@@ -31,7 +31,7 @@ export function Hero() {
         <img
           src="/landing/hero-1920.jpg"
           alt="Young player training at home with SogilityGO rebounder boards"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover [object-position:50%_22%] lg:[object-position:50%_50%]"
           fetchPriority="high"
         />
       </picture>
@@ -39,37 +39,40 @@ export function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-dark/85 via-dark/40 to-transparent" />
       {/* green glow, left */}
       <div className="pointer-events-none absolute inset-y-0 left-0 w-2/3 bg-[radial-gradient(circle_at_left,rgba(48,190,45,0.35),transparent_60%)]" />
+      {/* mobile gradient: dark at top (title) and slightly at bottom (countdown) */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-dark/85 via-dark/10 to-dark/55 lg:hidden" />
 
-      <div className="relative mx-auto min-h-[560px] max-w-[1440px] lg:min-h-[707px]">
-        {/* Countdown — green progress arc + "10 Seconds". Center x≈454 (left 324). */}
-        <div className="pointer-events-none absolute left-[324px] top-[48px] hidden h-[260px] w-[260px] lg:block">
+      <div className="relative mx-auto min-h-[520px] max-w-[1440px] lg:min-h-[707px]">
+        {/* Countdown — green progress arc + "10 Seconds". Mobile: left, mid. */}
+        <div className="pointer-events-none absolute left-5 top-[210px] h-[170px] w-[170px] lg:left-[324px] lg:top-[48px] lg:h-[260px] lg:w-[260px]">
           <img
             src="/landing/countdown-arc.svg"
             alt=""
             className="absolute inset-0 h-full w-full rotate-180"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="title-italic text-[112px] leading-[116px] text-white [text-shadow:0_3.6px_3.6px_rgba(0,0,0,0.45)]">
+            <span className="title-italic text-[80px] leading-none text-white [text-shadow:0_3.6px_3.6px_rgba(0,0,0,0.45)] lg:text-[112px] lg:leading-[116px]">
               10
             </span>
-            <span className="-mt-5 text-[20px] font-extrabold italic tracking-[0.02em] text-grey-001">
+            <span className="-mt-2 text-[14px] font-extrabold italic tracking-[0.02em] text-grey-001 lg:-mt-5 lg:text-[20px]">
               Seconds
             </span>
           </div>
         </div>
 
         {/* Text block — left 85 */}
-        <div className="flex min-h-[560px] flex-col justify-center px-6 lg:min-h-[707px] lg:pl-[85px] lg:pr-0">
-          <p className="text-[16px] font-extrabold uppercase leading-[38px] tracking-[0.1em] text-sogility">
-            At-home soccer training
+        <div className="flex min-h-[520px] flex-col justify-start px-6 pt-6 lg:min-h-[707px] lg:justify-center lg:pt-0 lg:pl-[85px] lg:pr-0">
+          <p className="text-[14px] font-extrabold uppercase leading-[28px] tracking-[0.1em] text-sogility lg:text-[16px] lg:leading-[38px]">
+            <span className="lg:hidden">At-home virtual coach</span>
+            <span className="hidden lg:inline">At-home soccer training</span>
           </p>
-          <h1 className="title-italic max-w-[501px] text-[62px] leading-[66px] tracking-[-0.01em] text-cream">
+          <h1 className="title-italic max-w-[330px] text-[42px] leading-[43px] tracking-[-0.01em] text-cream lg:max-w-[501px] lg:text-[62px] lg:leading-[66px]">
             Elite soccer training at home
           </h1>
-          <p className="mt-4 max-w-[486px] text-[20px] leading-[28px] tracking-[-0.01em] text-cream">
+          <p className="mt-4 hidden max-w-[486px] text-[18px] leading-[26px] tracking-[-0.01em] text-cream lg:block lg:text-[20px] lg:leading-[28px]">
             A guided virtual coach. Real-time feedback. Measurable improvement.
           </p>
-          <div className="mt-7">
+          <div className="mt-7 hidden lg:block">
             <a
               href="#start-training"
               className="inline-flex items-center gap-2 rounded-full bg-sogility px-7 py-3.5 font-bold text-white transition hover:brightness-110"
@@ -89,7 +92,46 @@ export function UnlockBanner() {
     // Full-bleed section: green panel reaches the right viewport edge, while the
     // left content stays aligned to the centered 1440 grid.
     <section className="w-full bg-white">
-      <div className="flex flex-col lg:h-[130px] lg:flex-row lg:items-stretch">
+      {/* Mobile layout — centered title + 50-80 / +1000 cards + 4x */}
+      <div className="bg-cream px-6 py-8 text-center lg:hidden">
+        <p className="text-[20px] font-extrabold leading-[28px] tracking-[-0.01em] text-dark">
+          Unlocking their full potential
+        </p>
+        <p className="text-[18px] font-bold leading-[22px] tracking-[-0.01em] text-sogility">
+          Improve training efficiency
+        </p>
+        <div className="mx-auto mt-4 flex h-[96px] w-[345px] max-w-full items-stretch overflow-hidden rounded-tr-[24px] bg-white">
+          <div className="flex flex-1 flex-col items-center justify-center px-3 text-center">
+            <p className="title-italic text-[36px] leading-[38px] tracking-[-0.02em] text-blue-003">
+              50-80
+            </p>
+            <p className="text-[13px] leading-[16px] tracking-[-0.01em] text-blue-005">
+              Touches per player in a typical team practice
+            </p>
+          </div>
+          <div className="relative flex w-[178px] shrink-0 flex-col items-center justify-center text-center">
+            <img
+              src="/landing/unlock-green.svg"
+              alt=""
+              className="absolute inset-0 h-full w-full"
+            />
+            <div className="relative">
+              <p className="title-italic text-[36px] leading-[38px] tracking-[-0.02em] text-cream">
+                +1000
+              </p>
+              <p className="text-[13px] leading-[16px] tracking-[-0.01em] text-white">
+                In a SogilityGO session
+              </p>
+            </div>
+          </div>
+        </div>
+        <p className="mt-4 text-[16px] leading-[22px] text-dark">
+          <span className="font-bold">4x</span> a traditional sessions
+        </p>
+      </div>
+
+      {/* Desktop layout */}
+      <div className="hidden lg:flex lg:h-[130px] lg:flex-row lg:items-stretch">
         {/* Left — cream block, content aligned to centered-1440 left inset */}
         <div className="flex flex-col justify-center bg-cream px-6 py-6 lg:shrink-0 lg:grow-0 lg:basis-[max(466px,calc((100%_-_1440px)/2_+_466px))] lg:py-0 lg:pl-[max(85px,calc((100%_-_1440px)/2_+_85px))]">
           <p className="text-[20px] font-extrabold leading-[28px] tracking-[-0.01em] text-dark">
@@ -124,52 +166,67 @@ export function UnlockBanner() {
   );
 }
 
-/* 5 — Trusted by + Training together */
+/* 5 — Trusted by (logos). Mobile: horizontal scroll strip. */
 export function TrustedBy() {
   return (
     <section>
       {/* TRUSTED BY — white band with thin green top border */}
-      <div className="flex h-14 items-center justify-center border-t-[1.333px] border-sogility/60 bg-white">
-        <p className="text-[18.667px] font-extrabold uppercase leading-none tracking-[1.87px] text-sogility">
+      <div className="flex h-[42px] items-center justify-center border-t-[1.333px] border-sogility/60 bg-white lg:h-14">
+        <p className="text-[14px] font-extrabold uppercase leading-none tracking-[1.4px] text-sogility lg:text-[18.667px] lg:tracking-[1.87px]">
           Trusted by
         </p>
       </div>
 
-      {/* Logos — cream band */}
-      <div className="flex flex-wrap items-center justify-center gap-x-[71px] gap-y-8 bg-cream px-6 pb-8 pt-5">
+      {/* Logos — mobile: horizontal scroll; desktop: centered wrap */}
+      <div className="flex items-center gap-[53px] overflow-x-auto bg-cream px-4 pb-6 pt-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-wrap lg:justify-center lg:gap-x-[71px] lg:gap-y-8 lg:overflow-visible lg:px-6 lg:pb-8 lg:pt-5">
         {TRUSTED_LOGOS.map((logo, i) => (
           <img
             key={i}
             src={logo.src}
             alt={logo.alt}
-            className="h-[107px] w-auto"
+            className="h-[80px] w-auto shrink-0 lg:h-[107px]"
             loading="lazy"
           />
         ))}
       </div>
+    </section>
+  );
+}
 
-      {/* Training together — cream, photo bleeds left, text on 1440 grid */}
-      <div className="bg-cream">
-        <div className="flex flex-col lg:flex-row lg:items-stretch">
-          {/* Photo — pinned to the left viewport edge, extends to the 1440 grid */}
-          <div className="relative min-h-[360px] lg:min-h-[554px] lg:shrink-0 lg:grow-0 lg:basis-[max(478px,calc((100%_-_1440px)/2_+_478px))]">
+/* 5b — Training together */
+export function TrainingTogether() {
+  return (
+    <section className="bg-cream">
+      <div className="flex flex-col lg:flex-row lg:items-stretch">
+          {/* Photo — mobile: title overlaid on image; desktop: bleed to left edge */}
+          <div className="relative h-[540px] lg:h-auto lg:min-h-[554px] lg:shrink-0 lg:grow-0 lg:basis-[max(478px,calc((100%_-_1440px)/2_+_478px))]">
             <img
               src="/landing/training-together.webp"
               alt="Coach guiding a young player with the SogilityGO app"
               className="absolute inset-0 h-full w-full object-cover object-center"
               loading="lazy"
             />
+            {/* mobile green glow + title overlay */}
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_55%_at_15%_0%,rgba(48,190,45,0.5),transparent_55%)] lg:hidden" />
+            <div className="absolute left-8 right-6 top-6 lg:hidden">
+              <p className="text-[14px] font-extrabold uppercase tracking-[1.4px] text-dark">
+                Training together
+              </p>
+              <h2 className="title-italic mt-2 max-w-[290px] text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
+                Supporting your player&rsquo;s journey
+              </h2>
+            </div>
           </div>
 
           {/* Text */}
-          <div className="flex flex-1 flex-col justify-center px-6 py-16 lg:py-20 lg:pl-[88px] lg:pr-[max(85px,calc((100%_-_1440px)/2_+_85px))]">
-            <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-dark">
+          <div className="flex flex-1 flex-col justify-center px-6 py-10 lg:py-20 lg:pl-[88px] lg:pr-[max(85px,calc((100%_-_1440px)/2_+_85px))]">
+            <p className="hidden text-[14px] font-semibold uppercase tracking-[1.4px] text-dark lg:block">
               Training together
             </p>
-            <h2 className="title-italic mt-3 max-w-[760px] text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
+            <h2 className="title-italic mt-3 hidden max-w-[760px] text-[42px] leading-[43px] tracking-[-0.42px] text-sogility lg:block">
               Supporting your player&rsquo;s journey
             </h2>
-            <p className="mt-6 max-w-[620px] text-[16px] leading-[22px] text-dark">
+            <p className="max-w-[620px] text-[16px] leading-[22px] text-dark lg:mt-6">
               Success comes from more deliberate practice than the competition.
             </p>
 
@@ -192,7 +249,6 @@ export function TrustedBy() {
             </div>
           </div>
         </div>
-      </div>
     </section>
   );
 }
@@ -287,7 +343,11 @@ export function PlayerJourney() {
           Player journey
         </h2>
 
-        <div className="mt-14 grid grid-cols-1 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-2">
+        {/* Mobile — slider */}
+        <JourneySlider />
+
+        {/* Desktop — 4-up grid */}
+        <div className="mt-14 hidden grid-cols-4 gap-x-2 lg:grid">
           {JOURNEY_STEPS.map((s, i) => (
             <div key={s.week} className="flex flex-col items-center text-center">
               <div className="relative">
@@ -326,6 +386,89 @@ export function PlayerJourney() {
         </div>
       </Container>
     </section>
+  );
+}
+
+/** Mobile Player-journey slider (native scroll-snap + dots + next arrow). */
+function JourneySlider() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const onScroll = () => {
+    const el = ref.current;
+    if (!el) return;
+    setActive(Math.round(el.scrollLeft / el.clientWidth));
+  };
+  const next = () => {
+    const el = ref.current;
+    if (!el) return;
+    const i = (active + 1) % JOURNEY_STEPS.length;
+    el.scrollTo({left: i * el.clientWidth, behavior: 'smooth'});
+  };
+  return (
+    <div className="relative mt-10 lg:hidden">
+      <div
+        ref={ref}
+        onScroll={onScroll}
+        className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {JOURNEY_STEPS.map((s) => (
+          <div
+            key={s.week}
+            className="flex w-full shrink-0 snap-center flex-col items-center px-6 text-center"
+          >
+            <div className="relative">
+              <div className="h-[200px] w-[200px] overflow-hidden rounded-full">
+                <img
+                  src={s.img}
+                  alt={s.title}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <img
+                src="/landing/journey/clipboard.svg"
+                alt=""
+                className="absolute -bottom-1 right-1 w-[52px]"
+              />
+            </div>
+            <p className="mt-5 text-[14px] font-extrabold uppercase tracking-[1.4px] text-[#22ae1f]">
+              {s.week}
+            </p>
+            <p className="mt-2 text-[20px] font-extrabold text-dark">{s.title}</p>
+            <p className="mt-2 text-[24px] font-bold italic tracking-[-0.24px] text-[#22ae1f]">
+              {s.stat}
+            </p>
+            <p className="mt-2 max-w-[300px] text-[16px] leading-[22px] text-dark">
+              {s.desc}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* next arrow */}
+      <button
+        type="button"
+        onClick={next}
+        aria-label="Next step"
+        className="absolute right-3 top-[88px] text-sogility"
+      >
+        <svg width="34" height="24" viewBox="0 0 34 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="M2 12h28M22 4l9 8-9 8" />
+        </svg>
+      </button>
+
+      {/* dots */}
+      <div className="mt-4 flex justify-center gap-2">
+        {JOURNEY_STEPS.map((s, i) => (
+          <span
+            key={s.week}
+            className={`h-[8px] rounded-full transition-all ${
+              i === active ? 'w-6 bg-sogility' : 'w-[8px] bg-sogility/30'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -375,24 +518,31 @@ export function VirtualCoach() {
 
         {/* Right — features + store badges */}
         <div className="flex flex-col gap-7">
-          {COACH_FEATURES.map((f) => (
-            <div key={f.title} className="flex items-start gap-5">
-              <img
-                src={f.icon}
-                alt=""
-                aria-hidden
-                className="h-[72px] w-[72px] shrink-0"
-                loading="lazy"
-              />
-              <div>
-                <p className="text-[16px] font-bold text-white">{f.title}</p>
-                <p className="text-[16px] leading-[22px] text-blue-003">
-                  {f.desc}
-                </p>
+          {/* Desktop — stacked features */}
+          <div className="hidden flex-col gap-7 lg:flex">
+            {COACH_FEATURES.map((f) => (
+              <div key={f.title} className="flex items-start gap-5">
+                <img
+                  src={f.icon}
+                  alt=""
+                  aria-hidden
+                  className="h-[72px] w-[72px] shrink-0"
+                  loading="lazy"
+                />
+                <div>
+                  <p className="text-[16px] font-bold text-white">{f.title}</p>
+                  <p className="text-[16px] leading-[22px] text-blue-003">
+                    {f.desc}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
-          <div className="mt-3 flex items-center gap-3">
+            ))}
+          </div>
+
+          {/* Mobile — feature slider */}
+          <FeatureSlider />
+
+          <div className="mt-3 flex items-center justify-center gap-3 lg:justify-start">
             <img
               src="/landing/coach/google-play.svg"
               alt="Get it on Google Play"
@@ -409,6 +559,55 @@ export function VirtualCoach() {
         </div>
       </Container>
     </section>
+  );
+}
+
+/** Mobile slider for the Your Virtual Coach feature items. */
+function FeatureSlider() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const onScroll = () => {
+    const el = ref.current;
+    if (!el) return;
+    setActive(Math.round(el.scrollLeft / el.clientWidth));
+  };
+  return (
+    <div className="lg:hidden">
+      <div
+        ref={ref}
+        onScroll={onScroll}
+        className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {COACH_FEATURES.map((f) => (
+          <div
+            key={f.title}
+            className="flex w-full shrink-0 snap-center items-center gap-5 px-2"
+          >
+            <img
+              src={f.icon}
+              alt=""
+              aria-hidden
+              className="h-[72px] w-[72px] shrink-0"
+              loading="lazy"
+            />
+            <div>
+              <p className="text-[16px] font-bold text-white">{f.title}</p>
+              <p className="text-[16px] leading-[22px] text-blue-003">{f.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-6 flex justify-center gap-2">
+        {COACH_FEATURES.map((f, i) => (
+          <span
+            key={f.title}
+            className={`h-[8px] rounded-full transition-all ${
+              i === active ? 'w-6 bg-sogility' : 'w-[8px] bg-sogility/30'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -548,13 +747,83 @@ function PlayableVideo({
 }
 
 /* 9 — Elite Training Board (dark) — same pattern as Training together */
+const BOARD_BULLETS = [
+  {
+    title: 'Rebound IQ tracking',
+    desc: 'Connects to the SogilityGO app, giving you access to a complete library of guided drills.',
+    tag: 'Track every touch',
+  },
+  {
+    title: 'Rebound IQ tracking',
+    desc: 'Connects to the SogilityGO app, giving you access to a complete library of guided drills.',
+    tag: 'Track every touch',
+  },
+  {
+    title: 'Rebound IQ tracking',
+    desc: 'Connects to the SogilityGO app, giving you access to a complete library of guided drills.',
+    tag: 'Track every touch',
+  },
+];
+
+function BoardSlider() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const onScroll = () => {
+    const el = ref.current;
+    if (!el) return;
+    setActive(Math.round(el.scrollLeft / el.clientWidth));
+  };
+  return (
+    <div className="lg:hidden">
+      <div
+        ref={ref}
+        onScroll={onScroll}
+        className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {BOARD_BULLETS.map((b, i) => (
+          <div
+            key={i}
+            className="flex w-full shrink-0 snap-center items-start gap-2 px-6 pb-6 pt-8"
+          >
+            <span className="flex h-[25px] w-[35px] shrink-0 items-center justify-center text-sogility">
+              <ArrowRight className="w-[26px]" />
+            </span>
+            <div className="flex flex-col gap-2">
+              <p className="text-[20px] font-extrabold leading-[28px] tracking-[-0.2px] text-cream">
+                {b.title}
+              </p>
+              <p className="text-[16px] leading-[22px] tracking-[-0.16px] text-blue-003">
+                {b.desc}
+              </p>
+              <p className="text-[14px] font-semibold leading-[22px] tracking-[-0.14px] text-sogility/90">
+                {b.tag}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-2 flex justify-center gap-2 pb-6">
+        {BOARD_BULLETS.map((b, i) => (
+          <span
+            key={i}
+            className={`h-[8px] rounded-full transition-all ${
+              i === active ? 'w-6 bg-sogility' : 'w-[8px] bg-sogility/30'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function TrainingBoard() {
   return (
     <section className="relative overflow-hidden bg-dark text-white">
       {/* green glow, top-left */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[400px] bg-[radial-gradient(50%_110%_at_24%_0%,rgba(48,190,45,0.18),transparent_65%)]" />
-      <Container className="relative grid grid-cols-1 items-center gap-12 py-16 lg:grid-cols-2 lg:py-20">
-        {/* Left — title + board */}
+
+      {/* Desktop — title + board left, feature bullets right */}
+      <Container className="relative hidden grid-cols-2 items-center gap-12 py-20 lg:grid">
         <div className="flex flex-col">
           <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-sogility">
             How it works
@@ -570,29 +839,46 @@ export function TrainingBoard() {
           />
         </div>
 
-        {/* Right — feature bullets */}
         <div className="flex flex-col gap-8">
-          {[0, 1, 2].map((i) => (
+          {BOARD_BULLETS.map((b, i) => (
             <div key={i} className="flex items-start gap-3">
               <span className="flex h-[30px] w-[30px] shrink-0 items-center justify-center text-sogility">
                 <ArrowRight className="w-[26px]" />
               </span>
               <div>
                 <p className="text-[24px] font-bold leading-[30px] tracking-[-0.32px] text-cream">
-                  Rebound IQ tracking
+                  {b.title}
                 </p>
                 <p className="mt-1 text-[20px] leading-[27px] tracking-[-0.2px] text-blue-003">
-                  Connects to the SogilityGO app, giving you access to a complete
-                  library of guided drills.
+                  {b.desc}
                 </p>
                 <p className="mt-1 text-[14px] font-semibold text-sogility">
-                  Track every touch
+                  {b.tag}
                 </p>
               </div>
             </div>
           ))}
         </div>
       </Container>
+
+      {/* Mobile — title, centered board, bullet slider */}
+      <div className="relative lg:hidden">
+        <div className="flex flex-col gap-1 px-8 pt-6">
+          <p className="text-[14px] font-semibold uppercase leading-[38px] tracking-[1.4px] text-sogility">
+            How it works
+          </p>
+          <h2 className="title-italic text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
+            Elite Training Board
+          </h2>
+        </div>
+        <img
+          src="/landing/board/board.webp"
+          alt="SogilityGO Rebound IQ training board with smart light"
+          className="mx-auto mt-2 w-[303px]"
+          loading="lazy"
+        />
+        <BoardSlider />
+      </div>
     </section>
   );
 }

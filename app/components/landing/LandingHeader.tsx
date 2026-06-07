@@ -1,4 +1,4 @@
-import {Suspense} from 'react';
+import {Suspense, useState} from 'react';
 import {Await, Link, useAsyncValue} from 'react-router';
 import {
   type CartViewPayload,
@@ -17,12 +17,32 @@ export function LandingHeader({
 }: {
   cart: Promise<CartApiQueryFragment | null>;
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <>
-      {/* Header — dark bar, logo centered, nav right */}
+      {/* Header — dark bar, logo centered, nav right (hamburger on mobile) */}
       <header className="sticky top-0 z-50 bg-dark shadow-[0px_4px_10px_rgba(0,0,0,0.25)]">
-        <div className="mx-auto grid h-[88px] max-w-[1440px] grid-cols-3 items-center pl-[70px] pr-6">
-          <span aria-hidden />
+        <div className="mx-auto grid h-[64px] max-w-[1440px] grid-cols-3 items-center px-5 lg:h-[88px] lg:pl-[70px] lg:pr-6">
+          {/* Left — hamburger (mobile only) */}
+          <div className="flex items-center">
+            <button
+              type="button"
+              aria-label="Open menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((o) => !o)}
+              className="text-cream lg:hidden"
+            >
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+                {menuOpen ? (
+                  <path d="M6 6l12 12M18 6L6 18" />
+                ) : (
+                  <path d="M3 6h18M3 12h18M3 18h18" />
+                )}
+              </svg>
+            </button>
+          </div>
+
           <Link
             to="/"
             className="flex items-center justify-center gap-2 text-cream"
@@ -35,25 +55,47 @@ export function LandingHeader({
               GO
             </span>
           </Link>
+
           <nav className="flex items-center justify-end gap-10 text-[14px] font-normal uppercase tracking-[0.12em] text-cream">
-            <a href="#start-training" className="hover:text-sogility">
+            <a href="#start-training" className="hidden hover:text-sogility lg:block">
               Training
             </a>
-            <a href="#faq" className="hover:text-sogility">
+            <a href="#faq" className="hidden hover:text-sogility lg:block">
               Contact
             </a>
             <CartToggle cart={cart} />
           </nav>
         </div>
+
+        {/* Mobile dropdown menu */}
+        {menuOpen && (
+          <nav className="flex flex-col gap-1 border-t border-white/10 bg-dark px-5 py-3 text-[14px] font-normal uppercase tracking-[0.12em] text-cream lg:hidden">
+            <a
+              href="#start-training"
+              onClick={() => setMenuOpen(false)}
+              className="py-2 hover:text-sogility"
+            >
+              Training
+            </a>
+            <a
+              href="#faq"
+              onClick={() => setMenuOpen(false)}
+              className="py-2 hover:text-sogility"
+            >
+              Contact
+            </a>
+          </nav>
+        )}
       </header>
 
       {/* Promo banner — below the header, dark text on green */}
-      <div className="flex h-10 items-center justify-center gap-3 bg-sogility text-dark">
-        <span aria-hidden className="text-[19px]">
-          🏆
+      <div className="flex h-10 items-center justify-center gap-2 bg-sogility px-4 text-center text-dark">
+        <span aria-hidden className="text-[17px]">
+          ⚽
         </span>
-        <p className="text-[15px] font-medium tracking-[0.02em]">
-          World Cup Promo 20% Off &nbsp;+&nbsp; Free US Shipping
+        <p className="text-[13px] font-medium tracking-[0.02em] sm:text-[15px]">
+          <span className="hidden sm:inline">World Cup Promo 20% Off &nbsp;+&nbsp; </span>
+          Free US Shipping
         </p>
       </div>
     </>

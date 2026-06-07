@@ -3,6 +3,7 @@ import {
   Hero,
   UnlockBanner,
   TrustedBy,
+  TrainingTogether,
   PlayerJourney,
   VirtualCoach,
   Reviews,
@@ -29,8 +30,19 @@ export default function Homepage() {
     <>
       <Hero />
       <UnlockBanner />
-      <TrustedBy />
-      <PlayerJourney />
+      {/* Mobile order: Training together → Player journey → Trusted by (logos).
+          Desktop order: Trusted by → Training together → Player journey. */}
+      <div className="flex flex-col">
+        <div className="order-3 lg:order-1">
+          <TrustedBy />
+        </div>
+        <div className="order-1 lg:order-2">
+          <TrainingTogether />
+        </div>
+        <div className="order-2 lg:order-3">
+          <PlayerJourney />
+        </div>
+      </div>
       <VirtualCoach />
       <Reviews />
       <TrainingBoard />
