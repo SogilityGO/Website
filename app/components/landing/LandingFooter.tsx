@@ -19,8 +19,12 @@ const RESOURCE_LINKS = [
 export function LandingFooter() {
   return (
     <footer className="bg-sogility text-black">
-      <Container className="flex flex-col gap-10 py-12 md:flex-row md:gap-[200px] md:py-16">
-        <FooterColumn title="About SogilityGo" links={ABOUT_LINKS} />
+      <Container className="flex flex-row py-12 md:gap-[200px] md:py-16">
+        <FooterColumn
+          title="About SogilityGo"
+          links={ABOUT_LINKS}
+          className="w-[214px] md:w-auto"
+        />
         <FooterColumn title="Resources" links={RESOURCE_LINKS} />
       </Container>
     </footer>
@@ -30,12 +34,14 @@ export function LandingFooter() {
 function FooterColumn({
   title,
   links,
+  className = '',
 }: {
   title: string;
   links: {label: string; href: string}[];
+  className?: string;
 }) {
   return (
-    <div className="text-[16px] tracking-[-0.16px]">
+    <div className={`text-[16px] tracking-[-0.16px] ${className}`}>
       <p className="font-bold leading-[22px]">{title}</p>
       <ul>
         {links.map(({label, href}) => (

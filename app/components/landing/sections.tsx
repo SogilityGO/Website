@@ -1,4 +1,4 @@
-import {type ReactNode, useRef, useState} from 'react';
+import {type ReactNode, useEffect, useRef, useState} from 'react';
 import {Container, Eyebrow, SectionTitle, Placeholder} from './ui';
 
 const TRUSTED_LOGOS = [
@@ -645,8 +645,12 @@ const REVIEWS = [
 
 export function Reviews() {
   return (
-    <section className="bg-cream py-20">
-      <Container>
+    <section className="relative overflow-hidden bg-cream py-20 lg:py-20">
+      {/* green glow, top (mobile light-gradient from Figma) */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[170px] bg-[radial-gradient(90%_120%_at_80%_0%,rgba(48,190,45,0.30),transparent_60%)] lg:hidden" />
+
+      {/* desktop: 4-up grid */}
+      <Container className="relative hidden lg:block">
         <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-dark">
           Player + parent reviews
         </p>
@@ -660,7 +664,101 @@ export function Reviews() {
           ))}
         </div>
       </Container>
+
+      {/* mobile: horizontal slider, active video autoplays */}
+      <ReviewsSlider />
     </section>
+  );
+}
+
+/** Mobile reviews slider — one video card per view, active card autoplays muted. */
+function ReviewsSlider() {
+  const ref = useRef<HTMLDivElement>(null);
+  const videos = useRef<Array<HTMLVideoElement | null>>([]);
+  const [active, setActive] = useState(0);
+
+  const onScroll = () => {
+    const el = ref.current;
+    if (!el) return;
+    setActive(Math.round(el.scrollLeft / el.clientWidth));
+  };
+
+  // Autoplay only the visible card; pause + reset the rest.
+  useEffect(() => {
+    videos.current.forEach((v, i) => {
+      if (!v) return;
+      if (i === active) {
+        void v.play().catch(() => {});
+      } else {
+        v.pause();
+        v.currentTime = 0;
+      }
+    });
+  }, [active]);
+
+  return (
+    <div className="relative lg:hidden">
+      <div className="flex flex-col gap-1 px-8 pb-4 pt-6">
+        <p className="text-[14px] font-semibold uppercase leading-[38px] tracking-[1.4px] text-dark">
+          Player + parent reviews
+        </p>
+        <h2 className="title-italic text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
+          Players in action
+        </h2>
+      </div>
+
+      <div
+        ref={ref}
+        onScroll={onScroll}
+        className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {REVIEWS.map((r, i) => (
+          <div key={r.name} className="w-full shrink-0 snap-center px-6">
+            <div className="relative aspect-[345/515] overflow-hidden rounded-2xl bg-black">
+              <video
+                ref={(el) => {
+                  videos.current[i] = el;
+                }}
+                src={r.video}
+                className="h-full w-full object-cover"
+                muted
+                loop
+                playsInline
+                preload={i === 0 ? 'auto' : 'metadata'}
+              />
+              {i !== active && (
+                <span className="absolute inset-0 flex items-center justify-center">
+                  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden>
+                    <circle cx="32" cy="32" r="30" stroke="#fff" strokeWidth="2.5" />
+                    <path d="M27 22.5 44 32 27 41.5z" fill="#fff" />
+                  </svg>
+                </span>
+              )}
+            </div>
+            <p className="mt-4 text-center text-[14px] font-extrabold leading-[38px] tracking-[1.4px] text-sogility">
+              {r.name}
+            </p>
+            <p className="text-center text-[14px] leading-[18px] tracking-[-0.14px] text-dark">
+              {r.meta}
+            </p>
+            <p className="mt-2 px-6 text-center text-[20px] font-extrabold leading-[28px] tracking-[-0.2px] text-surface">
+              {r.caption}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 flex justify-center gap-2 pb-2">
+        {REVIEWS.map((r, i) => (
+          <span
+            key={r.name}
+            className={`h-[8px] rounded-full transition-all ${
+              i === active ? 'w-6 bg-sogility' : 'w-[8px] bg-sogility/30'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -912,10 +1010,34 @@ const CORE_SKILLS = [
   },
 ];
 
+/** Shared skill copy (STUB — same lines for every skill, matches Figma). */
+function SkillCopy({size}: {size: 14 | 18}) {
+  const cls = `leading-[22px] text-blue-003 ${size === 18 ? 'text-[18px]' : 'text-[14px] leading-[18px]'}`;
+  return (
+    <>
+      <p className={cls}>
+        <span className="font-bold text-cream">Improve</span> your ball control
+      </p>
+      <p className={cls}>
+        <span className="font-bold text-cream">Receive</span> and direct the ball
+        smoothly
+      </p>
+      <p className={cls}>
+        <span className="font-bold text-cream">Train</span> your feet to handle
+        the ball cleanly
+      </p>
+    </>
+  );
+}
+
 export function CoreSkills() {
   return (
-    <section className="bg-dark py-20 text-white">
-      <Container>
+    <section className="relative overflow-hidden bg-dark py-20 text-white">
+      {/* green glow, top (mobile light-gradient from Figma) */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[170px] bg-[radial-gradient(90%_120%_at_80%_0%,rgba(48,190,45,0.30),transparent_60%)] lg:hidden" />
+
+      {/* desktop: 5-up grid */}
+      <Container className="relative hidden lg:block">
         <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-sogility">
           5 core skills
         </p>
@@ -941,25 +1063,112 @@ export function CoreSkills() {
                   <p className="text-[18px] font-bold leading-[22px] text-sogility">
                     {s.name}
                   </p>
-                  <p className="text-[14px] leading-[18px] text-blue-003">
-                    <span className="font-bold text-cream">Improve</span> your
-                    ball control
-                  </p>
-                  <p className="text-[14px] leading-[18px] text-blue-003">
-                    <span className="font-bold text-cream">Receive</span> and
-                    direct the ball smoothly
-                  </p>
-                  <p className="text-[14px] leading-[18px] text-blue-003">
-                    <span className="font-bold text-cream">Train</span> your feet
-                    to handle the ball cleanly
-                  </p>
+                  <SkillCopy size={14} />
                 </div>
               </div>
             </div>
           ))}
         </div>
       </Container>
+
+      {/* mobile: horizontal slider, active video autoplays */}
+      <CoreSkillsSlider />
     </section>
+  );
+}
+
+/** Mobile Core Skills slider — one skill per view, active card autoplays muted. */
+function CoreSkillsSlider() {
+  const ref = useRef<HTMLDivElement>(null);
+  const videos = useRef<Array<HTMLVideoElement | null>>([]);
+  const [active, setActive] = useState(0);
+
+  const onScroll = () => {
+    const el = ref.current;
+    if (!el) return;
+    setActive(Math.round(el.scrollLeft / el.clientWidth));
+  };
+
+  // Autoplay only the visible card; pause + reset the rest.
+  useEffect(() => {
+    videos.current.forEach((v, i) => {
+      if (!v) return;
+      if (i === active) {
+        void v.play().catch(() => {});
+      } else {
+        v.pause();
+        v.currentTime = 0;
+      }
+    });
+  }, [active]);
+
+  return (
+    <div className="relative lg:hidden">
+      <div className="flex flex-col gap-1 px-8 pb-4 pt-6">
+        <p className="text-[14px] font-semibold uppercase leading-[38px] tracking-[1.4px] text-sogility">
+          5 core skills
+        </p>
+        <h2 className="title-italic text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
+          Personalized Training Sessions
+        </h2>
+      </div>
+
+      <div
+        ref={ref}
+        onScroll={onScroll}
+        className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {CORE_SKILLS.map((s, i) => (
+          <div key={s.name} className="w-full shrink-0 snap-center px-6">
+            <div className="relative aspect-[345/515] overflow-hidden rounded-2xl bg-black">
+              <video
+                ref={(el) => {
+                  videos.current[i] = el;
+                }}
+                src={s.video}
+                className="h-full w-full object-cover"
+                muted
+                loop
+                playsInline
+                preload={i === 0 ? 'auto' : 'metadata'}
+              />
+              {i !== active && (
+                <span className="absolute inset-0 flex items-center justify-center">
+                  <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden>
+                    <circle cx="32" cy="32" r="30" stroke="#fff" strokeWidth="2.5" />
+                    <path d="M27 22.5 44 32 27 41.5z" fill="#fff" />
+                  </svg>
+                </span>
+              )}
+            </div>
+
+            {/* number + skill info, green divider */}
+            <div className="mt-6 flex gap-4 border-b border-sogility pb-6">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-dashed border-blue-003 text-[18px] font-bold text-grey-001">
+                {i + 1}
+              </span>
+              <div className="flex flex-1 flex-col gap-4">
+                <p className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px] text-sogility">
+                  {s.name}
+                </p>
+                <SkillCopy size={18} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 flex justify-center gap-2 pb-2">
+        {CORE_SKILLS.map((s, i) => (
+          <span
+            key={s.name}
+            className={`h-[8px] rounded-full transition-all ${
+              i === active ? 'w-6 bg-sogility' : 'w-[8px] bg-sogility/30'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -999,8 +1208,14 @@ const PRICING_TIERS = [
 
 export function StartTraining() {
   return (
-    <section id="start-training" className="bg-dark py-16 text-white lg:py-20">
-      <Container>
+    <section
+      id="start-training"
+      className="relative overflow-hidden bg-dark py-16 text-white lg:py-20"
+    >
+      {/* green glow, top (mobile light-gradient from Figma) */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[170px] bg-[radial-gradient(90%_120%_at_80%_0%,rgba(48,190,45,0.30),transparent_60%)] lg:hidden" />
+
+      <Container className="relative hidden lg:block">
         <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-sogility">
           Choose your best fit
         </p>
@@ -1101,7 +1316,147 @@ export function StartTraining() {
           ))}
         </div>
       </Container>
+
+      {/* mobile: horizontal slider of pricing cards */}
+      <StartTrainingSlider />
     </section>
+  );
+}
+
+/** Mobile Start Training slider — one pricing card per view, shared policy row + dots. */
+function StartTrainingSlider() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  const onScroll = () => {
+    const el = ref.current;
+    if (!el) return;
+    setActive(Math.round(el.scrollLeft / el.clientWidth));
+  };
+
+  return (
+    <div className="relative lg:hidden">
+      <div className="flex flex-col gap-1 px-8 pb-4 pt-6">
+        <p className="text-[14px] font-semibold uppercase leading-[38px] tracking-[1.4px] text-sogility">
+          Choose your best fit
+        </p>
+        <h2 className="title-italic text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
+          Start Training
+        </h2>
+      </div>
+
+      <div
+        ref={ref}
+        onScroll={onScroll}
+        className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {PRICING_TIERS.map((t) => (
+          <div key={t.name} className="w-full shrink-0 snap-center px-6">
+            <div className="overflow-hidden rounded-bl-[24px] rounded-tr-[24px] bg-cream text-left shadow-[0_12px_30px_rgba(0,0,0,0.22)]">
+              {/* Photo */}
+              <div className="relative h-[230px] border-b-2 border-sogility">
+                <img
+                  src={t.img}
+                  alt={`Rebound IQ ${t.name}`}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                {t.popular && (
+                  <span className="absolute left-0 top-0 flex h-8 items-center bg-sogility px-3 text-[16px] font-extrabold text-cream">
+                    Most Popular
+                  </span>
+                )}
+              </div>
+
+              {/* Body */}
+              <div className="flex flex-col gap-6 px-4 pb-6 pt-4">
+                <div className="flex flex-col gap-[7px]">
+                  <div className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px]">
+                    <p className="text-sogility">Rebound IQ</p>
+                    <p className="text-dark">{t.name}</p>
+                  </div>
+                  <p className="text-[16px] leading-[22px] text-blue-005">
+                    {t.blurb}
+                  </p>
+                  <div className="flex flex-col gap-2 pt-4">
+                    <div className="flex items-center gap-3.5">
+                      <span className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px] text-dark">
+                        {t.price}
+                      </span>
+                      {t.was && (
+                        <span className="text-[16px] font-medium text-dark line-through">
+                          {t.was}
+                        </span>
+                      )}
+                      {t.save && (
+                        <span className="rounded-lg border-2 border-dashed border-sogility bg-white px-3 py-1 text-[16px] font-extrabold leading-none text-sogility">
+                          {t.save}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[14px] text-dark">
+                      Pay with affirm on orders over $35
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 pl-6 text-[18px] leading-[22px]">
+                  {t.features.map((f, i) => (
+                    <p
+                      key={i}
+                      className={`text-blue-005 ${i === 0 ? 'font-bold' : ''}`}
+                    >
+                      <span className="font-normal text-sogility">&rarr;</span> {f}
+                    </p>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  className="flex h-14 w-full items-center justify-center rounded-2xl border border-sogility-deep bg-[linear-gradient(188deg,#30be2d_13%,#30892e_68%)] p-3 text-[18px] font-semibold text-white shadow-[0px_4px_10px_rgba(0,0,0,0.25)] transition hover:brightness-105"
+                >
+                  Buy {t.name}
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Policy row (shared) */}
+      <div className="mt-8 flex items-stretch justify-center px-6">
+        {[
+          ['14', 'Day Return Policy'],
+          ['1', 'Year Warranty'],
+          ['365', 'Days outside Weatherproof'],
+        ].map(([n, label], i) => (
+          <div
+            key={label}
+            className={`flex flex-1 flex-col items-center justify-center gap-1 px-2.5 py-4 text-center ${
+              i < 2 ? 'border-r border-sogility' : ''
+            }`}
+          >
+            <span className="text-[24px] font-bold leading-[18px] text-sogility">
+              {n}
+            </span>
+            <span className="text-[12px] font-medium leading-4 text-cream">
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 flex justify-center gap-2 pb-2">
+        {PRICING_TIERS.map((t, i) => (
+          <span
+            key={t.name}
+            className={`h-[8px] rounded-full transition-all ${
+              i === active ? 'w-6 bg-sogility' : 'w-[8px] bg-sogility/30'
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -1122,33 +1477,46 @@ export function OwnerMessage() {
 /* 13 — FAQ */
 export function Faq() {
   return (
-    <section id="faq" className="bg-white py-16">
+    <section
+      id="faq"
+      className="border-t-[3px] border-blue-005 bg-white py-16 lg:border-t-0"
+    >
       <Container>
-        <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-dark">
+        {/* mobile: compact "FAQ" label */}
+        <p className="text-[20px] font-extrabold leading-[28px] tracking-[-0.2px] text-dark lg:hidden">
+          FAQ
+        </p>
+        {/* desktop: eyebrow + big italic title */}
+        <p className="hidden text-[14px] font-semibold uppercase tracking-[1.4px] text-dark lg:block">
           Things you might ask
         </p>
-        <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
+        <h2 className="title-italic mt-1 hidden text-[42px] leading-[43px] tracking-[-0.42px] text-sogility lg:block">
           FAQs
         </h2>
 
-        <div className="mt-10 lg:px-16">
-          <h3 className="mb-1 text-[14px] font-semibold uppercase tracking-[1.4px] text-[#22ae1f]">
-            For Parents and Coaches:
-          </h3>
-          <FaqItem
-            open
-            q="What is the value of having multiple ReboundIQ boards?"
-            a="While a single board is great for basic repetition, adding more boards exponentially increases the training complexity. Multiple boards allow for 360-degree training, forcing players to scan their shoulders, change direction quickly, and react to unpredictable cues—mimicking the chaos of a real match."
-          />
-          <FaqItem q="How does the system work?" />
-          <FaqItem q="What skills can I improve?" />
+        {/* groups: About-product first on mobile, Parents-first on desktop (Figma) */}
+        <div className="mt-6 flex flex-col lg:mt-10 lg:px-16">
+          <div className="order-2 lg:order-1">
+            <h3 className="mb-1 mt-8 text-[14px] font-semibold uppercase tracking-[1.4px] text-[#22ae1f] lg:mt-0">
+              For Parents and Coaches:
+            </h3>
+            <FaqItem
+              open
+              q="What is the value of having multiple ReboundIQ boards?"
+              a="While a single board is great for basic repetition, adding more boards exponentially increases the training complexity. Multiple boards allow for 360-degree training, forcing players to scan their shoulders, change direction quickly, and react to unpredictable cues—mimicking the chaos of a real match."
+            />
+            <FaqItem q="How does the system work?" />
+            <FaqItem q="What skills can I improve?" />
+          </div>
 
-          <h3 className="mb-1 mt-10 text-[14px] font-semibold uppercase tracking-[1.4px] text-[#22ae1f]">
-            About the product:
-          </h3>
-          <FaqItem q="What is SogilityGO?" />
-          <FaqItem q="How does the system work?" />
-          <FaqItem q="What skills can I improve?" />
+          <div className="order-1 lg:order-2">
+            <h3 className="mb-1 mt-8 text-[14px] font-semibold uppercase tracking-[1.4px] text-[#22ae1f] lg:mt-10">
+              About the product:
+            </h3>
+            <FaqItem q="What is SogilityGO?" />
+            <FaqItem q="How does the system work?" />
+            <FaqItem q="What skills can I improve?" />
+          </div>
         </div>
       </Container>
     </section>
