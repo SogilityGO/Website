@@ -7,3 +7,7 @@ node_modules
 .env
 .shopify
 .react-router
+
+# Local reference assets (not part of the app)
+Fix/
+design-ref/

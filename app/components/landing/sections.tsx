@@ -1,0 +1,863 @@
+import {type ReactNode, useRef, useState} from 'react';
+import {Container, Eyebrow, SectionTitle, Placeholder} from './ui';
+
+const TRUSTED_LOGOS = [
+  {src: '/landing/logos/anchor.webp', alt: 'Anchor Soccer'},
+  {src: '/landing/logos/erie.webp', alt: 'Erie Soccer'},
+  {src: '/landing/logos/usa.webp', alt: 'USA Soccer'},
+  {src: '/landing/logos/anchor.webp', alt: 'Anchor Soccer'},
+  {src: '/landing/logos/erie.webp', alt: 'Erie Soccer'},
+  {src: '/landing/logos/usa.webp', alt: 'USA Soccer'},
+];
+
+/**
+ * Sogility GO parents landing — sections (polish pass to match Figma).
+ *
+ * Copy is taken from the Figma layout. Media still uses <Placeholder> until
+ * real assets are pulled from Figma. Prices shown are the Figma values and are
+ * static for now — wired to the Storefront API in the commerce step.
+ */
+
+/* 3 — Hero */
+export function Hero() {
+  return (
+    <section className="relative overflow-hidden bg-dark text-white">
+      <picture>
+        <source
+          type="image/webp"
+          srcSet="/landing/hero-1280.webp 1280w, /landing/hero-1920.webp 1920w"
+          sizes="100vw"
+        />
+        <img
+          src="/landing/hero-1920.jpg"
+          alt="Young player training at home with SogilityGO rebounder boards"
+          className="absolute inset-0 h-full w-full object-cover"
+          fetchPriority="high"
+        />
+      </picture>
+      {/* dark gradient for text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-r from-dark/85 via-dark/40 to-transparent" />
+      {/* green glow, left */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-2/3 bg-[radial-gradient(circle_at_left,rgba(48,190,45,0.35),transparent_60%)]" />
+
+      <div className="relative mx-auto min-h-[560px] max-w-[1440px] lg:min-h-[707px]">
+        {/* Countdown — green progress arc + "10 Seconds". Center x≈454 (left 324). */}
+        <div className="pointer-events-none absolute left-[324px] top-[48px] hidden h-[260px] w-[260px] lg:block">
+          <img
+            src="/landing/countdown-arc.svg"
+            alt=""
+            className="absolute inset-0 h-full w-full rotate-180"
+          />
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <span className="title-italic text-[112px] leading-[116px] text-white [text-shadow:0_3.6px_3.6px_rgba(0,0,0,0.45)]">
+              10
+            </span>
+            <span className="-mt-5 text-[20px] font-extrabold italic tracking-[0.02em] text-grey-001">
+              Seconds
+            </span>
+          </div>
+        </div>
+
+        {/* Text block — left 85 */}
+        <div className="flex min-h-[560px] flex-col justify-center px-6 lg:min-h-[707px] lg:pl-[85px] lg:pr-0">
+          <p className="text-[16px] font-extrabold uppercase leading-[38px] tracking-[0.1em] text-sogility">
+            At-home soccer training
+          </p>
+          <h1 className="title-italic max-w-[501px] text-[62px] leading-[66px] tracking-[-0.01em] text-cream">
+            Elite soccer training at home
+          </h1>
+          <p className="mt-4 max-w-[486px] text-[20px] leading-[28px] tracking-[-0.01em] text-cream">
+            A guided virtual coach. Real-time feedback. Measurable improvement.
+          </p>
+          <div className="mt-7">
+            <a
+              href="#start-training"
+              className="inline-flex items-center gap-2 rounded-full bg-sogility px-7 py-3.5 font-bold text-white transition hover:brightness-110"
+            >
+              Get SogilityGO
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* 4 — Unlock banner (stats): cream block + 50-80 + green chevron panel */
+export function UnlockBanner() {
+  return (
+    // Full-bleed section: green panel reaches the right viewport edge, while the
+    // left content stays aligned to the centered 1440 grid.
+    <section className="w-full bg-white">
+      <div className="flex flex-col lg:h-[130px] lg:flex-row lg:items-stretch">
+        {/* Left — cream block, content aligned to centered-1440 left inset */}
+        <div className="flex flex-col justify-center bg-cream px-6 py-6 lg:shrink-0 lg:grow-0 lg:basis-[max(466px,calc((100%_-_1440px)/2_+_466px))] lg:py-0 lg:pl-[max(85px,calc((100%_-_1440px)/2_+_85px))]">
+          <p className="text-[20px] font-extrabold leading-[28px] tracking-[-0.01em] text-dark">
+            Unlocking their full potential
+          </p>
+          <p className="text-[18px] font-bold leading-[22px] tracking-[-0.01em] text-sogility">
+            Improve training efficiency x4
+          </p>
+        </div>
+
+        {/* Middle — 50-80 */}
+        <div className="flex flex-col justify-center bg-white px-6 py-6 text-center lg:w-[219px] lg:shrink-0 lg:py-0">
+          <p className="title-italic text-[36px] leading-[38px] tracking-[-0.02em] text-blue-003">
+            50-80
+          </p>
+          <p className="text-[14px] leading-[18px] tracking-[-0.01em] text-blue-005">
+            Touches per player in a typical team practice
+          </p>
+        </div>
+
+        {/* Right — green gradient panel with chevron, bleeds to the right edge */}
+        <div className="relative flex flex-1 items-center justify-center gap-4 bg-[linear-gradient(134.4deg,#30be2d_37.31%,#165815_96.77%)] px-6 py-8 lg:py-0 lg:[clip-path:polygon(0_0,100%_0,100%_100%,0_100%,44px_50%)]">
+          <span className="title-italic text-[62px] leading-[65px] tracking-[-0.01em] text-cream">
+            +1000
+          </span>
+          <span className="text-[18px] leading-[22px] tracking-[-0.01em] text-white">
+            Touches in a SogilityGO session
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* 5 — Trusted by + Training together */
+export function TrustedBy() {
+  return (
+    <section>
+      {/* TRUSTED BY — white band with thin green top border */}
+      <div className="flex h-14 items-center justify-center border-t-[1.333px] border-sogility/60 bg-white">
+        <p className="text-[18.667px] font-extrabold uppercase leading-none tracking-[1.87px] text-sogility">
+          Trusted by
+        </p>
+      </div>
+
+      {/* Logos — cream band */}
+      <div className="flex flex-wrap items-center justify-center gap-x-[71px] gap-y-8 bg-cream px-6 pb-8 pt-5">
+        {TRUSTED_LOGOS.map((logo, i) => (
+          <img
+            key={i}
+            src={logo.src}
+            alt={logo.alt}
+            className="h-[107px] w-auto"
+            loading="lazy"
+          />
+        ))}
+      </div>
+
+      {/* Training together — cream, photo bleeds left, text on 1440 grid */}
+      <div className="bg-cream">
+        <div className="flex flex-col lg:flex-row lg:items-stretch">
+          {/* Photo — pinned to the left viewport edge, extends to the 1440 grid */}
+          <div className="relative min-h-[360px] lg:min-h-[554px] lg:shrink-0 lg:grow-0 lg:basis-[max(478px,calc((100%_-_1440px)/2_+_478px))]">
+            <img
+              src="/landing/training-together.webp"
+              alt="Coach guiding a young player with the SogilityGO app"
+              className="absolute inset-0 h-full w-full object-cover object-center"
+              loading="lazy"
+            />
+          </div>
+
+          {/* Text */}
+          <div className="flex flex-1 flex-col justify-center px-6 py-16 lg:py-20 lg:pl-[88px] lg:pr-[max(85px,calc((100%_-_1440px)/2_+_85px))]">
+            <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-dark">
+              Training together
+            </p>
+            <h2 className="title-italic mt-3 max-w-[760px] text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
+              Supporting your player&rsquo;s journey
+            </h2>
+            <p className="mt-6 max-w-[620px] text-[16px] leading-[22px] text-dark">
+              Success comes from more deliberate practice than the competition.
+            </p>
+
+            <div className="mt-6 max-w-[620px] space-y-6">
+              <TrainingBullet
+                title="Making the starting lineup, two lines if needed"
+                defaultOpen
+              >
+                <p className="text-[16px] leading-[22px] text-grey">
+                  Coaches pick players who look sharper, who control the ball
+                  under pressure, whose first touch doesn&rsquo;t cost
+                  possession. That sharpness comes from repetition.
+                </p>
+                <p className="mt-2 text-[14px] font-semibold text-sogility">
+                  Visible improvement within 6-10 weeks
+                </p>
+              </TrainingBullet>
+              <TrainingBullet title="Moving up a division" />
+              <TrainingBullet title="Levelling up their talent" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/** Heavy filled rightwards arrow (matches the Figma "➔" glyph). */
+function ArrowRight({className = ''}: {className?: string}) {
+  return (
+    <svg
+      viewBox="0 0 32 26"
+      fill="currentColor"
+      aria-hidden
+      className={className}
+    >
+      <path d="M0 9.5h17V2.5L32 13 17 23.5V16.5H0z" />
+    </svg>
+  );
+}
+
+/** Training-together accordion item with an arrow aligned to the title line. */
+function TrainingBullet({
+  title,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  defaultOpen?: boolean;
+  children?: ReactNode;
+}) {
+  return (
+    <details open={defaultOpen} className="group">
+      <summary className="flex cursor-pointer list-none items-start gap-3">
+        <span className="flex h-[22px] w-[28px] shrink-0 items-center justify-center text-sogility">
+          <ArrowRight className="w-[24px]" />
+        </span>
+        <span className="flex-1 text-[18px] font-bold leading-[22px] text-dark">
+          {title}
+        </span>
+        <span className="text-[26px] font-light leading-none text-sogility group-open:hidden">
+          +
+        </span>
+        <span className="hidden text-[26px] font-light leading-none text-sogility group-open:inline">
+          &minus;
+        </span>
+      </summary>
+      {children ? <div className="mt-2 pl-[38px]">{children}</div> : null}
+    </details>
+  );
+}
+
+/* 6 — Player journey (4-step timeline) */
+const JOURNEY_STEPS = [
+  {
+    img: '/landing/journey/j1.webp',
+    week: 'WEEK 1',
+    title: 'Test your skills',
+    stat: '5 core skills',
+    desc: 'What to expect week by week when a player commits to daily practice.',
+  },
+  {
+    img: '/landing/journey/j2.webp',
+    week: 'WEEK 4',
+    title: 'Form habits',
+    stat: '+20%',
+    desc: 'Average accuracy gain',
+  },
+  {
+    img: '/landing/journey/j3.webp',
+    week: 'WEEK 8',
+    title: 'Get noticed',
+    stat: '600+',
+    desc: 'Touches up per session. First touch visibly sharper at practice.',
+  },
+  {
+    img: '/landing/journey/j4.webp',
+    week: 'WEEK 10',
+    title: 'Continue growth',
+    stat: 'x4',
+    desc: 'Extra work is now measurable and visible',
+  },
+];
+
+export function PlayerJourney() {
+  return (
+    <section className="relative overflow-hidden bg-cream py-20">
+      {/* green glow, top */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[373px] bg-[radial-gradient(55%_110%_at_28%_0%,rgba(48,190,45,0.22),transparent_65%)]" />
+      <Container className="relative">
+        <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-dark">
+          Training that delivers results
+        </p>
+        <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
+          Player journey
+        </h2>
+
+        <div className="mt-14 grid grid-cols-1 gap-y-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-x-2">
+          {JOURNEY_STEPS.map((s, i) => (
+            <div key={s.week} className="flex flex-col items-center text-center">
+              <div className="relative">
+                <div className="h-[200px] w-[200px] overflow-hidden rounded-full">
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <img
+                  src="/landing/journey/clipboard.svg"
+                  alt=""
+                  className="absolute -bottom-1 right-1 w-[52px]"
+                />
+                {i < JOURNEY_STEPS.length - 1 && (
+                  <span className="absolute -right-6 top-1/2 hidden -translate-y-1/2 text-sogility lg:block">
+                    <ArrowRight className="w-[26px]" />
+                  </span>
+                )}
+              </div>
+
+              <p className="mt-5 text-[14px] font-extrabold uppercase tracking-[1.4px] text-[#22ae1f]">
+                {s.week}
+              </p>
+              <p className="mt-2 text-[18px] font-bold text-dark">{s.title}</p>
+              <p className="mt-1 text-[20px] font-bold italic tracking-[-0.2px] text-[#22ae1f]">
+                {s.stat}
+              </p>
+              <p className="mt-2 max-w-[260px] text-[15px] leading-[22px] text-dark">
+                {s.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* 7 — Your Virtual Coach (dark) */
+const COACH_FEATURES = [
+  {
+    icon: '/landing/coach/icons/coach.svg',
+    title: 'Your Virtual Coach',
+    desc: 'Get tips from pro soccer coaches to improve your training',
+  },
+  {
+    icon: '/landing/coach/icons/training.svg',
+    title: 'Tailored Training',
+    desc: 'A training plan personalized just for you and your skills',
+  },
+  {
+    icon: '/landing/coach/icons/videos.svg',
+    title: '180+ Videos',
+    desc: 'Access to the full library of pro-designed training activities',
+  },
+  {
+    icon: '/landing/coach/icons/multiplayer.svg',
+    title: 'Multiplayer',
+    desc: 'Multiplayer feature text',
+  },
+];
+
+export function VirtualCoach() {
+  return (
+    <section className="bg-dark text-white">
+      <Container className="grid grid-cols-1 items-center gap-12 py-16 lg:grid-cols-[1fr_minmax(0,540px)] lg:gap-12 lg:py-20">
+        {/* Left — title + phone/analytics photo */}
+        <div className="flex flex-col">
+          <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-sogility">
+            How it works
+          </p>
+          <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
+            Your Virtual Coach
+          </h2>
+          <img
+            src="/landing/coach/phone-graph.webp"
+            alt="SogilityGO app showing player skill analytics"
+            className="mt-8 w-full max-w-[540px] self-center lg:mt-10"
+            loading="lazy"
+          />
+        </div>
+
+        {/* Right — features + store badges */}
+        <div className="flex flex-col gap-7">
+          {COACH_FEATURES.map((f) => (
+            <div key={f.title} className="flex items-start gap-5">
+              <img
+                src={f.icon}
+                alt=""
+                aria-hidden
+                className="h-[72px] w-[72px] shrink-0"
+                loading="lazy"
+              />
+              <div>
+                <p className="text-[16px] font-bold text-white">{f.title}</p>
+                <p className="text-[16px] leading-[22px] text-blue-003">
+                  {f.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+          <div className="mt-3 flex items-center gap-3">
+            <img
+              src="/landing/coach/google-play.svg"
+              alt="Get it on Google Play"
+              className="h-[44px] w-auto"
+              loading="lazy"
+            />
+            <img
+              src="/landing/coach/app-store.svg"
+              alt="Download on the App Store"
+              className="h-[44px] w-auto"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* 8 — Player + parent reviews (real Shopify-hosted videos, click-to-play) */
+const REVIEWS = [
+  {
+    name: 'Sam',
+    meta: '13  |  Noblesville United SC  |  Midfielder',
+    caption: '“It helps me with my weak foot.”',
+    video:
+      'https://www.sogilitygo.com/cdn/shop/videos/c/vp/3241b786375542e3bce7f82e20d4c2c6/3241b786375542e3bce7f82e20d4c2c6.HD-1080p-4.8Mbps-81554159.mp4',
+  },
+  {
+    name: 'Harlow',
+    meta: '10  |  Noblesville United SC  |  Midfielder',
+    caption: '“The boards and app are super fun and entertaining.”',
+    video:
+      'https://www.sogilitygo.com/cdn/shop/videos/c/vp/1a3d1b1a31cd4532a68626068b44ef12/1a3d1b1a31cd4532a68626068b44ef12.HD-1080p-4.8Mbps-81554158.mp4',
+  },
+  {
+    name: 'Ava',
+    meta: '9  |  Indy Eleven Academy  |  Defender',
+    caption: '“It helps me get better on both of my feet.”',
+    video:
+      'https://www.sogilitygo.com/cdn/shop/videos/c/vp/2104f55f21dd49b3a6adc8434921cf42/2104f55f21dd49b3a6adc8434921cf42.HD-1080p-4.8Mbps-81554157.mp4',
+  },
+  {
+    name: 'Wes',
+    meta: '8  |  Indy Eleven Academy  |  Midfielder',
+    caption: '“I’m sharper and more confident at every session.”',
+    video:
+      'https://www.sogilitygo.com/cdn/shop/videos/c/vp/f469c30e9bd54378be5531cc53998f01/f469c30e9bd54378be5531cc53998f01.HD-1080p-4.8Mbps-81554156.mp4',
+  },
+];
+
+export function Reviews() {
+  return (
+    <section className="bg-cream py-20">
+      <Container>
+        <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-dark">
+          Player + parent reviews
+        </p>
+        <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
+          Player in action
+        </h2>
+
+        <div className="mt-12 grid grid-cols-1 justify-items-center gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+          {REVIEWS.map((r) => (
+            <ReviewCard key={r.name} {...r} />
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function ReviewCard({
+  name,
+  meta,
+  caption,
+  video,
+}: {
+  name: string;
+  meta: string;
+  caption: string;
+  video: string;
+}) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const toggle = () => {
+    const v = ref.current;
+    if (!v) return;
+    if (v.paused) {
+      void v.play();
+      setPlaying(true);
+    } else {
+      v.pause();
+      setPlaying(false);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-[300px]">
+      <div className="relative aspect-[313/468] overflow-hidden rounded-2xl bg-black">
+        <video
+          ref={ref}
+          src={video}
+          className="h-full w-full object-cover"
+          loop
+          playsInline
+          preload="metadata"
+          onClick={toggle}
+          onPause={() => setPlaying(false)}
+          onPlay={() => setPlaying(true)}
+        />
+        {!playing && (
+          <button
+            type="button"
+            aria-label={`Play ${name}'s video`}
+            onClick={toggle}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden>
+              <circle cx="32" cy="32" r="30" stroke="#fff" strokeWidth="2.5" />
+              <path d="M27 22.5 44 32 27 41.5z" fill="#fff" />
+            </svg>
+          </button>
+        )}
+      </div>
+      <p className="mt-4 text-center text-[14px] font-extrabold tracking-[1.4px] text-sogility">
+        {name}
+      </p>
+      <p className="text-center text-[14px] text-dark">{meta}</p>
+      <p className="mx-auto mt-2 max-w-[300px] text-center text-[14px] font-bold leading-[22px] text-surface">
+        {caption}
+      </p>
+    </div>
+  );
+}
+
+/* 9 — Elite Training Board (dark) — same pattern as Training together */
+export function TrainingBoard() {
+  return (
+    <section className="relative overflow-hidden bg-dark text-white">
+      {/* green glow, top-left */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[400px] bg-[radial-gradient(50%_110%_at_24%_0%,rgba(48,190,45,0.18),transparent_65%)]" />
+      <Container className="relative grid grid-cols-1 items-center gap-12 py-16 lg:grid-cols-2 lg:py-20">
+        {/* Left — title + board */}
+        <div className="flex flex-col">
+          <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-sogility">
+            How it works
+          </p>
+          <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
+            Elite Training Board
+          </h2>
+          <img
+            src="/landing/board/board.webp"
+            alt="SogilityGO Rebound IQ training board with smart light"
+            className="mt-6 w-full max-w-[500px] self-center"
+            loading="lazy"
+          />
+        </div>
+
+        {/* Right — feature bullets */}
+        <div className="flex flex-col gap-8">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="flex items-start gap-3">
+              <span className="flex h-[30px] w-[30px] shrink-0 items-center justify-center text-sogility">
+                <ArrowRight className="w-[26px]" />
+              </span>
+              <div>
+                <p className="text-[24px] font-bold leading-[30px] tracking-[-0.32px] text-cream">
+                  Rebound IQ tracking
+                </p>
+                <p className="mt-1 text-[20px] leading-[27px] tracking-[-0.2px] text-blue-003">
+                  Connects to the SogilityGO app, giving you access to a complete
+                  library of guided drills.
+                </p>
+                <p className="mt-1 text-[14px] font-semibold text-sogility">
+                  Track every touch
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* 10 — Personalized Training Sessions / 5 Core Skills (dark) */
+export function CoreSkills() {
+  const skills = ['First Touch', 'Passing', 'Dribbling', 'Vision', 'Agility'];
+  return (
+    <section className="bg-dark py-20 text-white">
+      <Container>
+        <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-sogility">
+          5 core skills
+        </p>
+        <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
+          Personalized Training Sessions
+        </h2>
+
+        <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+          {skills.map((s, i) => (
+            <div key={s} className="flex flex-col gap-4">
+              {/* video poster */}
+              <div className="relative aspect-[235/351] overflow-hidden rounded-2xl">
+                <img
+                  src="/landing/reviews/poster.webp"
+                  alt={`${s} training drill`}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                <button
+                  type="button"
+                  aria-label={`Play ${s} video`}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <svg width="56" height="56" viewBox="0 0 64 64" fill="none" aria-hidden>
+                    <circle cx="32" cy="32" r="30" stroke="#fff" strokeWidth="2.5" />
+                    <path d="M27 22.5 44 32 27 41.5z" fill="#fff" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* number + skill info */}
+              <div className="flex gap-2 px-2">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-dashed border-blue-003 text-[18px] font-bold text-grey-001">
+                  {i + 1}
+                </span>
+                <div className="flex flex-col gap-3">
+                  <p className="text-[18px] font-bold leading-[22px] text-sogility">
+                    {s}
+                  </p>
+                  <p className="text-[14px] leading-[18px] text-blue-003">
+                    <span className="font-bold text-cream">Improve</span> your
+                    ball control
+                  </p>
+                  <p className="text-[14px] leading-[18px] text-blue-003">
+                    <span className="font-bold text-cream">Receive</span> and
+                    direct the ball smoothly
+                  </p>
+                  <p className="text-[14px] leading-[18px] text-blue-003">
+                    <span className="font-bold text-cream">Train</span> your feet
+                    to handle the ball cleanly
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* 11 — Start Training (pricing). Prices from Figma; BUY → Storefront API later. */
+const PRICING_TIERS = [
+  {
+    name: 'Starter',
+    img: '/landing/pricing/p1.webp',
+    blurb: 'Best for complete development',
+    price: '$349',
+    was: null as string | null,
+    save: null as string | null,
+    popular: false,
+    features: ['Rebound IQ board ×1', 'Impact Light ×1', 'SogilityGO App'],
+  },
+  {
+    name: 'Advanced',
+    img: '/landing/pricing/p2.webp',
+    blurb: 'Best for serious development',
+    price: '$649',
+    was: '$698',
+    save: 'Save $49',
+    popular: true,
+    features: ['Rebound IQ board ×2', 'Impact Light ×2', 'SogilityGO App'],
+  },
+  {
+    name: 'Pro',
+    img: '/landing/pricing/p3.webp',
+    blurb: 'Best for complete development',
+    price: '$949',
+    was: '$1,047',
+    save: 'Save $98',
+    popular: false,
+    features: ['Rebound IQ board ×3', 'Impact Light ×3', 'SogilityGO App'],
+  },
+];
+
+export function StartTraining() {
+  return (
+    <section id="start-training" className="bg-dark py-16 text-white lg:py-20">
+      <Container>
+        <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-sogility">
+          Choose your best fit
+        </p>
+        <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
+          Start Training
+        </h2>
+
+        <div className="mt-12 grid grid-cols-1 justify-items-center gap-8 md:grid-cols-3">
+          {PRICING_TIERS.map((t) => (
+            <div
+              key={t.name}
+              className="w-full max-w-[345px] overflow-hidden rounded-bl-[24px] rounded-tr-[24px] bg-cream text-left shadow-[0_12px_30px_rgba(0,0,0,0.22)]"
+            >
+              {/* Photo */}
+              <div className="relative h-[230px] border-b-2 border-sogility">
+                <img
+                  src={t.img}
+                  alt={`Rebound IQ ${t.name}`}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                {t.popular && (
+                  <span className="absolute left-0 top-0 flex h-8 items-center bg-sogility px-3 text-[16px] font-extrabold text-cream">
+                    Most Popular
+                  </span>
+                )}
+              </div>
+
+              {/* Body */}
+              <div className="flex flex-col gap-6 px-4 pb-6 pt-4">
+                <div className="flex flex-col gap-[7px]">
+                  <div className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px]">
+                    <p className="text-sogility">Rebound IQ</p>
+                    <p className="text-dark">{t.name}</p>
+                  </div>
+                  <p className="text-[16px] leading-[22px] text-blue-005">
+                    {t.blurb}
+                  </p>
+                  <div className="flex flex-col gap-2 pt-4">
+                    <div className="flex items-center gap-3.5">
+                      <span className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px] text-dark">
+                        {t.price}
+                      </span>
+                      {t.was && (
+                        <span className="text-[16px] font-medium text-dark line-through">
+                          {t.was}
+                        </span>
+                      )}
+                      {t.save && (
+                        <span className="rounded-lg border-2 border-dashed border-sogility bg-white px-3 py-1 text-[16px] font-extrabold leading-none text-sogility">
+                          {t.save}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[14px] text-dark">
+                      Pay with affirm on orders over $35
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 pl-6 text-[14px] leading-[22px]">
+                  {t.features.map((f, i) => (
+                    <p key={i} className="text-blue-005">
+                      <span className="text-sogility">&rarr;</span> {f}
+                    </p>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-center rounded-2xl border border-sogility-deep bg-[linear-gradient(188deg,#30be2d_13%,#30892e_68%)] p-3 text-[16px] font-bold text-white shadow-[0px_4px_10px_rgba(0,0,0,0.25)] transition hover:brightness-105"
+                >
+                  Buy {t.name}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Policy row */}
+        <div className="mx-auto mt-14 flex max-w-[944px] items-stretch">
+          {[
+            ['14', 'Day Return Policy'],
+            ['1', 'Year Warranty'],
+            ['365', 'Waterproof + Durable'],
+          ].map(([n, label], i) => (
+            <div
+              key={label}
+              className={`flex flex-1 items-center justify-center gap-4 px-2 py-4 ${
+                i < 2 ? 'border-r border-sogility' : ''
+              }`}
+            >
+              <span className="text-[24px] font-bold leading-none text-sogility">
+                {n}
+              </span>
+              <span className="text-[12px] font-medium text-cream">{label}</span>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* 12 — Message from the owner (dark). Placeholder card → real owner video later. */
+export function OwnerMessage() {
+  return (
+    <section className="flex justify-center bg-dark px-6 py-16 lg:py-24">
+      <img
+        src="/landing/owner/owner.webp"
+        alt="Message from the owner — Jozy Altidore, former USMNT striker: My mission is simple — to inspire the next generation to dream bigger and work smarter."
+        className="w-full max-w-[988px]"
+        loading="lazy"
+      />
+    </section>
+  );
+}
+
+/* 13 — FAQ */
+export function Faq() {
+  return (
+    <section id="faq" className="bg-white py-16">
+      <Container>
+        <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-dark">
+          Things you might ask
+        </p>
+        <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
+          FAQs
+        </h2>
+
+        <div className="mt-10 lg:px-16">
+          <h3 className="mb-1 text-[14px] font-semibold uppercase tracking-[1.4px] text-[#22ae1f]">
+            For Parents and Coaches:
+          </h3>
+          <FaqItem
+            open
+            q="What is the value of having multiple ReboundIQ boards?"
+            a="While a single board is great for basic repetition, adding more boards exponentially increases the training complexity. Multiple boards allow for 360-degree training, forcing players to scan their shoulders, change direction quickly, and react to unpredictable cues—mimicking the chaos of a real match."
+          />
+          <FaqItem q="How does the system work?" />
+          <FaqItem q="What skills can I improve?" />
+
+          <h3 className="mb-1 mt-10 text-[14px] font-semibold uppercase tracking-[1.4px] text-[#22ae1f]">
+            About the product:
+          </h3>
+          <FaqItem q="What is SogilityGO?" />
+          <FaqItem q="How does the system work?" />
+          <FaqItem q="What skills can I improve?" />
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+function FaqItem({q, a, open}: {q: string; a?: string; open?: boolean}) {
+  return (
+    <details open={open} className="group border-b border-sogility">
+      <summary className="flex cursor-pointer list-none items-center gap-2 py-3">
+        <span className="flex-1 text-[14px] font-semibold leading-[22px] tracking-[-0.14px] text-blue-005">
+          {q}
+        </span>
+        <span className="text-[24px] font-light leading-none text-sogility group-open:hidden">
+          +
+        </span>
+        <span className="hidden text-[24px] font-light leading-none text-sogility group-open:inline">
+          &minus;
+        </span>
+      </summary>
+      {a ? (
+        <p className="pb-6 pr-4 text-[16px] leading-[22px] tracking-[-0.16px] text-blue-005 lg:pr-20">
+          {a}
+        </p>
+      ) : null}
+    </details>
+  );
+}

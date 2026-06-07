@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 259.779 245.705" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Highlight">
+<path id="outline (Stroke)" d="M21.2222 122.852C21.2222 186.754 73.0249 238.557 136.927 238.557C200.828 238.557 252.631 186.754 252.631 122.852C252.631 58.9505 200.829 7.14778 136.927 7.14778L136.927 1.23944e-05L138.515 0.0104829C205.104 0.85403 258.925 54.6753 259.768 121.264L259.779 122.852C259.779 190.702 204.776 245.704 136.927 245.704C69.0772 245.704 14.0744 190.702 14.0744 122.852L14.0849 121.264C14.9352 54.1467 69.6074 6.64409e-06 136.927 1.23944e-05L136.927 7.14778C73.0249 7.14777 21.2222 58.9504 21.2222 122.852Z" fill="var(--fill-0, #30BE2D)" fill-opacity="0.2"/>
+<path id="outline (Stroke)_2" d="M132.898 238.502C71.8431 236.646 22.6863 187.489 20.8299 126.434C20.7699 124.461 19.1754 122.852 17.2016 122.852C15.2278 122.852 13.6225 124.462 13.679 126.435C15.5404 191.437 67.895 243.792 132.897 245.653C134.87 245.71 136.48 244.104 136.48 242.131C136.48 240.157 134.871 238.562 132.898 238.502Z" fill="var(--fill-0, #30BE2D)"/>
+<g id="Blur" filter="url(#filter0_f_0_16)">
+<circle cx="17.0888" cy="124.526" r="8.15408" transform="rotate(-180 17.0888 124.526)" fill="var(--fill-0, #30BE2D)"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_16" x="-2.41081e-07" y="107.438" width="34.1776" height="34.1776" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="4.46735" result="effect1_foregroundBlur_0_16"/>
+</filter>
+</defs>
+</svg>

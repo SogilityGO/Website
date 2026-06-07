@@ -4,12 +4,8 @@
   --cart-aside-summary-height: 250px;
   --grid-item-width: 355px;
   --header-height: 64px;
-  --color-dark: #000;
-  --color-light: #fff;
-}
-
-img {
-  border-radius: 4px;
+  --ui-dark: #000;
+  --ui-light: #fff;
 }
 
 /*
@@ -28,8 +24,8 @@ img {
 * --------------------------------------------------
 */
 .mock-shop-notice {
-  background: var(--color-light);
-  border: 1px solid var(--color-dark);
+  background: var(--ui-light);
+  border: 1px solid var(--ui-dark);
   border-left-width: 0.5rem;
   margin: 1rem 0;
   padding: 0;
@@ -85,7 +81,7 @@ img {
 }
 
 aside {
-  background: var(--color-light);
+  background: var(--ui-light);
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
   height: 100vh;
   width: min(var(--aside-width), 100vw);
@@ -97,7 +93,7 @@ aside {
 
 aside header {
   align-items: center;
-  border-bottom: 1px solid var(--color-dark);
+  border-bottom: 1px solid var(--ui-dark);
   display: flex;
   height: var(--header-height);
   justify-content: space-between;
@@ -279,7 +275,7 @@ button.reset:hover:not(:has(> *)) {
 * --------------------------------------------------
 */
 .footer {
-  background: var(--color-dark);
+  background: var(--ui-dark);
   margin-top: auto;
 }
 
@@ -292,7 +288,7 @@ button.reset:hover:not(:has(> *)) {
 }
 
 .footer-menu a {
-  color: var(--color-light);
+  color: var(--ui-light);
   min-width: fit-content;
 }
 
@@ -332,7 +328,7 @@ button.reset:hover:not(:has(> *)) {
 
 .cart-summary-aside {
   background: white;
-  border-top: 1px solid var(--color-dark);
+  border-top: 1px solid var(--ui-dark);
   bottom: 0;
   padding-top: 0.75rem;
   position: absolute;
@@ -369,7 +365,7 @@ button.reset:hover:not(:has(> *)) {
 }
 
 .predictive-search-form {
-  background: var(--color-light);
+  background: var(--ui-light);
   position: sticky;
   top: 0;
 }

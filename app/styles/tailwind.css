@@ -4,3 +4,80 @@
  */
 
 @import 'tailwindcss';
+
+/* ------------------------------------------------------------------ *
+ * Sogility GO — design tokens (from Figma "Web v2 new")
+ * Brand green on dark navy + cream/white. Font: Inter.
+ * ------------------------------------------------------------------ */
+@theme {
+  /* Brand */
+  --color-sogility: #30be2d; /* Brand/Sogility — primary green */
+  --color-sogility-deep: #2f6f3f; /* Content/Green 002 */
+
+  /* Surfaces (dark / modal backgrounds) */
+  --color-dark: #282938; /* Content dark / Modal BG Dark */
+  --color-surface: #3b3d4f; /* Modal BG/Medium */
+  --color-surface-light: #3f4258; /* Modal BG/Light */
+  --color-surface-lighter: #464867; /* Modal BG/Lighter */
+
+  /* Light surfaces */
+  --color-cream: #f8f8f1; /* Content Cream */
+  --color-grey-001: #f1f1f1; /* Grey/Grey 001 */
+  --color-grey: #6e6e6e; /* Grey */
+
+  /* Content blue scale (text on light + accents) */
+  --color-blue-001: #cacffb; /* Content/Blue 001 */
+  --color-blue-003: #9499ba; /* Content/Blue 003 — light text */
+  --color-blue-004: #727593; /* Content/Blue 004 */
+  --color-blue-005: #4f557d; /* Content/Blue 005 — content blue */
+
+  /* Typography */
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+
+  /* Type scale (size / line-height) — see Figma text styles.
+     Titles use ExtraBold Italic, labels use +10 letter-spacing. */
+  --text-label: 0.875rem; /* 14 — LABEL, uppercase, tracking +10 */
+  --text-label--line-height: 2.375rem;
+  --text-label--letter-spacing: 0.625rem;
+  --text-detail: 0.875rem; /* 14 */
+  --text-detail--line-height: 1.125rem;
+  --text-body: 1rem; /* 16 */
+  --text-body--line-height: 1.375rem;
+  --text-subtitle: 1.125rem; /* 18 */
+  --text-subtitle--line-height: 1.375rem;
+  --text-title-24: 1.5rem; /* 24 */
+  --text-title-24--line-height: 1.375rem;
+  --text-title-30: 1.875rem; /* 30 */
+  --text-title-30--line-height: 1.75rem;
+  --text-title-36: 2.25rem; /* 36 — Large title, ExtraBold Italic */
+  --text-title-36--line-height: 2.375rem;
+  --text-title-42: 2.625rem; /* 42 — Extra title, ExtraBold Italic */
+  --text-title-42--line-height: 2.6875rem;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-dark);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Landing helpers */
+@layer components {
+  /* Eyebrow / section label: uppercase, wide tracking */
+  .eyebrow {
+    font-weight: 800;
+    font-size: 0.875rem;
+    letter-spacing: 0.625rem;
+    text-transform: uppercase;
+  }
+  /* ExtraBold Italic display titles */
+  .title-italic {
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: -0.02em;
+  }
+}

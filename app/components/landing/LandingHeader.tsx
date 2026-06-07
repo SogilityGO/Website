@@ -1,0 +1,119 @@
+import {Suspense} from 'react';
+import {Await, Link, useAsyncValue} from 'react-router';
+import {
+  type CartViewPayload,
+  useAnalytics,
+  useOptimisticCart,
+} from '@shopify/hydrogen';
+import type {CartApiQueryFragment} from 'storefrontapi.generated';
+import {useAside} from '~/components/Aside';
+
+/**
+ * Landing header: logo + minimal nav + cart, with the green promo strip below.
+ * Reuses the cart Aside wiring from the scaffold so the drawer keeps working.
+ */
+export function LandingHeader({
+  cart,
+}: {
+  cart: Promise<CartApiQueryFragment | null>;
+}) {
+  return (
+    <>
+      {/* Header — dark bar, logo centered, nav right */}
+      <header className="sticky top-0 z-50 bg-dark shadow-[0px_4px_10px_rgba(0,0,0,0.25)]">
+        <div className="mx-auto grid h-[88px] max-w-[1440px] grid-cols-3 items-center pl-[70px] pr-6">
+          <span aria-hidden />
+          <Link
+            to="/"
+            className="flex items-center justify-center gap-2 text-cream"
+            aria-label="SogilityGO home"
+          >
+            <span className="text-xl font-extrabold tracking-[0.2em]">
+              SOGILITY
+            </span>
+            <span className="rounded-full bg-sogility px-2 py-0.5 text-sm font-extrabold text-white">
+              GO
+            </span>
+          </Link>
+          <nav className="flex items-center justify-end gap-10 text-[14px] font-normal uppercase tracking-[0.12em] text-cream">
+            <a href="#start-training" className="hover:text-sogility">
+              Training
+            </a>
+            <a href="#faq" className="hover:text-sogility">
+              Contact
+            </a>
+            <CartToggle cart={cart} />
+          </nav>
+        </div>
+      </header>
+
+      {/* Promo banner — below the header, dark text on green */}
+      <div className="flex h-10 items-center justify-center gap-3 bg-sogility text-dark">
+        <span aria-hidden className="text-[19px]">
+          🏆
+        </span>
+        <p className="text-[15px] font-medium tracking-[0.02em]">
+          World Cup Promo 20% Off &nbsp;+&nbsp; Free US Shipping
+        </p>
+      </div>
+    </>
+  );
+}
+
+function CartToggle({cart}: {cart: Promise<CartApiQueryFragment | null>}) {
+  return (
+    <Suspense fallback={<CartButton count={0} />}>
+      <Await resolve={cart}>
+        <CartBanner />
+      </Await>
+    </Suspense>
+  );
+}
+
+function CartBanner() {
+  const original = useAsyncValue() as CartApiQueryFragment | null;
+  const cart = useOptimisticCart(original);
+  return <CartButton count={cart?.totalQuantity ?? 0} />;
+}
+
+function CartButton({count}: {count: number}) {
+  const {open} = useAside();
+  const {publish, shop, cart, prevCart} = useAnalytics();
+  return (
+    <button
+      type="button"
+      aria-label={`Open cart (${count} items)`}
+      onClick={() => {
+        open('cart');
+        publish('cart_viewed', {
+          cart,
+          prevCart,
+          shop,
+          url: window.location.href || '',
+        } as CartViewPayload);
+      }}
+      className="relative flex items-center"
+    >
+      <svg
+        aria-hidden
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+        <path d="M3 6h18" />
+        <path d="M16 10a4 4 0 0 1-8 0" />
+      </svg>
+      {count > 0 && (
+        <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-sogility px-1 text-[10px] font-bold">
+          {count}
+        </span>
+      )}
+    </button>
+  );
+}
