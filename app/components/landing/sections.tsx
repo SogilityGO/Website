@@ -419,28 +419,28 @@ const REVIEWS = [
     meta: '13  |  Noblesville United SC  |  Midfielder',
     caption: '“It helps me with my weak foot.”',
     video:
-      'https://www.sogilitygo.com/cdn/shop/videos/c/vp/3241b786375542e3bce7f82e20d4c2c6/3241b786375542e3bce7f82e20d4c2c6.HD-1080p-4.8Mbps-81554159.mp4',
+      'https://cdn.shopify.com/videos/c/vp/3241b786375542e3bce7f82e20d4c2c6/3241b786375542e3bce7f82e20d4c2c6.HD-1080p-4.8Mbps-81554159.mp4#t=0.1',
   },
   {
     name: 'Harlow',
     meta: '10  |  Noblesville United SC  |  Midfielder',
     caption: '“The boards and app are super fun and entertaining.”',
     video:
-      'https://www.sogilitygo.com/cdn/shop/videos/c/vp/1a3d1b1a31cd4532a68626068b44ef12/1a3d1b1a31cd4532a68626068b44ef12.HD-1080p-4.8Mbps-81554158.mp4',
+      'https://cdn.shopify.com/videos/c/vp/1a3d1b1a31cd4532a68626068b44ef12/1a3d1b1a31cd4532a68626068b44ef12.HD-1080p-4.8Mbps-81554158.mp4#t=0.1',
   },
   {
     name: 'Ava',
     meta: '9  |  Indy Eleven Academy  |  Defender',
     caption: '“It helps me get better on both of my feet.”',
     video:
-      'https://www.sogilitygo.com/cdn/shop/videos/c/vp/2104f55f21dd49b3a6adc8434921cf42/2104f55f21dd49b3a6adc8434921cf42.HD-1080p-4.8Mbps-81554157.mp4',
+      'https://cdn.shopify.com/videos/c/vp/2104f55f21dd49b3a6adc8434921cf42/2104f55f21dd49b3a6adc8434921cf42.HD-1080p-4.8Mbps-81554157.mp4#t=0.1',
   },
   {
     name: 'Wes',
     meta: '8  |  Indy Eleven Academy  |  Midfielder',
     caption: '“I’m sharper and more confident at every session.”',
     video:
-      'https://www.sogilitygo.com/cdn/shop/videos/c/vp/f469c30e9bd54378be5531cc53998f01/f469c30e9bd54378be5531cc53998f01.HD-1080p-4.8Mbps-81554156.mp4',
+      'https://cdn.shopify.com/videos/c/vp/f469c30e9bd54378be5531cc53998f01/f469c30e9bd54378be5531cc53998f01.HD-1080p-4.8Mbps-81554156.mp4#t=0.1',
   },
 ];
 
@@ -476,9 +476,36 @@ function ReviewCard({
   caption: string;
   video: string;
 }) {
+  return (
+    <div className="w-full max-w-[300px]">
+      <PlayableVideo
+        src={video}
+        label={`Play ${name}'s video`}
+        className="aspect-[313/468]"
+      />
+      <p className="mt-4 text-center text-[14px] font-extrabold tracking-[1.4px] text-sogility">
+        {name}
+      </p>
+      <p className="text-center text-[14px] text-dark">{meta}</p>
+      <p className="mx-auto mt-2 max-w-[300px] text-center text-[14px] font-bold leading-[22px] text-surface">
+        {caption}
+      </p>
+    </div>
+  );
+}
+
+/** Click-to-play video with a centered play-button overlay. */
+function PlayableVideo({
+  src,
+  label,
+  className = '',
+}: {
+  src: string;
+  label: string;
+  className?: string;
+}) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
-
   const toggle = () => {
     const v = ref.current;
     if (!v) return;
@@ -490,42 +517,32 @@ function ReviewCard({
       setPlaying(false);
     }
   };
-
   return (
-    <div className="w-full max-w-[300px]">
-      <div className="relative aspect-[313/468] overflow-hidden rounded-2xl bg-black">
-        <video
-          ref={ref}
-          src={video}
-          className="h-full w-full object-cover"
-          loop
-          playsInline
-          preload="metadata"
+    <div className={`relative overflow-hidden rounded-2xl bg-black ${className}`}>
+      <video
+        ref={ref}
+        src={src}
+        className="h-full w-full object-cover"
+        loop
+        playsInline
+        preload="metadata"
+        onClick={toggle}
+        onPause={() => setPlaying(false)}
+        onPlay={() => setPlaying(true)}
+      />
+      {!playing && (
+        <button
+          type="button"
+          aria-label={label}
           onClick={toggle}
-          onPause={() => setPlaying(false)}
-          onPlay={() => setPlaying(true)}
-        />
-        {!playing && (
-          <button
-            type="button"
-            aria-label={`Play ${name}'s video`}
-            onClick={toggle}
-            className="absolute inset-0 flex items-center justify-center"
-          >
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden>
-              <circle cx="32" cy="32" r="30" stroke="#fff" strokeWidth="2.5" />
-              <path d="M27 22.5 44 32 27 41.5z" fill="#fff" />
-            </svg>
-          </button>
-        )}
-      </div>
-      <p className="mt-4 text-center text-[14px] font-extrabold tracking-[1.4px] text-sogility">
-        {name}
-      </p>
-      <p className="text-center text-[14px] text-dark">{meta}</p>
-      <p className="mx-auto mt-2 max-w-[300px] text-center text-[14px] font-bold leading-[22px] text-surface">
-        {caption}
-      </p>
+          className="absolute inset-0 flex items-center justify-center"
+        >
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden>
+            <circle cx="32" cy="32" r="30" stroke="#fff" strokeWidth="2.5" />
+            <path d="M27 22.5 44 32 27 41.5z" fill="#fff" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
@@ -581,8 +598,35 @@ export function TrainingBoard() {
 }
 
 /* 10 — Personalized Training Sessions / 5 Core Skills (dark) */
+const CORE_SKILLS = [
+  {
+    name: 'First Touch',
+    video:
+      'https://cdn.shopify.com/videos/c/vp/46f00d79b2e649419a91efa619a501c1/46f00d79b2e649419a91efa619a501c1.HD-1080p-2.5Mbps-84889328.mp4#t=0.1',
+  },
+  {
+    name: 'Passing',
+    video:
+      'https://cdn.shopify.com/videos/c/vp/464dddbf1f4c47eb86f5abdf0272292f/464dddbf1f4c47eb86f5abdf0272292f.HD-1080p-2.5Mbps-84890162.mp4#t=0.1',
+  },
+  {
+    name: 'Dribbling',
+    video:
+      'https://cdn.shopify.com/videos/c/vp/40b47e65064a413880a398fd44edfae1/40b47e65064a413880a398fd44edfae1.HD-1080p-2.5Mbps-84890372.mp4#t=0.1',
+  },
+  {
+    name: 'Vision',
+    video:
+      'https://cdn.shopify.com/videos/c/vp/1846d9d5c7b1431fbfd625d4d70ac7bc/1846d9d5c7b1431fbfd625d4d70ac7bc.HD-1080p-2.5Mbps-84890561.mp4#t=0.1',
+  },
+  {
+    name: 'Agility',
+    video:
+      'https://cdn.shopify.com/videos/c/vp/c4b85330de34456493e3506945cd5c7d/c4b85330de34456493e3506945cd5c7d.HD-1080p-2.5Mbps-84890716.mp4#t=0.1',
+  },
+];
+
 export function CoreSkills() {
-  const skills = ['First Touch', 'Passing', 'Dribbling', 'Vision', 'Agility'];
   return (
     <section className="bg-dark py-20 text-white">
       <Container>
@@ -594,27 +638,13 @@ export function CoreSkills() {
         </h2>
 
         <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
-          {skills.map((s, i) => (
-            <div key={s} className="flex flex-col gap-4">
-              {/* video poster */}
-              <div className="relative aspect-[235/351] overflow-hidden rounded-2xl">
-                <img
-                  src="/landing/reviews/poster.webp"
-                  alt={`${s} training drill`}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-                <button
-                  type="button"
-                  aria-label={`Play ${s} video`}
-                  className="absolute inset-0 flex items-center justify-center"
-                >
-                  <svg width="56" height="56" viewBox="0 0 64 64" fill="none" aria-hidden>
-                    <circle cx="32" cy="32" r="30" stroke="#fff" strokeWidth="2.5" />
-                    <path d="M27 22.5 44 32 27 41.5z" fill="#fff" />
-                  </svg>
-                </button>
-              </div>
+          {CORE_SKILLS.map((s, i) => (
+            <div key={s.name} className="flex flex-col gap-4">
+              <PlayableVideo
+                src={s.video}
+                label={`Play ${s.name} video`}
+                className="aspect-[235/351]"
+              />
 
               {/* number + skill info */}
               <div className="flex gap-2 px-2">
@@ -623,7 +653,7 @@ export function CoreSkills() {
                 </span>
                 <div className="flex flex-col gap-3">
                   <p className="text-[18px] font-bold leading-[22px] text-sogility">
-                    {s}
+                    {s.name}
                   </p>
                   <p className="text-[14px] leading-[18px] text-blue-003">
                     <span className="font-bold text-cream">Improve</span> your
@@ -692,7 +722,7 @@ export function StartTraining() {
           Start Training
         </h2>
 
-        <div className="mt-12 grid grid-cols-1 justify-items-center gap-8 md:grid-cols-3">
+        <div className="mt-12 flex flex-col items-center gap-6 md:flex-row md:items-stretch md:justify-center">
           {PRICING_TIERS.map((t) => (
             <div
               key={t.name}
