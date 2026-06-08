@@ -109,8 +109,8 @@ export default function Homepage() {
         </div>
       </div>
       <VirtualCoach />
-      <Reviews />
       <TrainingBoard />
+      <Reviews />
       <CoreSkills />
       <StartTraining checkout={checkout} />
       <OwnerMessage />

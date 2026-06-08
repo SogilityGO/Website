@@ -81,3 +81,14 @@
     letter-spacing: -0.02em;
   }
 }
+
+/* Continuous logo marquee (Trusted by, mobile). Track holds two copies; -50%
+   moves exactly one copy for a seamless loop. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

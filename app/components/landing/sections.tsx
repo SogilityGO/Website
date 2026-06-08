@@ -33,16 +33,16 @@ export function Hero() {
         <img
           src="/landing/hero-1920.jpg"
           alt="Young player training at home with SogilityGO rebounder boards"
-          className="absolute inset-0 h-full w-full object-cover [object-position:50%_22%] lg:[object-position:50%_50%]"
+          className="absolute inset-0 h-full w-full object-cover [object-position:24%_30%] lg:[object-position:50%_50%]"
           fetchpriority="high"
         />
       </picture>
-      {/* dark gradient for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-r from-dark/85 via-dark/40 to-transparent" />
+      {/* dark gradient for text legibility — desktop only (over-darkens mobile) */}
+      <div className="absolute inset-0 hidden bg-gradient-to-r from-dark/85 via-dark/40 to-transparent lg:block" />
       {/* green glow, left */}
       <div className="pointer-events-none absolute inset-y-0 left-0 w-2/3 bg-[radial-gradient(circle_at_left,rgba(48,190,45,0.35),transparent_60%)]" />
-      {/* mobile gradient: dark at top (title) and slightly at bottom (countdown) */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-dark/85 via-dark/10 to-dark/55 lg:hidden" />
+      {/* mobile gradient: dark at top (title) + light middle (boy/countdown) */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-dark/80 via-transparent to-dark/35 lg:hidden" />
 
       <div className="relative mx-auto min-h-[520px] max-w-[1440px] lg:min-h-[707px]">
         {/* Countdown — green progress arc + "10 Seconds". Mobile: left, mid. */}
@@ -94,7 +94,7 @@ export function UnlockBanner() {
     // Full-bleed section: green panel reaches the right viewport edge, while the
     // left content stays aligned to the centered 1440 grid.
     <section className="w-full bg-white">
-      {/* Mobile layout — centered title + 50-80 / +1000 cards + 4x */}
+      {/* Mobile layout — centered title + 50-80 / 500-1,000 cards + 4x */}
       <div className="bg-cream px-6 py-8 text-center lg:hidden">
         <p className="text-[20px] font-extrabold leading-[28px] tracking-[-0.01em] text-dark">
           Unlocking their full potential
@@ -119,7 +119,7 @@ export function UnlockBanner() {
             />
             <div className="relative">
               <p className="title-italic text-[36px] leading-[38px] tracking-[-0.02em] text-cream">
-                +1000
+                500-1,000
               </p>
               <p className="text-[13px] leading-[16px] tracking-[-0.01em] text-white">
                 In a SogilityGO session
@@ -157,7 +157,7 @@ export function UnlockBanner() {
         {/* Right — green gradient panel with chevron, bleeds to the right edge */}
         <div className="relative flex flex-1 items-center justify-center gap-4 bg-[linear-gradient(134.4deg,#30be2d_37.31%,#165815_96.77%)] px-6 py-8 lg:py-0 lg:[clip-path:polygon(0_0,100%_0,100%_100%,0_100%,44px_50%)]">
           <span className="title-italic text-[62px] leading-[65px] tracking-[-0.01em] text-cream">
-            +1000
+            500-1,000
           </span>
           <span className="text-[18px] leading-[22px] tracking-[-0.01em] text-white">
             Touches in a SogilityGO session
@@ -179,14 +179,28 @@ export function TrustedBy() {
         </p>
       </div>
 
-      {/* Logos — mobile: horizontal scroll; desktop: centered wrap */}
-      <div className="flex items-center gap-[53px] overflow-x-auto bg-cream px-4 pb-6 pt-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:flex-wrap lg:justify-center lg:gap-x-[71px] lg:gap-y-8 lg:overflow-visible lg:px-6 lg:pb-8 lg:pt-5">
+      {/* Logos — mobile: auto-scrolling marquee; desktop: centered wrap */}
+      <div className="overflow-hidden bg-cream pb-6 pt-4 lg:hidden">
+        <div className="flex w-max items-center [animation:marquee_22s_linear_infinite] motion-reduce:[animation:none]">
+          {[...TRUSTED_LOGOS, ...TRUSTED_LOGOS].map((logo, i) => (
+            <img
+              key={i}
+              src={logo.src}
+              alt={i < TRUSTED_LOGOS.length ? logo.alt : ''}
+              aria-hidden={i >= TRUSTED_LOGOS.length}
+              className="mr-[53px] h-[80px] w-auto shrink-0"
+              loading="lazy"
+            />
+          ))}
+        </div>
+      </div>
+      <div className="hidden items-center justify-center gap-x-[71px] gap-y-8 bg-cream px-6 pb-8 pt-5 lg:flex lg:flex-wrap">
         {TRUSTED_LOGOS.map((logo, i) => (
           <img
             key={i}
             src={logo.src}
             alt={logo.alt}
-            className="h-[80px] w-auto shrink-0 lg:h-[107px]"
+            className="h-[107px] w-auto shrink-0"
             loading="lazy"
           />
         ))}
@@ -228,15 +242,8 @@ export function TrainingTogether() {
             <h2 className="title-italic mt-3 hidden max-w-[760px] text-[42px] leading-[43px] tracking-[-0.42px] text-sogility lg:block">
               Supporting your player&rsquo;s journey
             </h2>
-            <p className="max-w-[620px] text-[16px] leading-[22px] text-dark lg:mt-6">
-              Success comes from more deliberate practice than the competition.
-            </p>
-
-            <div className="mt-6 max-w-[620px] space-y-6">
-              <TrainingBullet
-                title="Making the starting lineup, two lines if needed"
-                defaultOpen
-              >
+            <div className="mt-6 max-w-[620px] space-y-6 lg:mt-8">
+              <TrainingBullet title="Making the starting lineup" defaultOpen>
                 <p className="text-[16px] leading-[22px] text-grey">
                   Coaches pick players who look sharper, who control the ball
                   under pressure, whose first touch doesn&rsquo;t cost
@@ -246,8 +253,18 @@ export function TrainingTogether() {
                   Visible improvement within 6-10 weeks
                 </p>
               </TrainingBullet>
-              <TrainingBullet title="Moving up a division" />
-              <TrainingBullet title="Levelling up their talent" />
+              <TrainingBullet title="Moving up a division">
+                <p className="text-[16px] leading-[22px] text-grey">
+                  The jump between levels is almost always a question of
+                  technical quality under pressure.
+                </p>
+              </TrainingBullet>
+              <TrainingBullet title="Leveling up their talent">
+                <p className="text-[16px] leading-[22px] text-grey">
+                  Success comes from more deliberate practice than the
+                  competition.
+                </p>
+              </TrainingBullet>
             </div>
           </div>
         </div>
@@ -494,7 +511,7 @@ const COACH_FEATURES = [
   {
     icon: '/landing/coach/icons/multiplayer.svg',
     title: 'Multiplayer',
-    desc: 'Multiplayer feature text',
+    desc: 'Up to 5 players can access their own personalized training plan',
   },
 ];
 
@@ -544,19 +561,36 @@ export function VirtualCoach() {
           {/* Mobile — feature slider */}
           <FeatureSlider />
 
-          <div className="mt-3 flex items-center justify-center gap-3 lg:justify-start">
-            <img
-              src="/landing/coach/google-play.svg"
-              alt="Get it on Google Play"
-              className="h-[44px] w-auto"
-              loading="lazy"
-            />
-            <img
-              src="/landing/coach/app-store.svg"
-              alt="Download on the App Store"
-              className="h-[44px] w-auto"
-              loading="lazy"
-            />
+          <div className="mt-4 flex items-center justify-center gap-3 lg:justify-start">
+            <span className="text-[16px] text-blue-003">Available on:</span>
+            <a
+              href="https://play.google.com/store/apps/details?id=com.ytiligos.sogilitygo"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Get SogilityGO on Google Play"
+              className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 transition hover:bg-white/15"
+            >
+              <img
+                src="/landing/coach/icons/google-play.svg"
+                alt=""
+                className="h-6 w-6"
+                loading="lazy"
+              />
+            </a>
+            <a
+              href="https://apps.apple.com/us/app/sogilitygo-soccer-training/id6754323607"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Download SogilityGO on the App Store"
+              className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 transition hover:bg-white/15"
+            >
+              <img
+                src="/landing/coach/icons/app-store.svg"
+                alt=""
+                className="h-6 w-6"
+                loading="lazy"
+              />
+            </a>
           </div>
         </div>
       </Container>
@@ -657,7 +691,7 @@ export function Reviews() {
           Player + parent reviews
         </p>
         <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
-          Player in action
+          Players in action
         </h2>
 
         <div className="mt-12 grid grid-cols-1 justify-items-center gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
@@ -849,19 +883,16 @@ function PlayableVideo({
 /* 9 — Elite Training Board (dark) — same pattern as Training together */
 const BOARD_BULLETS = [
   {
-    title: 'Rebound IQ tracking',
-    desc: 'Connects to the SogilityGO app, giving you access to a complete library of guided drills.',
-    tag: 'Track every touch',
+    title: 'Delivers game-speed passes',
+    desc: 'Engineered with high-density materials designed to return the ball right back to you with the same velocity/force.',
   },
   {
-    title: 'Rebound IQ tracking',
-    desc: 'Connects to the SogilityGO app, giving you access to a complete library of guided drills.',
-    tag: 'Track every touch',
+    title: 'Replicates real match scenarios',
+    desc: 'By adding a cognitive, unpredictable element with the smart lights, players get a more dynamic and versatile training experience.',
   },
   {
-    title: 'Rebound IQ tracking',
-    desc: 'Connects to the SogilityGO app, giving you access to a complete library of guided drills.',
-    tag: 'Track every touch',
+    title: 'Durable, portable & easy assembly',
+    desc: 'Built to withstand high-impact shots and weather, with ease moving from your backyard to inside your home.',
   },
 ];
 
@@ -894,9 +925,6 @@ function BoardSlider() {
               </p>
               <p className="text-[16px] leading-[22px] tracking-[-0.16px] text-blue-003">
                 {b.desc}
-              </p>
-              <p className="text-[14px] font-semibold leading-[22px] tracking-[-0.14px] text-sogility/90">
-                {b.tag}
               </p>
             </div>
           </div>
@@ -951,9 +979,6 @@ export function TrainingBoard() {
                 </p>
                 <p className="mt-1 text-[20px] leading-[27px] tracking-[-0.2px] text-blue-003">
                   {b.desc}
-                </p>
-                <p className="mt-1 text-[14px] font-semibold text-sogility">
-                  {b.tag}
                 </p>
               </div>
             </div>
@@ -1206,7 +1231,7 @@ const PRICING_TIERS = [
     name: 'Starter',
     handle: 'sogilitygo-rebounder-pro',
     img: '/landing/pricing/p1.webp',
-    blurb: 'Best for complete development',
+    blurb: 'Perfect for mastering the basics and getting thousands of quality reps.',
     price: '$349',
     priceCents: 34900,
     was: null as string | null,
@@ -1218,7 +1243,7 @@ const PRICING_TIERS = [
     name: 'Advanced',
     handle: 'sogilitygo-reboundiq-elite',
     img: '/landing/pricing/p2.webp',
-    blurb: 'Best for serious development',
+    blurb: 'Take training up a notch with multi-angle passing, decision making and scanning.',
     price: '$649',
     priceCents: 64900,
     was: '$698',
@@ -1230,7 +1255,7 @@ const PRICING_TIERS = [
     name: 'Pro',
     handle: 'sogilitygo-reboundiq-ultimate',
     img: '/landing/pricing/p3.webp',
-    blurb: 'Best for complete development',
+    blurb: 'The ultimate 360-degree training experience for elite skill development.',
     price: '$949',
     priceCents: 94900,
     was: '$1,047',
@@ -1425,10 +1450,23 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
+  // Slides are narrower than the viewport (the next card peeks), so derive the
+  // active index from whichever slide centre is closest to the viewport centre.
   const onScroll = () => {
     const el = ref.current;
     if (!el) return;
-    setActive(Math.round(el.scrollLeft / el.clientWidth));
+    const centre = el.scrollLeft + el.clientWidth / 2;
+    let best = 0;
+    let bestDist = Infinity;
+    Array.from(el.children).forEach((c, i) => {
+      const child = c as HTMLElement;
+      const d = Math.abs(child.offsetLeft + child.offsetWidth / 2 - centre);
+      if (d < bestDist) {
+        bestDist = d;
+        best = i;
+      }
+    });
+    setActive(best);
   };
 
   return (
@@ -1445,10 +1483,10 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
       <div
         ref={ref}
         onScroll={onScroll}
-        className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {PRICING_TIERS.map((t) => (
-          <div key={t.name} className="w-full shrink-0 snap-center px-6">
+          <div key={t.name} className="w-[85%] shrink-0 snap-center">
             <div className="overflow-hidden rounded-bl-[24px] rounded-tr-[24px] bg-cream text-left shadow-[0_12px_30px_rgba(0,0,0,0.22)]">
               {/* Photo */}
               <div className="relative h-[230px] border-b-2 border-sogility">
@@ -1557,16 +1595,54 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
   );
 }
 
-/* 12 — Message from the owner (dark). Placeholder card → real owner video later. */
+/* 12 — Message from the owner (cream) — Figma 490:3494 / 2002:1890 */
 export function OwnerMessage() {
   return (
-    <section className="flex justify-center bg-dark px-6 py-16 lg:py-24">
-      <img
-        src="/landing/owner/owner.webp"
-        alt="Message from the owner — Jozy Altidore, former USMNT striker: My mission is simple — to inspire the next generation to dream bigger and work smarter."
-        className="w-full max-w-[988px]"
-        loading="lazy"
-      />
+    <section className="relative overflow-hidden bg-cream">
+      {/* green glow, top */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[200px] bg-[radial-gradient(80%_120%_at_15%_0%,rgba(48,190,45,0.22),transparent_60%)]" />
+      <Container className="relative py-12 lg:py-16">
+        <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-dark">
+          Message from the owner
+        </p>
+        <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
+          What separates good players from elite
+        </h2>
+
+        <div className="mt-8 flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:gap-10">
+          <img
+            src="/landing/owner/jozy.webp"
+            alt="Jozy Altidore, SogilityGO co-founder and former USMNT striker"
+            className="aspect-square w-full max-w-[345px] shrink-0 rounded-2xl object-cover object-top lg:aspect-[453/433] lg:w-[453px] lg:max-w-none"
+            loading="lazy"
+          />
+
+          <div className="flex flex-col lg:max-w-[790px]">
+            <p className="text-center text-[18px] leading-[27px] tracking-[-0.18px] text-surface lg:text-left lg:text-[19px] lg:leading-[28px]">
+              {`"I built SogilityGO because I know exactly what separates good players from elite ones: the invisible hours spent training away from the team. We created this so your child isn't just getting more touches in the backyard—they are getting the right touches, guided by pro-level technology, to build the unshakeable confidence they need on game day."`}
+            </p>
+
+            <div className="mt-5 flex flex-col items-center">
+              <img
+                src="/landing/owner/jozy-sig.svg"
+                alt=""
+                aria-hidden
+                className="h-[54px] w-auto"
+              />
+              <p className="mt-2 text-[18px] font-bold text-sogility">
+                Jozy Altidore
+              </p>
+              <p className="mt-1 text-center text-[14px] font-semibold text-dark">
+                Former USMNT Striker &amp; Co-founder, SogilityGO
+              </p>
+              <p className="text-center text-[14px] text-dark">
+                115 Caps for the USMNT | Professional Career across the Premier
+                League, Europe &amp; MLS
+              </p>
+            </div>
+          </div>
+        </div>
+      </Container>
     </section>
   );
 }
@@ -1591,8 +1667,8 @@ export function Faq() {
           FAQs
         </h2>
 
-        {/* groups: About-product first on mobile, Parents-first on desktop (Figma).
-            Answers are the real copy from the live store FAQ (theme-live). */}
+        {/* Parent-focused FAQ (client copy). About-product first on mobile,
+            Parents-first on desktop (responsive order). */}
         <div className="mt-6 flex flex-col lg:mt-10 lg:px-16">
           <div className="order-2 lg:order-1">
             <h3 className="mb-1 mt-8 text-[14px] font-semibold uppercase tracking-[1.4px] text-[#22ae1f] lg:mt-0">
@@ -1600,26 +1676,20 @@ export function Faq() {
             </h3>
             <FaqItem
               open
-              q="What is the value of having multiple ReboundIQ boards?"
-              a={
-                <>
-                  While a single board is great for basic repetition, adding more
-                  boards exponentially increases the training complexity. Multiple
-                  boards allow for{' '}
-                  <strong className="font-bold">360-degree training</strong>,
-                  forcing players to scan their shoulders, change direction
-                  quickly, and react to unpredictable cues—mimicking the chaos of
-                  a real match.
-                </>
-              }
+              q="Is this suitable for my child's age and skill level?"
+              a="Absolutely. The system is intuitive enough for young beginners, yet the reaction speeds and data tracking are challenging enough to push professional athletes to their limits. The app customizes the difficulty based on your child's initial assessment and adapts as they improve."
             />
             <FaqItem
-              q="Is SogilityGO suitable for all ages?"
-              a="Definitely. The system is intuitive enough for young players just starting their journey, yet the data-tracking and reaction speeds are challenging enough to push collegiate and professional athletes to their limits."
+              q="I have more than one child playing soccer. Can they share the system?"
+              a="Yes! You can set up 5 player profiles within the SogilityGO app. Each child will have their own customized training plan and individualized data tracking, so they can both progress at their own pace using the same ReboundIQ boards."
             />
             <FaqItem
-              q="Can I use SogilityGO indoors?"
-              a="Absolutely! The equipment is portable and designed for versatility. As long as you have a flat surface and enough space to safely kick a ball, SogilityGO is perfect for garages, basements, or home gyms."
+              q="As a parent, how can I track their progress?"
+              a="The SogilityGO app features a comprehensive data dashboard. Instead of guessing if they are getting better, you can review their training history, track their progress, and watch them improve week over week."
+            />
+            <FaqItem
+              q={'Is this going to just be more "screen time" for my kid?'}
+              a="This is active screen time. While the app runs on a phone, your child's eyes and body are engaged with the physical world, moving, reacting, and sweating. It turns screen motivation into physical development."
             />
           </div>
 
@@ -1628,45 +1698,24 @@ export function Faq() {
               About the product:
             </h3>
             <FaqItem
-              q="What is SogilityGO?"
-              a="SogilityGO is a science-based, at-home soccer training system that brings professional-grade technology to your backyard or basement. By combining high-quality hardware with interactive software, we provide a data-driven environment where players can master technical skills outside of team practice."
+              q="Can we really use it indoors?"
+              a="Yes! As long as you have a flat surface and enough space to safely kick a ball, SogilityGO is perfect for garages, basements, or home gyms."
             />
             <FaqItem
-              q="How does the system work?"
-              a="The system centers around our ReboundIQ boards and Impact Lights, which sync via Bluetooth to the SogilityGO App. The app acts as your virtual coach, guiding you through specific drills while sensors track your performance. You'll receive real-time data on your reaction time, passing accuracy, and total passes."
+              q="Will the boards break if my older kid kicks too hard?"
+              a="No. ReboundIQ boards are constructed from high-density, impact-resistant materials designed for professional use. They provide a true bounce every time, no matter how hard the pass."
             />
             <FaqItem
-              q="What skills can I improve?"
-              a={
-                <>
-                  <p className="mb-2">
-                    Our training plan is built around the Five Pillars of Player
-                    Development:
-                  </p>
-                  <ul className="list-disc space-y-1 pl-5">
-                    <li>
-                      <strong className="font-bold">First Touch:</strong>{' '}
-                      Mastering ball control under pressure.
-                    </li>
-                    <li>
-                      <strong className="font-bold">Passing:</strong> Developing
-                      crisp, accurate distribution.
-                    </li>
-                    <li>
-                      <strong className="font-bold">Dribbling:</strong> Improving
-                      close-quarters ball manipulation.
-                    </li>
-                    <li>
-                      <strong className="font-bold">Vision:</strong> Training your
-                      eyes to scan the field.
-                    </li>
-                    <li>
-                      <strong className="font-bold">Agility:</strong> Increasing
-                      explosive movement and coordination.
-                    </li>
-                  </ul>
-                </>
-              }
+              q="How long does it take to set up?"
+              a="Your first set up takes less than 5 minutes. Afterwards, your child can set up in under a minute. Simply place the ReboundIQ boards, connect them to the SogilityGO app via Bluetooth on your phone, and your child is ready to train. No complicated wiring or permanent installation is required."
+            />
+            <FaqItem
+              q="Does my child need a specific type of soccer ball?"
+              a="Not at all. Your player can use their standard size 3, 4, or 5 soccer balls. Just bring their regular game ball, your device to run the app, and the boards."
+            />
+            <FaqItem
+              q="Do the boards need to be plugged in during use?"
+              a="No, the boards are completely wireless. They feature a long-lasting rechargeable battery, giving you the freedom to set them up anywhere—from the driveway to the backyard to the living room—without tripping over cords."
             />
           </div>
         </div>

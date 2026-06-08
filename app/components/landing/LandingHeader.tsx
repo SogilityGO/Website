@@ -57,26 +57,15 @@ export function LandingHeader({
           </Link>
 
           <nav className="flex items-center justify-end gap-10 text-[14px] font-normal uppercase tracking-[0.12em] text-cream">
-            <a href="#start-training" className="hidden hover:text-sogility lg:block">
-              Training
-            </a>
             <a href="#faq" className="hidden hover:text-sogility lg:block">
               Contact
             </a>
-            <CartToggle cart={cart} />
           </nav>
         </div>
 
         {/* Mobile dropdown menu */}
         {menuOpen && (
           <nav className="flex flex-col gap-1 border-t border-white/10 bg-dark px-5 py-3 text-[14px] font-normal uppercase tracking-[0.12em] text-cream lg:hidden">
-            <a
-              href="#start-training"
-              onClick={() => setMenuOpen(false)}
-              className="py-2 hover:text-sogility"
-            >
-              Training
-            </a>
             <a
               href="#faq"
               onClick={() => setMenuOpen(false)}
@@ -91,11 +80,14 @@ export function LandingHeader({
       {/* Promo banner — below the header, dark text on green */}
       <div className="flex h-10 items-center justify-center gap-2 bg-sogility px-4 text-center text-dark">
         <span aria-hidden className="text-[17px]">
-          ⚽
+          🏆
         </span>
         <p className="text-[13px] font-medium tracking-[0.02em] sm:text-[15px]">
-          <span className="hidden sm:inline">World Cup Promo 20% Off &nbsp;+&nbsp; </span>
-          Free US Shipping
+          <span className="hidden sm:inline">
+            Get 20% Off &nbsp;+&nbsp; Free 1-Year Membership. Code:{' '}
+          </span>
+          <span className="sm:hidden">20% Off + Free Membership. Code: </span>
+          WC26
         </p>
       </div>
     </>
