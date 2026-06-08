@@ -1,4 +1,4 @@
-import {useLoaderData} from 'react-router';
+import {useLoaderData, type LinksFunction} from 'react-router';
 import type {Route} from './+types/_index';
 import {
   Hero,
@@ -27,6 +27,19 @@ export const meta: Route.MetaFunction = () => {
     },
   ];
 };
+
+// Preload the hero (LCP element) so it starts downloading in parallel with CSS
+// instead of after the <img> is discovered — biggest mobile LCP win.
+export const links: LinksFunction = () => [
+  {
+    rel: 'preload',
+    as: 'image',
+    href: '/landing/hero-960.webp',
+    imageSrcSet:
+      '/landing/hero-960.webp 960w, /landing/hero-1280.webp 1280w, /landing/hero-1920.webp 1920w',
+    imageSizes: '100vw',
+  },
+];
 
 // Pricing tiers → live Shopify products (handles). Buy buttons checkout via
 // the `/cart/<variantId>:1` permalink, so we only need the variant id + stock.

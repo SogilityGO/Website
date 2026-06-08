@@ -27,7 +27,7 @@ export function Hero() {
       <picture>
         <source
           type="image/webp"
-          srcSet="/landing/hero-1280.webp 1280w, /landing/hero-1920.webp 1920w"
+          srcSet="/landing/hero-960.webp 960w, /landing/hero-1280.webp 1280w, /landing/hero-1920.webp 1920w"
           sizes="100vw"
         />
         <img
