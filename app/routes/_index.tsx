@@ -1,3 +1,4 @@
+import {useLoaderData} from 'react-router';
 import type {Route} from './+types/_index';
 import {
   Hero,
@@ -12,6 +13,7 @@ import {
   StartTraining,
   OwnerMessage,
   Faq,
+  type CheckoutMap,
 } from '~/components/landing/sections';
 
 export const meta: Route.MetaFunction = () => {
@@ -25,7 +27,68 @@ export const meta: Route.MetaFunction = () => {
   ];
 };
 
+// Pricing tiers → live Shopify products (handles). Buy buttons checkout via
+// the `/cart/<variantId>:1` permalink, so we only need the variant id + stock.
+const PRICING_HANDLES = {
+  Starter: 'sogilitygo-rebounder-pro',
+  Advanced: 'sogilitygo-reboundiq-elite',
+  Pro: 'sogilitygo-reboundiq-ultimate',
+} as const;
+
+const START_TRAINING_QUERY = `#graphql
+  fragment TierVariant on Product {
+    availableForSale
+    variants(first: 1) {
+      nodes {
+        id
+        availableForSale
+      }
+    }
+  }
+  query StartTrainingTiers($starter: String!, $advanced: String!, $pro: String!) {
+    Starter: product(handle: $starter) { ...TierVariant }
+    Advanced: product(handle: $advanced) { ...TierVariant }
+    Pro: product(handle: $pro) { ...TierVariant }
+  }
+` as const;
+
+export async function loader({context}: Route.LoaderArgs) {
+  const {storefront} = context;
+
+  let checkout: CheckoutMap = {};
+  try {
+    const data = await storefront.query(START_TRAINING_QUERY, {
+      variables: {
+        starter: PRICING_HANDLES.Starter,
+        advanced: PRICING_HANDLES.Advanced,
+        pro: PRICING_HANDLES.Pro,
+      },
+    });
+
+    const toTier = (product: any): CheckoutMap[string] => {
+      const variant = product?.variants?.nodes?.[0];
+      if (!variant?.id) return undefined;
+      return {
+        variantId: String(variant.id).split('/').pop()!,
+        available: Boolean(product.availableForSale && variant.availableForSale),
+      };
+    };
+
+    checkout = {
+      Starter: toTier(data?.Starter),
+      Advanced: toTier(data?.Advanced),
+      Pro: toTier(data?.Pro),
+    };
+  } catch (error) {
+    // Never 500 the landing over pricing data — buttons fall back to the store.
+    console.error('StartTraining pricing fetch failed', error);
+  }
+
+  return {checkout};
+}
+
 export default function Homepage() {
+  const {checkout} = useLoaderData<typeof loader>();
   return (
     <>
       <Hero />
@@ -47,7 +110,7 @@ export default function Homepage() {
       <Reviews />
       <TrainingBoard />
       <CoreSkills />
-      <StartTraining />
+      <StartTraining checkout={checkout} />
       <OwnerMessage />
       <Faq />
     </>

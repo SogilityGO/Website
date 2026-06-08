@@ -1172,10 +1172,12 @@ function CoreSkillsSlider() {
   );
 }
 
-/* 11 — Start Training (pricing). Prices from Figma; BUY → Storefront API later. */
+/* 11 — Start Training (pricing). Tier name + handle map to live Shopify products;
+   Buy buttons checkout via the `/cart/<variantId>:1` permalink (Storefront API). */
 const PRICING_TIERS = [
   {
     name: 'Starter',
+    handle: 'sogilitygo-rebounder-pro',
     img: '/landing/pricing/p1.webp',
     blurb: 'Best for complete development',
     price: '$349',
@@ -1186,6 +1188,7 @@ const PRICING_TIERS = [
   },
   {
     name: 'Advanced',
+    handle: 'sogilitygo-reboundiq-elite',
     img: '/landing/pricing/p2.webp',
     blurb: 'Best for serious development',
     price: '$649',
@@ -1196,6 +1199,7 @@ const PRICING_TIERS = [
   },
   {
     name: 'Pro',
+    handle: 'sogilitygo-reboundiq-ultimate',
     img: '/landing/pricing/p3.webp',
     blurb: 'Best for complete development',
     price: '$949',
@@ -1206,7 +1210,60 @@ const PRICING_TIERS = [
   },
 ];
 
-export function StartTraining() {
+/** Live checkout data per tier, resolved in the route loader from the Storefront API. */
+export type TierCheckout = {variantId: string; available: boolean};
+export type CheckoutMap = Record<string, TierCheckout | undefined>;
+
+type PricingTier = (typeof PRICING_TIERS)[number];
+
+/**
+ * Buy button → Shopify checkout.
+ * - available: link to `/cart/<variantId>:1` (creates cart + redirects to checkout)
+ * - sold out: disabled button
+ * - no live data (fetch failed): fall back to the product page on the live store
+ */
+function BuyButton({
+  tier,
+  checkout,
+  className,
+}: {
+  tier: PricingTier;
+  checkout?: CheckoutMap;
+  className: string;
+}) {
+  const c = checkout?.[tier.name];
+  const gradient =
+    'border border-sogility-deep bg-[linear-gradient(188deg,#30be2d_13%,#30892e_68%)] text-white shadow-[0px_4px_10px_rgba(0,0,0,0.25)] transition hover:brightness-105';
+
+  if (c && !c.available) {
+    return (
+      <button
+        type="button"
+        disabled
+        className={`${className} cursor-not-allowed border border-grey/40 bg-grey/30 text-cream`}
+      >
+        Sold out
+      </button>
+    );
+  }
+
+  const href = c
+    ? `/cart/${c.variantId}:1`
+    : `https://www.sogilitygo.com/products/${tier.handle}`;
+  const external = !c;
+
+  return (
+    <a
+      href={href}
+      {...(external ? {target: '_blank', rel: 'noreferrer'} : {})}
+      className={`${className} ${gradient}`}
+    >
+      Buy {tier.name}
+    </a>
+  );
+}
+
+export function StartTraining({checkout}: {checkout?: CheckoutMap}) {
   return (
     <section
       id="start-training"
@@ -1284,12 +1341,11 @@ export function StartTraining() {
                   ))}
                 </div>
 
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-center rounded-2xl border border-sogility-deep bg-[linear-gradient(188deg,#30be2d_13%,#30892e_68%)] p-3 text-[16px] font-bold text-white shadow-[0px_4px_10px_rgba(0,0,0,0.25)] transition hover:brightness-105"
-                >
-                  Buy {t.name}
-                </button>
+                <BuyButton
+                  tier={t}
+                  checkout={checkout}
+                  className="flex w-full items-center justify-center rounded-2xl p-3 text-[16px] font-bold"
+                />
               </div>
             </div>
           ))}
@@ -1318,13 +1374,13 @@ export function StartTraining() {
       </Container>
 
       {/* mobile: horizontal slider of pricing cards */}
-      <StartTrainingSlider />
+      <StartTrainingSlider checkout={checkout} />
     </section>
   );
 }
 
 /** Mobile Start Training slider — one pricing card per view, shared policy row + dots. */
-function StartTrainingSlider() {
+function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
@@ -1411,12 +1467,11 @@ function StartTrainingSlider() {
                   ))}
                 </div>
 
-                <button
-                  type="button"
-                  className="flex h-14 w-full items-center justify-center rounded-2xl border border-sogility-deep bg-[linear-gradient(188deg,#30be2d_13%,#30892e_68%)] p-3 text-[18px] font-semibold text-white shadow-[0px_4px_10px_rgba(0,0,0,0.25)] transition hover:brightness-105"
-                >
-                  Buy {t.name}
-                </button>
+                <BuyButton
+                  tier={t}
+                  checkout={checkout}
+                  className="flex h-14 w-full items-center justify-center rounded-2xl p-3 text-[18px] font-semibold"
+                />
               </div>
             </div>
           </div>
