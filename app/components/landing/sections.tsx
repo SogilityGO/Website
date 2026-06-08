@@ -1,5 +1,7 @@
 import {type ReactNode, useEffect, useRef, useState} from 'react';
 import {Container, Eyebrow, SectionTitle, Placeholder} from './ui';
+import {AffirmLoader, AffirmMessage} from './affirm';
+import {trackBeginCheckout} from './analytics';
 
 const TRUSTED_LOGOS = [
   {src: '/landing/logos/anchor.webp', alt: 'Anchor Soccer'},
@@ -32,7 +34,7 @@ export function Hero() {
           src="/landing/hero-1920.jpg"
           alt="Young player training at home with SogilityGO rebounder boards"
           className="absolute inset-0 h-full w-full object-cover [object-position:50%_22%] lg:[object-position:50%_50%]"
-          fetchPriority="high"
+          fetchpriority="high"
         />
       </picture>
       {/* dark gradient for text legibility */}
@@ -365,7 +367,7 @@ export function PlayerJourney() {
                   className="absolute -bottom-1 right-1 w-[52px]"
                 />
                 {i < JOURNEY_STEPS.length - 1 && (
-                  <span className="absolute -right-6 top-1/2 hidden -translate-y-1/2 text-sogility lg:block">
+                  <span className="absolute -right-12 top-1/2 hidden -translate-y-1/2 text-sogility lg:block min-[1440px]:-right-[72px]">
                     <ArrowRight className="w-[26px]" />
                   </span>
                 )}
@@ -981,51 +983,76 @@ export function TrainingBoard() {
   );
 }
 
-/* 10 — Personalized Training Sessions / 5 Core Skills (dark) */
+/* 10 — Personalized Training Sessions / 5 Core Skills (dark).
+   `lines` are the real per-skill checklists from the live store's VIRTUAL
+   COACHING section (theme-live → templates/index.json). */
 const CORE_SKILLS = [
   {
     name: 'First Touch',
     video:
       'https://cdn.shopify.com/videos/c/vp/46f00d79b2e649419a91efa619a501c1/46f00d79b2e649419a91efa619a501c1.HD-1080p-2.5Mbps-84889328.mp4#t=0.1',
+    lines: [
+      'Improve your ball control',
+      'Receive and direct the ball smoothly',
+      'Train your feet to handle the ball cleanly',
+    ],
   },
   {
     name: 'Passing',
     video:
       'https://cdn.shopify.com/videos/c/vp/464dddbf1f4c47eb86f5abdf0272292f/464dddbf1f4c47eb86f5abdf0272292f.HD-1080p-2.5Mbps-84890162.mp4#t=0.1',
+    lines: [
+      'Pass the ball with confidence',
+      'Learn to make more accurate passes',
+      'Enhance your decision making abilities',
+    ],
   },
   {
     name: 'Dribbling',
     video:
       'https://cdn.shopify.com/videos/c/vp/40b47e65064a413880a398fd44edfae1/40b47e65064a413880a398fd44edfae1.HD-1080p-2.5Mbps-84890372.mp4#t=0.1',
+    lines: [
+      'Boost your ball mastery',
+      'Navigate throughout tight spaces',
+      'Build confidence with the ball',
+    ],
   },
   {
     name: 'Vision',
     video:
       'https://cdn.shopify.com/videos/c/vp/1846d9d5c7b1431fbfd625d4d70ac7bc/1846d9d5c7b1431fbfd625d4d70ac7bc.HD-1080p-2.5Mbps-84890561.mp4#t=0.1',
+    lines: [
+      'Master your spatial awareness',
+      'Spot your teammates quicker',
+      'Make smarter plays',
+    ],
   },
   {
     name: 'Agility',
     video:
       'https://cdn.shopify.com/videos/c/vp/c4b85330de34456493e3506945cd5c7d/c4b85330de34456493e3506945cd5c7d.HD-1080p-2.5Mbps-84890716.mp4#t=0.1',
+    lines: [
+      'Become quicker on your feet',
+      'Improve your speed and coordination',
+      'Make explosive movements',
+    ],
   },
 ];
 
-/** Shared skill copy (STUB — same lines for every skill, matches Figma). */
-function SkillCopy({size}: {size: 14 | 18}) {
+/** Per-skill checklist. Bolds the first word (the action verb) of each line. */
+function SkillCopy({lines, size}: {lines: string[]; size: 14 | 18}) {
   const cls = `leading-[22px] text-blue-003 ${size === 18 ? 'text-[18px]' : 'text-[14px] leading-[18px]'}`;
   return (
     <>
-      <p className={cls}>
-        <span className="font-bold text-cream">Improve</span> your ball control
-      </p>
-      <p className={cls}>
-        <span className="font-bold text-cream">Receive</span> and direct the ball
-        smoothly
-      </p>
-      <p className={cls}>
-        <span className="font-bold text-cream">Train</span> your feet to handle
-        the ball cleanly
-      </p>
+      {lines.map((line) => {
+        const [first, ...rest] = line.split(' ');
+        return (
+          <p key={line} className={cls}>
+            <span className="font-bold text-cream">{first}</span>{' '}
+            {rest.join(' ')}
+          </p>
+        );
+      })}
     </>
   );
 }
@@ -1063,7 +1090,7 @@ export function CoreSkills() {
                   <p className="text-[18px] font-bold leading-[22px] text-sogility">
                     {s.name}
                   </p>
-                  <SkillCopy size={14} />
+                  <SkillCopy lines={s.lines} size={14} />
                 </div>
               </div>
             </div>
@@ -1151,7 +1178,7 @@ function CoreSkillsSlider() {
                 <p className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px] text-sogility">
                   {s.name}
                 </p>
-                <SkillCopy size={18} />
+                <SkillCopy lines={s.lines} size={18} />
               </div>
             </div>
           </div>
@@ -1181,6 +1208,7 @@ const PRICING_TIERS = [
     img: '/landing/pricing/p1.webp',
     blurb: 'Best for complete development',
     price: '$349',
+    priceCents: 34900,
     was: null as string | null,
     save: null as string | null,
     popular: false,
@@ -1192,6 +1220,7 @@ const PRICING_TIERS = [
     img: '/landing/pricing/p2.webp',
     blurb: 'Best for serious development',
     price: '$649',
+    priceCents: 64900,
     was: '$698',
     save: 'Save $49',
     popular: true,
@@ -1203,6 +1232,7 @@ const PRICING_TIERS = [
     img: '/landing/pricing/p3.webp',
     blurb: 'Best for complete development',
     price: '$949',
+    priceCents: 94900,
     was: '$1,047',
     save: 'Save $98',
     popular: false,
@@ -1256,6 +1286,13 @@ function BuyButton({
     <a
       href={href}
       {...(external ? {target: '_blank', rel: 'noreferrer'} : {})}
+      onClick={() =>
+        trackBeginCheckout({
+          tierName: tier.name,
+          valueUSD: tier.priceCents / 100,
+          variantId: c?.variantId,
+        })
+      }
       className={`${className} ${gradient}`}
     >
       Buy {tier.name}
@@ -1271,6 +1308,9 @@ export function StartTraining({checkout}: {checkout?: CheckoutMap}) {
     >
       {/* green glow, top (mobile light-gradient from Figma) */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[170px] bg-[radial-gradient(90%_120%_at_80%_0%,rgba(48,190,45,0.30),transparent_60%)] lg:hidden" />
+
+      {/* loads the Affirm SDK once for the as-low-as widgets below */}
+      <AffirmLoader />
 
       <Container className="relative hidden lg:block">
         <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-sogility">
@@ -1327,9 +1367,10 @@ export function StartTraining({checkout}: {checkout?: CheckoutMap}) {
                         </span>
                       )}
                     </div>
-                    <p className="text-[14px] text-dark">
-                      Pay with affirm on orders over $35
-                    </p>
+                    <AffirmMessage
+                      amountCents={t.priceCents}
+                      className="text-[14px] text-dark"
+                    />
                   </div>
                 </div>
 
@@ -1450,9 +1491,10 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
                         </span>
                       )}
                     </div>
-                    <p className="text-[14px] text-dark">
-                      Pay with affirm on orders over $35
-                    </p>
+                    <AffirmMessage
+                      amountCents={t.priceCents}
+                      className="text-[14px] text-dark"
+                    />
                   </div>
                 </div>
 
@@ -1549,7 +1591,8 @@ export function Faq() {
           FAQs
         </h2>
 
-        {/* groups: About-product first on mobile, Parents-first on desktop (Figma) */}
+        {/* groups: About-product first on mobile, Parents-first on desktop (Figma).
+            Answers are the real copy from the live store FAQ (theme-live). */}
         <div className="mt-6 flex flex-col lg:mt-10 lg:px-16">
           <div className="order-2 lg:order-1">
             <h3 className="mb-1 mt-8 text-[14px] font-semibold uppercase tracking-[1.4px] text-[#22ae1f] lg:mt-0">
@@ -1558,19 +1601,73 @@ export function Faq() {
             <FaqItem
               open
               q="What is the value of having multiple ReboundIQ boards?"
-              a="While a single board is great for basic repetition, adding more boards exponentially increases the training complexity. Multiple boards allow for 360-degree training, forcing players to scan their shoulders, change direction quickly, and react to unpredictable cues—mimicking the chaos of a real match."
+              a={
+                <>
+                  While a single board is great for basic repetition, adding more
+                  boards exponentially increases the training complexity. Multiple
+                  boards allow for{' '}
+                  <strong className="font-bold">360-degree training</strong>,
+                  forcing players to scan their shoulders, change direction
+                  quickly, and react to unpredictable cues—mimicking the chaos of
+                  a real match.
+                </>
+              }
             />
-            <FaqItem q="How does the system work?" />
-            <FaqItem q="What skills can I improve?" />
+            <FaqItem
+              q="Is SogilityGO suitable for all ages?"
+              a="Definitely. The system is intuitive enough for young players just starting their journey, yet the data-tracking and reaction speeds are challenging enough to push collegiate and professional athletes to their limits."
+            />
+            <FaqItem
+              q="Can I use SogilityGO indoors?"
+              a="Absolutely! The equipment is portable and designed for versatility. As long as you have a flat surface and enough space to safely kick a ball, SogilityGO is perfect for garages, basements, or home gyms."
+            />
           </div>
 
           <div className="order-1 lg:order-2">
             <h3 className="mb-1 mt-8 text-[14px] font-semibold uppercase tracking-[1.4px] text-[#22ae1f] lg:mt-10">
               About the product:
             </h3>
-            <FaqItem q="What is SogilityGO?" />
-            <FaqItem q="How does the system work?" />
-            <FaqItem q="What skills can I improve?" />
+            <FaqItem
+              q="What is SogilityGO?"
+              a="SogilityGO is a science-based, at-home soccer training system that brings professional-grade technology to your backyard or basement. By combining high-quality hardware with interactive software, we provide a data-driven environment where players can master technical skills outside of team practice."
+            />
+            <FaqItem
+              q="How does the system work?"
+              a="The system centers around our ReboundIQ boards and Impact Lights, which sync via Bluetooth to the SogilityGO App. The app acts as your virtual coach, guiding you through specific drills while sensors track your performance. You'll receive real-time data on your reaction time, passing accuracy, and total passes."
+            />
+            <FaqItem
+              q="What skills can I improve?"
+              a={
+                <>
+                  <p className="mb-2">
+                    Our training plan is built around the Five Pillars of Player
+                    Development:
+                  </p>
+                  <ul className="list-disc space-y-1 pl-5">
+                    <li>
+                      <strong className="font-bold">First Touch:</strong>{' '}
+                      Mastering ball control under pressure.
+                    </li>
+                    <li>
+                      <strong className="font-bold">Passing:</strong> Developing
+                      crisp, accurate distribution.
+                    </li>
+                    <li>
+                      <strong className="font-bold">Dribbling:</strong> Improving
+                      close-quarters ball manipulation.
+                    </li>
+                    <li>
+                      <strong className="font-bold">Vision:</strong> Training your
+                      eyes to scan the field.
+                    </li>
+                    <li>
+                      <strong className="font-bold">Agility:</strong> Increasing
+                      explosive movement and coordination.
+                    </li>
+                  </ul>
+                </>
+              }
+            />
           </div>
         </div>
       </Container>
@@ -1578,7 +1675,7 @@ export function Faq() {
   );
 }
 
-function FaqItem({q, a, open}: {q: string; a?: string; open?: boolean}) {
+function FaqItem({q, a, open}: {q: string; a?: ReactNode; open?: boolean}) {
   return (
     <details open={open} className="group border-b border-sogility">
       <summary className="flex cursor-pointer list-none items-center gap-2 py-3">
@@ -1593,9 +1690,9 @@ function FaqItem({q, a, open}: {q: string; a?: string; open?: boolean}) {
         </span>
       </summary>
       {a ? (
-        <p className="pb-6 pr-4 text-[16px] leading-[22px] tracking-[-0.16px] text-blue-005 lg:pr-20">
+        <div className="pb-6 pr-4 text-[16px] leading-[22px] tracking-[-0.16px] text-blue-005 lg:pr-20">
           {a}
-        </p>
+        </div>
       ) : null}
     </details>
   );

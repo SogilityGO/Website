@@ -15,6 +15,7 @@ import {
   Faq,
   type CheckoutMap,
 } from '~/components/landing/sections';
+import {Analytics} from '~/components/landing/analytics';
 
 export const meta: Route.MetaFunction = () => {
   return [
@@ -91,6 +92,7 @@ export default function Homepage() {
   const {checkout} = useLoaderData<typeof loader>();
   return (
     <>
+      <Analytics />
       <Hero />
       <UnlockBanner />
       {/* Mobile order: Training together → Player journey → Trusted by (logos).

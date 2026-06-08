@@ -19,6 +19,40 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
+    // Third-party widgets/analytics. Affirm = monthly-payment messaging;
+    // GA4 (googletagmanager/google-analytics) + Meta Pixel (facebook) = tracking.
+    scriptSrc: [
+      "'self'",
+      'https://cdn.shopify.com',
+      'https://cdn1.affirm.com',
+      'https://www.googletagmanager.com',
+      'https://connect.facebook.net',
+    ],
+    connectSrc: [
+      "'self'",
+      'https://cdn.shopify.com',
+      'https://*.affirm.com',
+      'https://www.googletagmanager.com',
+      'https://www.google-analytics.com',
+      'https://*.google-analytics.com',
+      'https://*.analytics.google.com',
+      'https://connect.facebook.net',
+      'https://www.facebook.com',
+    ],
+    frameSrc: ["'self'", 'https://*.affirm.com', 'https://www.facebook.com'],
+    imgSrc: [
+      "'self'",
+      'https://cdn.shopify.com',
+      'data:',
+      'https://*.affirm.com',
+      'https://www.googletagmanager.com',
+      'https://www.google-analytics.com',
+      'https://*.google-analytics.com',
+      'https://www.facebook.com',
+      'https://connect.facebook.net',
+    ],
+    // Affirm injects its icon font as a data: URI; self-hosted Inter is same-origin.
+    fontSrc: ["'self'", 'data:', 'https://cdn.shopify.com'],
   });
 
   const body = await renderToReadableStream(
