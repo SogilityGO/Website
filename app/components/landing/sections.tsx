@@ -327,6 +327,7 @@ function TrainingBullet({
 const JOURNEY_STEPS = [
   {
     img: '/landing/journey/j1.webp',
+    badge: '/landing/journey/clipboard.svg',
     week: 'WEEK 1',
     title: 'Test your skills',
     stat: '5 core skills',
@@ -334,6 +335,7 @@ const JOURNEY_STEPS = [
   },
   {
     img: '/landing/journey/j2.webp',
+    badge: '/landing/journey/badge-trophy.svg',
     week: 'WEEK 4',
     title: 'Form habits',
     stat: '+20%',
@@ -341,6 +343,7 @@ const JOURNEY_STEPS = [
   },
   {
     img: '/landing/journey/j3.webp',
+    badge: '/landing/journey/clipboard.svg',
     week: 'WEEK 8',
     title: 'Get noticed',
     stat: '600+',
@@ -348,6 +351,7 @@ const JOURNEY_STEPS = [
   },
   {
     img: '/landing/journey/j4.webp',
+    badge: '/landing/journey/clipboard.svg',
     week: 'WEEK 10',
     title: 'Continue growth',
     stat: 'x4',
@@ -385,7 +389,7 @@ export function PlayerJourney() {
                   />
                 </div>
                 <img
-                  src="/landing/journey/badge-trophy.svg"
+                  src={s.badge}
                   alt=""
                   className="absolute -bottom-1 right-1 w-[52px]"
                 />
@@ -451,7 +455,7 @@ function JourneySlider() {
                 />
               </div>
               <img
-                src="/landing/journey/badge-trophy.svg"
+                src={s.badge}
                 alt=""
                 className="absolute -bottom-1 right-1 w-[52px]"
               />
@@ -683,6 +687,12 @@ const REVIEWS = [
     video:
       'https://cdn.shopify.com/videos/c/vp/f469c30e9bd54378be5531cc53998f01/f469c30e9bd54378be5531cc53998f01.HD-1080p-4.8Mbps-81554156.mp4#t=0.1',
   },
+  {
+    name: 'Rudy',
+    meta: 'Coach  |  Noblesville United SC',
+    caption: '', // TODO: real quote from client
+    video: '/landing/reviews/rudy.mp4',
+  },
 ];
 
 export function Reviews() {
@@ -700,7 +710,7 @@ export function Reviews() {
           Players in action
         </h2>
 
-        <div className="mt-12 grid grid-cols-1 justify-items-center gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-1 justify-items-center gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-5">
           {REVIEWS.map((r) => (
             <ReviewCard key={r.name} {...r} />
           ))}
@@ -783,9 +793,11 @@ function ReviewsSlider() {
             <p className="text-center text-[14px] leading-[18px] tracking-[-0.14px] text-dark">
               {r.meta}
             </p>
-            <p className="mt-2 px-6 text-center text-[20px] font-extrabold leading-[28px] tracking-[-0.2px] text-surface">
-              {r.caption}
-            </p>
+            {r.caption && (
+              <p className="mt-2 px-6 text-center text-[20px] font-extrabold leading-[28px] tracking-[-0.2px] text-surface">
+                {r.caption}
+              </p>
+            )}
           </div>
         ))}
       </div>
@@ -812,7 +824,7 @@ function ReviewCard({
 }: {
   name: string;
   meta: string;
-  caption: string;
+  caption?: string;
   video: string;
 }) {
   return (
@@ -826,9 +838,11 @@ function ReviewCard({
         {name}
       </p>
       <p className="text-center text-[14px] text-dark">{meta}</p>
-      <p className="mx-auto mt-2 max-w-[300px] text-center text-[14px] font-bold leading-[22px] text-surface">
-        {caption}
-      </p>
+      {caption && (
+        <p className="mx-auto mt-2 max-w-[300px] text-center text-[14px] font-bold leading-[22px] text-surface">
+          {caption}
+        </p>
+      )}
     </div>
   );
 }

@@ -7,6 +7,7 @@ const ABOUT_LINKS = [
   {label: 'Our Lights', href: 'https://www.sogilitygo.com/pages/our-lights'},
   {label: 'Our App', href: 'https://www.sogilitygo.com/pages/our-app'},
   {label: 'Partnership', href: 'https://www.sogilitygo.com/pages/partnerships'},
+  {label: 'Membership', href: 'https://www.sogilitygo.com/pages/membership'},
 ];
 
 const RESOURCE_LINKS = [

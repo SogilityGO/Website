@@ -80,11 +80,7 @@ export function LandingHeader({
       {/* Promo banner — below the header, dark text on green */}
       <div className="flex h-10 items-center justify-center gap-2 bg-sogility px-4 text-center text-dark">
         <p className="text-[13px] font-medium tracking-[0.02em] sm:text-[15px]">
-          <span className="hidden sm:inline">
-            Get 20% Off &nbsp;+&nbsp; Free 1-Year Membership. Code:{' '}
-          </span>
-          <span className="sm:hidden">20% Off + Free Membership. Code: </span>
-          WC26
+          Get 20% Off. Code: WC26
         </p>
         <span aria-hidden className="text-[17px]">
           🏆
