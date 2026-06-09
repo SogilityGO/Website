@@ -690,7 +690,7 @@ const REVIEWS = [
   {
     name: 'Rudy',
     meta: 'Coach  |  Noblesville United SC',
-    caption: '', // TODO: real quote from client
+    caption: '“Your players’ first touch will vastly improve.”',
     video:
       'https://cdn.shopify.com/videos/c/o/v/957532ac62a94a25998792a5a2f4b17a.mp4',
     poster:
