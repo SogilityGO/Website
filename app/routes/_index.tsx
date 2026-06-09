@@ -11,6 +11,7 @@ import {
   TrainingBoard,
   CoreSkills,
   StartTraining,
+  SetupTraining,
   OwnerMessage,
   Faq,
   type CheckoutMap,
@@ -126,6 +127,7 @@ export default function Homepage() {
       <Reviews />
       <CoreSkills />
       <StartTraining checkout={checkout} />
+      <SetupTraining />
       <OwnerMessage />
       <Faq />
     </>

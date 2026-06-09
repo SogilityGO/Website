@@ -691,7 +691,10 @@ const REVIEWS = [
     name: 'Rudy',
     meta: 'Coach  |  Noblesville United SC',
     caption: '', // TODO: real quote from client
-    video: '/landing/reviews/rudy.mp4',
+    video:
+      'https://cdn.shopify.com/videos/c/o/v/957532ac62a94a25998792a5a2f4b17a.mp4',
+    poster:
+      'https://cdn.shopify.com/s/files/1/0942/1380/0238/files/rudy_thumbnail_1.jpg?v=1781007392',
   },
 ];
 
@@ -772,6 +775,7 @@ function ReviewsSlider() {
                   videos.current[i] = el;
                 }}
                 src={r.video}
+                poster={r.poster}
                 className="h-full w-full object-cover"
                 muted
                 loop
@@ -821,16 +825,19 @@ function ReviewCard({
   meta,
   caption,
   video,
+  poster,
 }: {
   name: string;
   meta: string;
   caption?: string;
   video: string;
+  poster?: string;
 }) {
   return (
     <div className="w-full max-w-[300px]">
       <PlayableVideo
         src={video}
+        poster={poster}
         label={`Play ${name}'s video`}
         className="aspect-[313/468]"
       />
@@ -851,10 +858,12 @@ function ReviewCard({
 function PlayableVideo({
   src,
   label,
+  poster,
   className = '',
 }: {
   src: string;
   label: string;
+  poster?: string;
   className?: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -875,6 +884,7 @@ function PlayableVideo({
       <video
         ref={ref}
         src={src}
+        poster={poster}
         className="h-full w-full object-cover"
         loop
         playsInline
@@ -1578,8 +1588,20 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
         ))}
       </div>
 
-      {/* Policy row (shared) */}
-      <div className="mt-8 flex items-stretch justify-center px-6">
+      {/* Carousel dots — directly under the product cards */}
+      <div className="mt-5 flex justify-center gap-2">
+        {PRICING_TIERS.map((t, i) => (
+          <span
+            key={t.name}
+            className={`h-[8px] rounded-full transition-all ${
+              i === active ? 'w-6 bg-sogility' : 'w-[8px] bg-sogility/30'
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Policy row (shared, static) */}
+      <div className="mt-8 flex items-stretch justify-center px-6 pb-2">
         {[
           ['14', 'Day Return Policy'],
           ['1', 'Year Warranty'],
@@ -1600,11 +1622,130 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
 
-      <div className="mt-6 flex justify-center gap-2 pb-2">
-        {PRICING_TIERS.map((t, i) => (
+/* 11b — Setup and training (dark) — Figma 2001:2379 / 2001:2381 */
+const SETUP_STEPS = [
+  {
+    img: '/landing/setup/board.webp',
+    rounded: true,
+    step: 'Step 1',
+    title: 'Place the board',
+    desc: 'Any flat surface – backyard, basement, driveway. No tools, no assembly. Takes minutes.',
+  },
+  {
+    img: '/landing/setup/phone-light.webp',
+    rounded: false,
+    step: 'Step 2',
+    title: 'Pair the APP',
+    desc: 'Download the SogilityGO app, pair Impact Light via bluetooth. Account setup under 3 minutes. Ready every session after that.',
+  },
+  {
+    img: '/landing/setup/phone-explore.webp',
+    rounded: false,
+    step: 'Step 3',
+    title: 'Virtual Coach runs the session',
+    desc: 'Player assessment first, then a personalized 10-day plan. Real-time audio cues. 180+ activities. Average first session starts within 5 mins of unboxing.',
+  },
+];
+
+type SetupStepT = (typeof SETUP_STEPS)[number];
+
+function SetupStepText({step, title, desc}: SetupStepT) {
+  return (
+    <div className="mt-6 flex flex-col gap-3 px-1">
+      <p className="text-[14px] font-extrabold uppercase tracking-[1.4px] text-sogility">
+        {step}
+      </p>
+      <p className="text-[18px] font-bold leading-[22px] text-cream">{title}</p>
+      <p className="text-[14px] leading-[18px] tracking-[-0.14px] text-blue-003">
+        {desc}
+      </p>
+    </div>
+  );
+}
+
+function SetupImage({img, rounded}: {img: string; rounded: boolean}) {
+  return (
+    <div className="flex h-[300px] items-end justify-center lg:h-[354px]">
+      {rounded ? (
+        <img
+          src={img}
+          alt=""
+          className="h-full w-full rounded-2xl object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <img src={img} alt="" className="h-full w-auto object-contain" loading="lazy" />
+      )}
+    </div>
+  );
+}
+
+export function SetupTraining() {
+  return (
+    <section className="relative overflow-hidden bg-dark text-white">
+      {/* green glow, top */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[300px] bg-[radial-gradient(50%_110%_at_24%_0%,rgba(48,190,45,0.18),transparent_65%)]" />
+
+      <Container className="relative pb-4 pt-16 lg:pb-20 lg:pt-20">
+        <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-sogility">
+          Setup and training
+        </p>
+        <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
+          Ready in under 5 minutes
+        </h2>
+        <p className="mt-2 max-w-[608px] text-[16px] leading-[22px] text-blue-003">
+          Player doesn&rsquo;t need you there. Set it up once and they run their
+          own sessions.
+        </p>
+
+        {/* desktop: 3 columns */}
+        <div className="mt-12 hidden grid-cols-3 gap-10 lg:grid">
+          {SETUP_STEPS.map((s) => (
+            <div key={s.step} className="flex flex-col">
+              <SetupImage img={s.img} rounded={s.rounded} />
+              <SetupStepText {...s} />
+            </div>
+          ))}
+        </div>
+      </Container>
+
+      {/* mobile: slider */}
+      <SetupSlider />
+    </section>
+  );
+}
+
+/** Mobile Setup-and-training slider — one step per view + dots. */
+function SetupSlider() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const onScroll = () => {
+    const el = ref.current;
+    if (!el) return;
+    setActive(Math.round(el.scrollLeft / el.clientWidth));
+  };
+  return (
+    <div className="relative pb-6 lg:hidden">
+      <div
+        ref={ref}
+        onScroll={onScroll}
+        className="flex snap-x snap-mandatory overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {SETUP_STEPS.map((s) => (
+          <div key={s.step} className="w-full shrink-0 snap-center px-6">
+            <SetupImage img={s.img} rounded={s.rounded} />
+            <SetupStepText {...s} />
+          </div>
+        ))}
+      </div>
+      <div className="mt-4 flex justify-center gap-2">
+        {SETUP_STEPS.map((s, i) => (
           <span
-            key={t.name}
+            key={s.step}
             className={`h-[8px] rounded-full transition-all ${
               i === active ? 'w-6 bg-sogility' : 'w-[8px] bg-sogility/30'
             }`}
