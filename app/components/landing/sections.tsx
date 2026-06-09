@@ -4,12 +4,12 @@ import {AffirmLoader, AffirmMessage} from './affirm';
 import {trackBeginCheckout} from './analytics';
 
 const TRUSTED_LOGOS = [
-  {src: '/landing/logos/anchor.webp', alt: 'Anchor Soccer'},
-  {src: '/landing/logos/erie.webp', alt: 'Erie Soccer'},
-  {src: '/landing/logos/usa.webp', alt: 'USA Soccer'},
-  {src: '/landing/logos/anchor.webp', alt: 'Anchor Soccer'},
-  {src: '/landing/logos/erie.webp', alt: 'Erie Soccer'},
-  {src: '/landing/logos/usa.webp', alt: 'USA Soccer'},
+  {src: '/landing/logos/p1.webp', alt: 'Partner club'},
+  {src: '/landing/logos/p2.webp', alt: 'Partner club'},
+  {src: '/landing/logos/p3.webp', alt: 'Partner club'},
+  {src: '/landing/logos/p4.webp', alt: 'Partner club'},
+  {src: '/landing/logos/p5.webp', alt: 'Partner club'},
+  {src: '/landing/logos/p6.webp', alt: 'Partner club'},
 ];
 
 /**
@@ -94,7 +94,7 @@ export function UnlockBanner() {
     // Full-bleed section: green panel reaches the right viewport edge, while the
     // left content stays aligned to the centered 1440 grid.
     <section className="w-full bg-white">
-      {/* Mobile layout — centered title + 50-80 / 500-1,000 cards + 4x */}
+      {/* Mobile layout — centered title + 50-80 / +1000 cards + 4x */}
       <div className="bg-cream px-6 py-8 text-center lg:hidden">
         <p className="text-[20px] font-extrabold leading-[28px] tracking-[-0.01em] text-dark">
           Unlocking their full potential
@@ -119,7 +119,7 @@ export function UnlockBanner() {
             />
             <div className="relative">
               <p className="title-italic text-[36px] leading-[38px] tracking-[-0.02em] text-cream">
-                500-1,000
+                +1000
               </p>
               <p className="text-[13px] leading-[16px] tracking-[-0.01em] text-white">
                 In a SogilityGO session
@@ -157,7 +157,7 @@ export function UnlockBanner() {
         {/* Right — green gradient panel with chevron, bleeds to the right edge */}
         <div className="relative flex flex-1 items-center justify-center gap-4 bg-[linear-gradient(134.4deg,#30be2d_37.31%,#165815_96.77%)] px-6 py-8 lg:py-0 lg:[clip-path:polygon(0_0,100%_0,100%_100%,0_100%,44px_50%)]">
           <span className="title-italic text-[62px] leading-[65px] tracking-[-0.01em] text-cream">
-            500-1,000
+            +1000
           </span>
           <span className="text-[18px] leading-[22px] tracking-[-0.01em] text-white">
             Touches in a SogilityGO session
@@ -216,12 +216,18 @@ export function TrainingTogether() {
       <div className="flex flex-col lg:flex-row lg:items-stretch">
           {/* Photo — mobile: title overlaid on image; desktop: bleed to left edge */}
           <div className="relative h-[540px] lg:h-auto lg:min-h-[554px] lg:shrink-0 lg:grow-0 lg:basis-[max(478px,calc((100%_-_1440px)/2_+_478px))]">
-            <img
-              src="/landing/training-together.webp"
-              alt="Coach guiding a young player with the SogilityGO app"
+            <video
               className="absolute inset-0 h-full w-full object-cover object-center"
-              loading="lazy"
-            />
+              poster="/landing/training-together.webp"
+              aria-label="Coach guiding a young player with the SogilityGO app"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="none"
+            >
+              <source src="/landing/training-together.mp4" type="video/mp4" />
+            </video>
             {/* mobile green glow + title overlay */}
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_55%_at_15%_0%,rgba(48,190,45,0.5),transparent_55%)] lg:hidden" />
             <div className="absolute left-8 right-6 top-6 lg:hidden">
@@ -356,10 +362,10 @@ export function PlayerJourney() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[373px] bg-[radial-gradient(55%_110%_at_28%_0%,rgba(48,190,45,0.22),transparent_65%)]" />
       <Container className="relative">
         <p className="text-[14px] font-semibold uppercase tracking-[1.4px] text-dark">
-          Training that delivers results
+          Player journey
         </p>
         <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-sogility">
-          Player journey
+          Training that delivers results
         </h2>
 
         {/* Mobile — slider */}
@@ -379,7 +385,7 @@ export function PlayerJourney() {
                   />
                 </div>
                 <img
-                  src="/landing/journey/clipboard.svg"
+                  src="/landing/journey/badge-trophy.svg"
                   alt=""
                   className="absolute -bottom-1 right-1 w-[52px]"
                 />
@@ -445,7 +451,7 @@ function JourneySlider() {
                 />
               </div>
               <img
-                src="/landing/journey/clipboard.svg"
+                src="/landing/journey/badge-trophy.svg"
                 alt=""
                 className="absolute -bottom-1 right-1 w-[52px]"
               />
@@ -960,7 +966,7 @@ export function TrainingBoard() {
             Elite Training Board
           </h2>
           <img
-            src="/landing/board/board.webp"
+            src="/landing/board/board-light.webp"
             alt="SogilityGO Rebound IQ training board with smart light"
             className="mt-6 w-full max-w-[500px] self-center"
             loading="lazy"
@@ -997,7 +1003,7 @@ export function TrainingBoard() {
           </h2>
         </div>
         <img
-          src="/landing/board/board.webp"
+          src="/landing/board/board-light.webp"
           alt="SogilityGO Rebound IQ training board with smart light"
           className="mx-auto mt-2 w-[303px]"
           loading="lazy"
@@ -1370,7 +1376,7 @@ export function StartTraining({checkout}: {checkout?: CheckoutMap}) {
               <div className="flex flex-col gap-6 px-4 pb-6 pt-4">
                 <div className="flex flex-col gap-[7px]">
                   <div className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px]">
-                    <p className="text-sogility">Rebound IQ</p>
+                    <p className="text-sogility">ReboundIQ</p>
                     <p className="text-dark">{t.name}</p>
                   </div>
                   <p className="text-[16px] leading-[22px] text-blue-005">
@@ -1392,10 +1398,6 @@ export function StartTraining({checkout}: {checkout?: CheckoutMap}) {
                         </span>
                       )}
                     </div>
-                    <AffirmMessage
-                      amountCents={t.priceCents}
-                      className="text-[14px] text-dark"
-                    />
                   </div>
                 </div>
 
@@ -1411,6 +1413,10 @@ export function StartTraining({checkout}: {checkout?: CheckoutMap}) {
                   tier={t}
                   checkout={checkout}
                   className="flex w-full items-center justify-center rounded-2xl p-3 text-[16px] font-bold"
+                />
+                <AffirmMessage
+                  amountCents={t.priceCents}
+                  className="text-center text-[14px] text-dark"
                 />
               </div>
             </div>
@@ -1507,7 +1513,7 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
               <div className="flex flex-col gap-6 px-4 pb-6 pt-4">
                 <div className="flex flex-col gap-[7px]">
                   <div className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px]">
-                    <p className="text-sogility">Rebound IQ</p>
+                    <p className="text-sogility">ReboundIQ</p>
                     <p className="text-dark">{t.name}</p>
                   </div>
                   <p className="text-[16px] leading-[22px] text-blue-005">
@@ -1529,10 +1535,6 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
                         </span>
                       )}
                     </div>
-                    <AffirmMessage
-                      amountCents={t.priceCents}
-                      className="text-[14px] text-dark"
-                    />
                   </div>
                 </div>
 
@@ -1551,6 +1553,10 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
                   tier={t}
                   checkout={checkout}
                   className="flex h-14 w-full items-center justify-center rounded-2xl p-3 text-[18px] font-semibold"
+                />
+                <AffirmMessage
+                  amountCents={t.priceCents}
+                  className="text-center text-[14px] text-dark"
                 />
               </div>
             </div>
