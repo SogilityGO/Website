@@ -69,7 +69,8 @@ export function AffirmLoader() {
     })(window, w._affirm_config, 'affirm', 'checkout', 'ui', 'script', 'ready');
     /* eslint-enable */
 
-    w.affirm?.ui?.ready?.(() => w.affirm?.ui?.refresh?.());
+    const aw = window as AffirmWindow;
+    aw.affirm?.ui?.ready?.(() => aw.affirm?.ui?.refresh?.());
   }, []);
 
   return null;

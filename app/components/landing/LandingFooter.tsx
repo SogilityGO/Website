@@ -28,8 +28,10 @@ export function LandingFooter() {
         <div className="mt-8 flex flex-col gap-10 lg:mt-10 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
           {/* Left — tagline + socials */}
           <div className="flex flex-col gap-6 lg:gap-8">
-            <p className="max-w-[318px] text-[24px] font-light leading-[33px] tracking-[-0.24px]">
-              Train different. Get better.
+            <p className="max-w-[360px] text-[20px] font-light leading-[28px] tracking-[-0.2px]">
+              SogilityGO&rsquo;s ReboundIQ Starter, Advanced and Pro connects to
+              the SogilityGO app, giving you access to a complete library of
+              guided drills.
             </p>
             <div className="flex gap-4">
               <SocialIcon

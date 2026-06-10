@@ -38,7 +38,7 @@ export function PageLayout({
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
-      <LandingHeader cart={cart} />
+      <LandingHeader />
       <main>{children}</main>
       <LandingFooter />
     </Aside.Provider>

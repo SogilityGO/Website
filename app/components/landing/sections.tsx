@@ -34,7 +34,7 @@ export function Hero() {
           src="/landing/hero-1920.jpg"
           alt="Young player training at home with SogilityGO rebounder boards"
           className="absolute inset-0 h-full w-full object-cover [object-position:24%_30%] lg:[object-position:50%_50%]"
-          fetchpriority="high"
+          fetchPriority="high"
         />
       </picture>
       {/* dark gradient for text legibility — desktop only (over-darkens mobile) */}
@@ -342,7 +342,7 @@ const JOURNEY_STEPS = [
     desc: 'Average accuracy gain',
   },
   {
-    img: '/landing/journey/j3.webp',
+    img: '/landing/journey/get-noticed.webp',
     badge: '/landing/journey/clipboard.svg',
     week: 'WEEK 8',
     title: 'Get noticed',
