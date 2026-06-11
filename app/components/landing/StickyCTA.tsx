@@ -4,9 +4,9 @@ const TARGET_ID = 'start-training';
 
 /**
  * Sticky mobile-only CTA → scrolls to the products section (#start-training).
- * Hides itself once that section reaches the viewport (and stays hidden past it)
- * so it never covers the tier cards / purchase flow. Desktop already has its own
- * hero CTA, so this is `lg:hidden`.
+ * Hidden only while that section is on screen, so it never covers the tier cards /
+ * purchase flow — it reappears both above and below the products section. Desktop
+ * already has its own hero CTA, so this is `lg:hidden`.
  *
  * Design: Figma node 322:6490 — green gradient, sogility-deep border, 16px radius.
  */
@@ -18,8 +18,8 @@ export function StickyMobileCTA() {
     if (!target) return;
     const io = new IntersectionObserver(
       ([entry]) => {
-        // Hide once products enter the viewport, and keep hidden once scrolled past.
-        setHidden(entry.isIntersecting || entry.boundingClientRect.top < 0);
+        // Hide only while the products section is on screen — reappear above and below it.
+        setHidden(entry.isIntersecting);
       },
       {threshold: 0, rootMargin: '0px 0px -15% 0px'},
     );
