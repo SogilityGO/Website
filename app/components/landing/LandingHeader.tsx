@@ -25,14 +25,14 @@ export function LandingHeader() {
         </div>
       </header>
 
-      {/* Promo banner — below the header, dark text on green */}
-      <div className="flex min-h-10 items-center justify-center gap-2 bg-sogility px-4 py-1.5 text-center text-dark">
-        <p className="text-[14px] font-extrabold uppercase tracking-[0.03em] sm:text-[17px]">
-          Get 20% Off + Free Shipping (US). Use Code: WC26
+      {/* Promo banner — below the header, dark text on green. On mobile it breaks
+          into two clean lines; "Use Code: WC26 🏆" is kept on one line so the
+          trophy never orphans away from the code. */}
+      <div className="flex min-h-10 items-center justify-center bg-sogility px-4 py-1.5 text-center text-dark">
+        <p className="text-[13px] font-extrabold uppercase tracking-[0.02em] sm:text-[17px]">
+          Get 20% Off + Free Shipping (US).{' '}
+          <span className="whitespace-nowrap">Use Code: WC26&nbsp;🏆</span>
         </p>
-        <span aria-hidden className="text-[18px] sm:text-[20px]">
-          🏆
-        </span>
       </div>
     </>
   );
