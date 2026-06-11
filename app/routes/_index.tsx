@@ -17,6 +17,7 @@ import {
   type CheckoutMap,
 } from '~/components/landing/sections';
 import {Analytics} from '~/components/landing/analytics';
+import {StickyMobileCTA} from '~/components/landing/StickyCTA';
 
 export const meta: Route.MetaFunction = () => {
   return [
@@ -130,6 +131,7 @@ export default function Homepage() {
       <SetupTraining />
       <OwnerMessage />
       <Faq />
+      <StickyMobileCTA />
     </>
   );
 }
