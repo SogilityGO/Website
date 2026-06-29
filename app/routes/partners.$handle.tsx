@@ -19,7 +19,7 @@ import {Analytics} from '~/components/landing/analytics';
 import {StickyMobileCTA} from '~/components/landing/StickyCTA';
 import {PartnerHero} from '~/components/landing/PartnerHero';
 import {PartnerOffer} from '~/components/landing/PartnerOffer';
-import {getPartner} from '~/data/partners';
+import {getPartner, type PartnerData} from '~/data/partners';
 
 export const links: LinksFunction = () => [
   {
@@ -64,13 +64,79 @@ const PARTNER_TIERS_QUERY = `#graphql
   }
 ` as const;
 
+const PARTNER_METAOBJECT_QUERY = `#graphql
+  query PartnerMetaobject($handle: String!) {
+    metaobject(handle: {type: "partner_page", handle: $handle}) {
+      handle
+      fields {
+        key
+        value
+        reference {
+          ... on MediaImage {
+            image {
+              url(transform: {maxHeight: 480, preferredContentType: WEBP})
+              altText
+            }
+          }
+        }
+      }
+    }
+  }
+` as const;
+
+/**
+ * Map a `partner_page` metaobject to PartnerData. Optional fields (cta, accent,
+ * banner) fall back to sensible defaults so the team only fills the essentials.
+ */
+function metaobjectToPartner(handle: string, metaobject: any): PartnerData | null {
+  if (!metaobject) return null;
+  const f: Record<string, any> = {};
+  for (const field of metaobject.fields ?? []) f[field.key] = field;
+  const val = (k: string): string => (f[k]?.value ?? '').trim();
+
+  const name = val('name');
+  if (!name) return null;
+
+  const logoImage = f.logo?.reference?.image;
+  return {
+    handle,
+    name,
+    logo: logoImage?.url ?? '/landing/partners/indiana-soccer/logo.webp',
+    logoAlt: logoImage?.altText || `${name} logo`,
+    eyebrow: val('eyebrow'),
+    headline: val('headline'),
+    body: val('body')
+      .split(/\n{2,}/)
+      .map((p: string) => p.trim())
+      .filter(Boolean),
+    offerText: val('offer_text'),
+    discountCode: val('discount_code'),
+    ctaText: 'Claim your offer',
+    accentColor: '#1b2a4a',
+    bannerMode: 'hide',
+  };
+}
+
 export async function loader({context, params}: Route.LoaderArgs) {
-  const partner = getPartner(params.handle);
+  const {storefront} = context;
+  const handle = params.handle ?? '';
+
+  // Partner content: live from the `partner_page` metaobject, with the in-repo
+  // seed config as a fallback so the page still renders if the metaobject is
+  // missing or unreachable.
+  let partner: PartnerData | null = null;
+  try {
+    const result: any = await storefront.query(PARTNER_METAOBJECT_QUERY, {
+      variables: {handle},
+    });
+    partner = metaobjectToPartner(handle, result?.metaobject);
+  } catch (error) {
+    console.error('Partner metaobject fetch failed', error);
+  }
+  if (!partner) partner = getPartner(handle);
   if (!partner) {
     throw new Response('Partner not found', {status: 404});
   }
-
-  const {storefront} = context;
 
   // Live variant ids for the Buy buttons (same approach as the main landing).
   let checkout: CheckoutMap = {};
