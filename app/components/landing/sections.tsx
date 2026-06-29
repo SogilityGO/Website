@@ -1311,10 +1311,12 @@ function BuyButton({
   tier,
   checkout,
   className,
+  discountCode,
 }: {
   tier: PricingTier;
   checkout?: CheckoutMap;
   className: string;
+  discountCode?: string;
 }) {
   const c = checkout?.[tier.name];
   const gradient =
@@ -1333,7 +1335,7 @@ function BuyButton({
   }
 
   const href = c
-    ? `/cart/${c.variantId}:1`
+    ? `/cart/${c.variantId}:1${discountCode ? `?discount=${encodeURIComponent(discountCode)}` : ''}`
     : `https://www.sogilitygo.com/products/${tier.handle}`;
   const external = !c;
 
@@ -1355,7 +1357,13 @@ function BuyButton({
   );
 }
 
-export function StartTraining({checkout}: {checkout?: CheckoutMap}) {
+export function StartTraining({
+  checkout,
+  discountCode,
+}: {
+  checkout?: CheckoutMap;
+  discountCode?: string;
+}) {
   return (
     <section
       id="start-training"
@@ -1436,6 +1444,7 @@ export function StartTraining({checkout}: {checkout?: CheckoutMap}) {
                 <BuyButton
                   tier={t}
                   checkout={checkout}
+                  discountCode={discountCode}
                   className="flex w-full items-center justify-center rounded-2xl p-3 text-[16px] font-bold"
                 />
                 <AffirmMessage
@@ -1470,13 +1479,19 @@ export function StartTraining({checkout}: {checkout?: CheckoutMap}) {
       </Container>
 
       {/* mobile: horizontal slider of pricing cards */}
-      <StartTrainingSlider checkout={checkout} />
+      <StartTrainingSlider checkout={checkout} discountCode={discountCode} />
     </section>
   );
 }
 
 /** Mobile Start Training slider — one pricing card per view, shared policy row + dots. */
-function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
+function StartTrainingSlider({
+  checkout,
+  discountCode,
+}: {
+  checkout?: CheckoutMap;
+  discountCode?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
@@ -1576,6 +1591,7 @@ function StartTrainingSlider({checkout}: {checkout?: CheckoutMap}) {
                 <BuyButton
                   tier={t}
                   checkout={checkout}
+                  discountCode={discountCode}
                   className="flex h-14 w-full items-center justify-center rounded-2xl p-3 text-[18px] font-semibold"
                 />
                 <AffirmMessage

@@ -1,10 +1,44 @@
-import {Link} from 'react-router';
+import {Link, useMatches} from 'react-router';
+
+type PartnerBanner = {bannerMode?: 'hide' | 'replace'; bannerText?: string};
 
 /**
  * Landing header: centered logo + green promo strip below.
  * No nav items, so no mobile hamburger is needed.
+ *
+ * On partner pages (/partners/<handle>) the sitewide WC26 promo is hidden or
+ * replaced with the partner's own banner, so members aren't pushed toward a
+ * competing offer — this keeps partner attribution clean.
  */
 export function LandingHeader() {
+  const matches = useMatches();
+  const partner = matches
+    .map((m) => (m.data as {partner?: PartnerBanner} | undefined)?.partner)
+    .find(Boolean);
+
+  let banner = null;
+  if (!partner) {
+    // Default sitewide promo banner.
+    banner = (
+      <div className="flex min-h-10 items-center justify-center bg-sogility px-4 py-1.5 text-center text-dark">
+        <p className="text-[13px] font-extrabold uppercase tracking-[0.02em] sm:text-[17px]">
+          Get 20% Off + Free Shipping (US).{' '}
+          <span className="whitespace-nowrap">Use Code: WC26&nbsp;🏆</span>
+        </p>
+      </div>
+    );
+  } else if (partner.bannerMode === 'replace' && partner.bannerText) {
+    // Partner-specific banner.
+    banner = (
+      <div className="flex min-h-10 items-center justify-center bg-sogility px-4 py-1.5 text-center text-dark">
+        <p className="text-[13px] font-extrabold uppercase tracking-[0.02em] sm:text-[17px]">
+          {partner.bannerText}
+        </p>
+      </div>
+    );
+  }
+  // else bannerMode === 'hide' → render no banner.
+
   return (
     <>
       {/* Header — dark bar, logo centered */}
@@ -25,15 +59,7 @@ export function LandingHeader() {
         </div>
       </header>
 
-      {/* Promo banner — below the header, dark text on green. On mobile it breaks
-          into two clean lines; "Use Code: WC26 🏆" is kept on one line so the
-          trophy never orphans away from the code. */}
-      <div className="flex min-h-10 items-center justify-center bg-sogility px-4 py-1.5 text-center text-dark">
-        <p className="text-[13px] font-extrabold uppercase tracking-[0.02em] sm:text-[17px]">
-          Get 20% Off + Free Shipping (US).{' '}
-          <span className="whitespace-nowrap">Use Code: WC26&nbsp;🏆</span>
-        </p>
-      </div>
+      {banner}
     </>
   );
 }
