@@ -11,7 +11,9 @@ import {useEffect} from 'react';
  * Analytics domains are allow-listed in the CSP (app/entry.server.tsx).
  * Cross-domain linker passes the GA client id to the checkout on www.sogilitygo.com.
  */
-const GA4_ID = 'G-Z5TKEJ2070';
+// GA4 properties tracked on this page. G-Z5TKEJ2070 = existing (Shopify Google
+// channel); G-NKRXX9ER4G = added per Sogility request (Josh, 1 Jul 2026).
+const GA4_IDS = ['G-Z5TKEJ2070', 'G-NKRXX9ER4G'];
 const META_PIXEL_ID = '1654787059166470';
 const LINKER_DOMAINS = ['my.sogilitygo.com', 'www.sogilitygo.com', 'sogilitygo.com'];
 
@@ -37,7 +39,7 @@ export function Analytics() {
     if (!w.gtag) {
       const s = document.createElement('script');
       s.async = true;
-      s.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`;
+      s.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_IDS[0]}`;
       document.head.appendChild(s);
 
       w.dataLayer = w.dataLayer || [];
@@ -46,10 +48,12 @@ export function Analytics() {
         w.dataLayer!.push(arguments);
       };
       w.gtag('js', new Date());
-      w.gtag('config', GA4_ID, {
-        // pass the GA client id across to the Shopify checkout domain
-        linker: {domains: LINKER_DOMAINS},
-      });
+      for (const id of GA4_IDS) {
+        w.gtag('config', id, {
+          // pass the GA client id across to the Shopify checkout domain
+          linker: {domains: LINKER_DOMAINS},
+        });
+      }
     }
 
     // --- Meta Pixel (fbevents.js) ---
