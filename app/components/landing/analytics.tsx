@@ -1,25 +1,44 @@
 import {useEffect} from 'react';
 
 /**
- * GA4 + Meta Pixel for the parents landing.
+ * GA4 + Google Ads + Meta Pixel + Yahoo dot pixel for the landing pages.
  *
- * IDs are the SAME accounts the main store uses (pulled from the Shopify
- * Google & YouTube / Facebook & Instagram channels). The Shopify channel pixels
- * only fire on the Online Store (Liquid) — this headless Hydrogen app needs them
- * wired manually so landing traffic + events land in the same GA4/Meta accounts.
+ * The GA4/Meta IDs are the SAME accounts the main store uses (pulled from the
+ * Shopify Google & YouTube / Facebook & Instagram channels). The Shopify channel
+ * pixels only fire on the Online Store (Liquid) — this headless Hydrogen app
+ * needs them wired manually so landing traffic + events land in the same accounts.
  *
- * Analytics domains are allow-listed in the CSP (app/entry.server.tsx).
+ * All third-party domains are allow-listed in the CSP (app/entry.server.tsx) —
+ * without that they are silently blocked.
  * Cross-domain linker passes the GA client id to the checkout on www.sogilitygo.com.
  */
 // GA4 properties tracked on this page. G-Z5TKEJ2070 = existing (Shopify Google
 // channel); G-NKRXX9ER4G = added per Sogility request (Josh, 1 Jul 2026).
 const GA4_IDS = ['G-Z5TKEJ2070', 'G-NKRXX9ER4G'];
+/**
+ * Google Ads (Invisibly, Jul 2026). Deliberately shares the single gtag.js loader
+ * below: their instructions say "don't add more than one Google tag to each page",
+ * and gtag.js is already loaded here for GA4 — so this is an extra config, not a
+ * second loader.
+ */
+const GOOGLE_ADS_ID = 'AW-18109223824';
+/**
+ * Yahoo dot pixel (Invisibly, Jul 2026). Enhanced matching is NOT in use, so the
+ * he/hph placeholders stay exactly as Yahoo supplied them — confirmed by Payton
+ * (16 Jul 2026): they don't interfere unless real values are passed.
+ */
+const YAHOO_PROJECT_ID = '10000';
+const YAHOO_PIXEL_ID = '10220772';
 const META_PIXEL_ID = '1654787059166470';
 const LINKER_DOMAINS = ['my.sogilitygo.com', 'www.sogilitygo.com', 'sogilitygo.com'];
+
+type YahooBeacon = {ywa: {I13N: {fireBeacon: (payload: unknown[]) => void}}};
 
 type AnalyticsWindow = Window & {
   dataLayer?: unknown[];
   gtag?: (...args: unknown[]) => void;
+  dotq?: unknown[];
+  YAHOO?: YahooBeacon;
   fbq?: ((...args: unknown[]) => void) & {
     callMethod?: (...args: unknown[]) => void;
     queue?: unknown[];
@@ -54,6 +73,42 @@ export function Analytics() {
           linker: {domains: LINKER_DOMAINS},
         });
       }
+      // Google Ads — same loader, extra config (one Google tag per page).
+      w.gtag('config', GOOGLE_ADS_ID);
+    }
+
+    // --- Yahoo dot pixel (ytc.js) ---
+    if (!w.dotq) {
+      w.dotq = [];
+      w.dotq.push({
+        projectId: YAHOO_PROJECT_ID,
+        properties: {
+          pixelId: YAHOO_PIXEL_ID,
+          he: '<email_address>',
+          hph: '<phone_number>',
+        },
+      });
+
+      const ys = document.createElement('script');
+      ys.async = true;
+      ys.src = 'https://s.yimg.com/wi/ytc.js';
+      // Yahoo's bootstrap: once ytc.js is up, flush the queue and route further
+      // pushes straight to fireBeacon.
+      ys.onload = () => {
+        try {
+          const fireBeacon = w.YAHOO!.ywa.I13N.fireBeacon;
+          const queued = w.dotq!;
+          w.dotq = [];
+          w.dotq.push = (payload: unknown) => {
+            fireBeacon([payload]);
+            return 0;
+          };
+          fireBeacon(queued);
+        } catch {
+          // pixel unavailable — non-blocking
+        }
+      };
+      document.head.appendChild(ys);
     }
 
     // --- Meta Pixel (fbevents.js) ---

@@ -20,13 +20,18 @@ export default async function handleRequest(
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
     // Third-party widgets/analytics. Affirm = monthly-payment messaging;
-    // GA4 (googletagmanager/google-analytics) + Meta Pixel (facebook) = tracking.
+    // GA4 (googletagmanager/google-analytics) + Meta Pixel (facebook) = tracking;
+    // Google Ads (googleadservices/doubleclick) + Yahoo dot pixel (yimg/yahoo)
+    // = Invisibly ad tracking.
     scriptSrc: [
       "'self'",
       'https://cdn.shopify.com',
       'https://cdn1.affirm.com',
       'https://www.googletagmanager.com',
+      'https://www.googleadservices.com',
+      'https://googleads.g.doubleclick.net',
       'https://connect.facebook.net',
+      'https://s.yimg.com',
     ],
     connectSrc: [
       "'self'",
@@ -36,10 +41,22 @@ export default async function handleRequest(
       'https://www.google-analytics.com',
       'https://*.google-analytics.com',
       'https://*.analytics.google.com',
+      'https://www.googleadservices.com',
+      // Google Ads talks to several doubleclick subdomains (ad., googleads.g.,
+      // stats.g.) — a wildcard avoids silently blocking one of them.
+      'https://*.doubleclick.net',
+      'https://www.google.com',
       'https://connect.facebook.net',
       'https://www.facebook.com',
+      'https://sp.analytics.yahoo.com',
+      'https://s.yimg.com',
     ],
-    frameSrc: ["'self'", 'https://*.affirm.com', 'https://www.facebook.com'],
+    frameSrc: [
+      "'self'",
+      'https://*.affirm.com',
+      'https://www.facebook.com',
+      'https://*.doubleclick.net',
+    ],
     imgSrc: [
       "'self'",
       'https://cdn.shopify.com',
@@ -48,8 +65,13 @@ export default async function handleRequest(
       'https://www.googletagmanager.com',
       'https://www.google-analytics.com',
       'https://*.google-analytics.com',
+      'https://www.googleadservices.com',
+      'https://*.doubleclick.net',
+      'https://www.google.com',
       'https://www.facebook.com',
       'https://connect.facebook.net',
+      'https://sp.analytics.yahoo.com',
+      'https://s.yimg.com',
     ],
     // Affirm injects its icon font as a data: URI; self-hosted Inter is same-origin.
     fontSrc: ["'self'", 'data:', 'https://cdn.shopify.com'],
