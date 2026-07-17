@@ -12,8 +12,14 @@ import {useEffect} from 'react';
  * without that they are silently blocked.
  * Cross-domain linker passes the GA client id to the checkout on www.sogilitygo.com.
  */
-// GA4 properties tracked on this page. G-Z5TKEJ2070 = existing (Shopify Google
-// channel); G-NKRXX9ER4G = added per Sogility request (Josh, 1 Jul 2026).
+// GA4 properties tracked on this page. G-NKRXX9ER4G = added per Sogility request
+// (Josh, 1 Jul 2026).
+//
+// G-Z5TKEJ2070 is correct — do not "fix" it to G-Z5TKEJ2G70. The Shopify Google
+// channel's storefront config lists G-Z5TKEJ2G70, but googletagmanager 404s that
+// id while it serves the full library for G-Z5TKEJ2070 (checked 17 Jul 2026).
+// Loading a 404 id as the first loader kills gtag entirely — GA4 and Google Ads
+// both stop firing.
 const GA4_IDS = ['G-Z5TKEJ2070', 'G-NKRXX9ER4G'];
 /**
  * Google Ads (Invisibly, Jul 2026). Deliberately shares the single gtag.js loader
