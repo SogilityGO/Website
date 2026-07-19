@@ -101,7 +101,8 @@ function metaobjectToPartner(handle: string, metaobject: any): PartnerData | nul
   return {
     handle,
     name,
-    logo: logoImage?.url ?? '/landing/partners/indiana-soccer/logo.webp',
+    // No fallback: a partner with no uploaded logo shows no logo (not Indiana's).
+    logo: logoImage?.url,
     logoAlt: logoImage?.altText || `${name} logo`,
     eyebrow: val('eyebrow'),
     headline: val('headline'),

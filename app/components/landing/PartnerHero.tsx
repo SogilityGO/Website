@@ -11,13 +11,19 @@ const HERO_ALT = 'Young player training at home with SogilityGO';
 function CoBrand({partner, logoClass}: {partner: PartnerData; logoClass: string}) {
   return (
     <div className="flex items-center gap-4">
-      <img
-        src={partner.logo}
-        alt={partner.logoAlt}
-        className={logoClass}
-        fetchPriority="high"
-      />
-      <span className="text-xl font-light text-white/45">×</span>
+      {/* Partner logo is optional: with no logo, show SogilityGO alone (no default
+          logo, no "×" separator) — per client request 19 Jul 2026. */}
+      {partner.logo && (
+        <>
+          <img
+            src={partner.logo}
+            alt={partner.logoAlt}
+            className={logoClass}
+            fetchPriority="high"
+          />
+          <span className="text-xl font-light text-white/45">×</span>
+        </>
+      )}
       <span className="flex items-center gap-1.5">
         <span className="text-base font-extrabold tracking-[0.18em] text-cream lg:text-lg">
           SOGILITY

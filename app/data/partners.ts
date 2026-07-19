@@ -11,8 +11,9 @@ export type PartnerData = {
   handle: string;
   /** Display name, e.g. "Indiana Soccer" */
   name: string;
-  /** Optimized logo in /public/landing/partners/<handle>/ */
-  logo: string;
+  /** Optimized logo in /public/landing/partners/<handle>/. Optional: no logo =
+   *  the hero shows SogilityGO alone (no default logo). */
+  logo?: string;
   logoAlt: string;
   /** Optional partner background image for the hero; falls back to the default SogilityGO hero photo */
   heroImage?: string;
