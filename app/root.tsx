@@ -103,23 +103,53 @@ export async function loader(args: Route.LoaderArgs) {
 }
 
 /**
+ * Admin-editable promo banner for the Hydrogen storefront. The Sogility team
+ * controls it from Shopify admin (Content → Metaobjects → Site banner): a
+ * true/false "enabled" toggle to show/hide it and a "text" field for the message.
+ * CacheShort so edits appear within seconds. If the metaobject is missing the
+ * header falls back to a built-in default (see LandingHeader).
+ */
+const SITE_BANNER_QUERY = `#graphql
+  query SiteBanner {
+    metaobjects(type: "site_banner", first: 1) {
+      nodes {
+        enabled: field(key: "enabled") { value }
+        text: field(key: "text") { value }
+      }
+    }
+  }
+` as const;
+
+/**
  * Load data necessary for rendering content above the fold. This is the critical data
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
 async function loadCriticalData({context}: Route.LoaderArgs) {
   const {storefront} = context;
 
-  const [header] = await Promise.all([
+  const [header, siteBannerData] = await Promise.all([
     storefront.query(HEADER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
         headerMenuHandle: 'main-menu', // Adjust to your header menu handle
       },
     }),
-    // Add other queries here, so that they are loaded in parallel
+    // Promo banner — non-critical: never throw, so a missing metaobject can't 500.
+    storefront
+      .query(SITE_BANNER_QUERY, {cache: storefront.CacheShort()})
+      .catch((error: Error) => {
+        console.error('site_banner fetch failed', error);
+        return null;
+      }),
   ]);
 
-  return {header};
+  const node = (siteBannerData as {metaobjects?: {nodes?: any[]}} | null)
+    ?.metaobjects?.nodes?.[0];
+  const siteBanner = node
+    ? {enabled: node.enabled?.value === 'true', text: (node.text?.value ?? '').trim()}
+    : null;
+
+  return {header, siteBanner};
 }
 
 /**

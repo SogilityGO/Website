@@ -1,14 +1,21 @@
-import {Link, useMatches} from 'react-router';
+import {Link, useMatches, useRouteLoaderData} from 'react-router';
 
 type PartnerBanner = {bannerMode?: 'hide' | 'replace'; bannerText?: string};
+type SiteBanner = {enabled: boolean; text: string} | null;
+
+/** Shown only until the Sogility team creates the `site_banner` metaobject. */
+const DEFAULT_BANNER_TEXT = 'Get 20% Off + Free Shipping (US). Use Code: WC26 🏆';
 
 /**
  * Landing header: centered logo + green promo strip below.
  * No nav items, so no mobile hamburger is needed.
  *
- * On partner pages (/partners/<handle>) the sitewide WC26 promo is hidden or
- * replaced with the partner's own banner, so members aren't pushed toward a
- * competing offer — this keeps partner attribution clean.
+ * Banner source:
+ * - Partner pages (/partners/<handle>): hidden or replaced with the partner's own
+ *   banner (keeps partner attribution clean).
+ * - Everywhere else: the admin-editable `site_banner` metaobject (root loader) —
+ *   the team toggles it on/off and edits the text in Shopify admin, no deploy.
+ * - If that metaobject doesn't exist yet: the built-in default below.
  */
 export function LandingHeader() {
   const matches = useMatches();
@@ -16,28 +23,29 @@ export function LandingHeader() {
     .map((m) => (m.data as {partner?: PartnerBanner} | undefined)?.partner)
     .find(Boolean);
 
-  let banner = null;
-  if (!partner) {
-    // Default sitewide promo banner.
-    banner = (
-      <div className="flex min-h-10 items-center justify-center bg-sogility px-4 py-1.5 text-center text-dark">
-        <p className="text-[13px] font-extrabold uppercase tracking-[0.02em] sm:text-[17px]">
-          Get 20% Off + Free Shipping (US).{' '}
-          <span className="whitespace-nowrap">Use Code: WC26&nbsp;🏆</span>
-        </p>
-      </div>
-    );
-  } else if (partner.bannerMode === 'replace' && partner.bannerText) {
-    // Partner-specific banner.
-    banner = (
-      <div className="flex min-h-10 items-center justify-center bg-sogility px-4 py-1.5 text-center text-dark">
-        <p className="text-[13px] font-extrabold uppercase tracking-[0.02em] sm:text-[17px]">
-          {partner.bannerText}
-        </p>
-      </div>
-    );
+  const rootData = useRouteLoaderData('root') as
+    | {siteBanner?: SiteBanner}
+    | undefined;
+  const siteBanner = rootData?.siteBanner;
+
+  let bannerText: string | null;
+  if (partner) {
+    // Partner page: only the "replace" mode shows a banner; "hide" shows none.
+    bannerText = partner.bannerMode === 'replace' ? partner.bannerText ?? null : null;
+  } else if (siteBanner) {
+    // Admin-controlled: toggle off → no banner; on → the edited text.
+    bannerText = siteBanner.enabled ? siteBanner.text || null : null;
+  } else {
+    bannerText = DEFAULT_BANNER_TEXT;
   }
-  // else bannerMode === 'hide' → render no banner.
+
+  const banner = bannerText ? (
+    <div className="flex min-h-10 items-center justify-center bg-sogility px-4 py-1.5 text-center text-dark">
+      <p className="text-[13px] font-extrabold uppercase tracking-[0.02em] [text-wrap:balance] sm:text-[17px]">
+        {bannerText}
+      </p>
+    </div>
+  ) : null;
 
   return (
     <>
