@@ -9,6 +9,7 @@ import {Aside} from '~/components/Aside';
 import {HeaderMenu} from '~/components/Header';
 import {LandingHeader} from '~/components/landing/LandingHeader';
 import {LandingFooter} from '~/components/landing/LandingFooter';
+import {HubSpotTracking} from '~/components/landing/analytics';
 import {CartMain} from '~/components/CartMain';
 import {
   SEARCH_ENDPOINT,
@@ -41,6 +42,8 @@ export function PageLayout({
       <LandingHeader />
       <main>{children}</main>
       <LandingFooter />
+      {/* Site-wide HubSpot analytics (loads on every route). */}
+      <HubSpotTracking />
     </Aside.Provider>
   );
 }

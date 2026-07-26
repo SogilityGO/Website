@@ -153,6 +153,32 @@ export function Analytics() {
 }
 
 /**
+ * HubSpot tracking code (portal 243986947, na2 region). Added per Sogility
+ * request (Josh, Jul 2026) so my.sogilitygo.com traffic lands in HubSpot
+ * analytics. The hs-scripts.com loader pulls in HubSpot's analytics /
+ * cookie-banner / collected-forms scripts and beacons to *.hubspot.com /
+ * *.hubapi.com — all allow-listed in the CSP (app/entry.server.tsx), else they
+ * are silently blocked. Mounted in PageLayout so it loads on every route
+ * (home + partner pages), not just the landing index like Analytics above.
+ */
+const HUBSPOT_LOADER_SRC = 'https://js-na2.hs-scripts.com/243986947.js';
+
+export function HubSpotTracking() {
+  useEffect(() => {
+    if (document.getElementById('hs-script-loader')) return;
+    const s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.id = 'hs-script-loader';
+    s.async = true;
+    s.defer = true;
+    s.src = HUBSPOT_LOADER_SRC;
+    document.body.appendChild(s);
+  }, []);
+
+  return null;
+}
+
+/**
  * Fire a "begin checkout" conversion event in GA4 + Meta when a Buy button is
  * clicked. Best-effort and non-blocking — navigation to checkout proceeds.
  */

@@ -32,6 +32,16 @@ export default async function handleRequest(
       'https://googleads.g.doubleclick.net',
       'https://connect.facebook.net',
       'https://s.yimg.com',
+      // HubSpot tracking code (portal 243986947). The hs-scripts loader pulls in
+      // HubSpot's analytics / cookie-banner / collected-forms scripts —
+      // wildcards cover the regional (js-na2.*) subdomains this portal serves.
+      'https://*.hs-scripts.com',
+      'https://*.hs-analytics.net',
+      'https://*.hs-banner.com',
+      'https://*.hscollectedforms.net',
+      'https://*.usemessages.com',
+      'https://*.hsadspixel.net',
+      'https://*.hubspot.com',
     ],
     connectSrc: [
       "'self'",
@@ -50,12 +60,19 @@ export default async function handleRequest(
       'https://www.facebook.com',
       'https://sp.analytics.yahoo.com',
       'https://s.yimg.com',
+      // HubSpot: analytics beacons (*.hubapi.com), cookie banner, collected forms.
+      'https://*.hubapi.com',
+      'https://*.hubspot.com',
+      'https://*.hs-banner.com',
+      'https://*.hscollectedforms.net',
     ],
     frameSrc: [
       "'self'",
       'https://*.affirm.com',
       'https://www.facebook.com',
       'https://*.doubleclick.net',
+      'https://*.hubspot.com',
+      'https://*.hs-sites.com',
     ],
     imgSrc: [
       "'self'",
@@ -72,6 +89,8 @@ export default async function handleRequest(
       'https://connect.facebook.net',
       'https://sp.analytics.yahoo.com',
       'https://s.yimg.com',
+      // HubSpot tracking pixel (track.hubspot.com) + banner/forms images.
+      'https://*.hubspot.com',
     ],
     // Affirm injects its icon font as a data: URI; self-hosted Inter is same-origin.
     fontSrc: ["'self'", 'data:', 'https://cdn.shopify.com'],
