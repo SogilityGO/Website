@@ -1,33 +1,43 @@
-import {Container} from './ui';
 import type {PartnerData} from '~/data/partners';
 
 /**
- * Partner-specific offer band — sits right before the pricing section.
- * The discount is auto-applied via the Buy buttons (no code to type), so this
- * section just communicates the member benefit and routes to pricing.
+ * Partner-specific offer band. It carries the approved partner-page mockup's
+ * floating benefit card into the shared dynamic route.
  */
 export function PartnerOffer({partner}: {partner: PartnerData}) {
   return (
-    <section className="bg-sogility">
-      <Container className="flex flex-col items-center gap-4 py-12 text-center text-dark lg:py-14">
-        <p className="text-[14px] font-extrabold uppercase tracking-[0.15em]">
-          {partner.offerText}
-        </p>
-        <h2 className="title-italic text-[30px] leading-tight lg:text-[42px]">
-          {partner.name} Member Benefit
-        </h2>
-        <p className="max-w-[640px] text-[16px] leading-[26px] text-dark/80">
-          As part of our partnership with {partner.name}, your member discount is
-          applied automatically when you check out through this page. No code to
-          remember.
-        </p>
-        <a
-          href="#start-training"
-          className="mt-2 inline-flex items-center justify-center rounded-2xl bg-dark px-8 py-3.5 text-[16px] font-bold text-cream transition hover:brightness-110"
-        >
-          {partner.ctaText}
-        </a>
-      </Container>
+    <section className="relative z-10 bg-[#f7f6ef] pb-2">
+      <div className="mx-auto grid min-h-[96px] w-[calc(100%-2rem)] max-w-[960px] -translate-y-4 overflow-hidden rounded-2xl border border-[#202333]/10 border-l-[5px] border-l-sogility bg-white shadow-[0_20px_50px_rgba(28,31,43,0.15)] lg:-translate-y-5 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="flex items-center gap-4 p-4 lg:px-6">
+          {partner.logo ? (
+            <img
+              src={partner.logo}
+              alt=""
+              aria-hidden="true"
+              className="h-[52px] w-10 shrink-0 object-contain lg:h-[55px] lg:w-[42px]"
+            />
+          ) : null}
+          <div>
+            <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#247d25]">
+              {partner.name} member exclusive
+            </span>
+            <strong className="mt-1 block text-[18px] font-black leading-tight tracking-[-0.025em] text-[#202333] lg:text-[21px]">
+              {partner.offerText || 'Exclusive member pricing'}
+            </strong>
+            <small className="mt-1 block text-[11px] font-bold text-[#656977]">
+              Automatically applied at checkout
+            </small>
+          </div>
+        </div>
+        <div className="flex items-center justify-center px-4 pb-4 lg:px-6 lg:pb-0 lg:pl-2">
+          <a
+            href="#start-training"
+            className="inline-flex min-h-12 w-full min-w-[190px] items-center justify-center rounded-full bg-sogility px-5 text-[13px] font-black text-[#202333] transition hover:-translate-y-0.5 hover:brightness-105 lg:w-auto"
+          >
+            View member pricing
+          </a>
+        </div>
+      </div>
     </section>
   );
 }
