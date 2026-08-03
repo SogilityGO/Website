@@ -620,7 +620,7 @@ function PlayerProof() {
               </p>
             </div>
           </article>
-          <aside className="flex flex-col rounded-[24px] border border-white/15 bg-white/[0.055] p-6 lg:p-8">
+          <div className="flex flex-col rounded-[24px] border border-white/15 bg-white/[0.055] p-6 lg:p-8">
             <Kicker>Player + parent reviews</Kicker>
             <h3 className="mt-2 text-[28px] font-black leading-tight">
               What families and players say about SogilityGO
@@ -648,7 +648,7 @@ function PlayerProof() {
                 </div>
               ))}
             </div>
-          </aside>
+          </div>
         </div>
       </div>
     </section>
