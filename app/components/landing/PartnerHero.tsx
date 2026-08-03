@@ -109,9 +109,11 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
           <p className="mt-5 text-[12px] font-black uppercase leading-[1.3] tracking-[0.11em] text-sogility lg:mt-6">
             {partner.eyebrow}
           </p>
-          <h1 className="mt-3 max-w-[620px] text-[40px] font-black leading-[0.97] tracking-[-0.055em] text-white lg:text-[52px] lg:leading-[0.98]">
-            <span className="block">Big Confidence Begins</span>
-            <span className="block">in the Backyard.</span>
+          <h1 className="mt-3 max-w-[620px] text-[clamp(27px,8.7vw,40px)] font-black leading-[0.97] tracking-[-0.055em] text-white sm:text-[46px] lg:text-[52px] lg:leading-[0.98]">
+            <span className="block whitespace-nowrap">
+              Big Confidence Begins
+            </span>
+            <span className="block whitespace-nowrap">in the Backyard.</span>
           </h1>
           <div className="mt-[18px] flex max-w-[560px] flex-col gap-3 text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
             <p>
