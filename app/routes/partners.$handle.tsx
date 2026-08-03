@@ -1,24 +1,11 @@
 import {useLoaderData, type LinksFunction} from 'react-router';
 import type {Route} from './+types/partners.$handle';
-import {
-  UnlockBanner,
-  TrustedBy,
-  TrainingTogether,
-  PlayerJourney,
-  VirtualCoach,
-  TrainingBoard,
-  Reviews,
-  CoreSkills,
-  StartTraining,
-  SetupTraining,
-  OwnerMessage,
-  Faq,
-  type CheckoutMap,
-} from '~/components/landing/sections';
+import type {CheckoutMap} from '~/components/landing/sections';
 import {Analytics} from '~/components/landing/analytics';
 import {StickyMobileCTA} from '~/components/landing/StickyCTA';
 import {PartnerHero} from '~/components/landing/PartnerHero';
 import {PartnerOffer} from '~/components/landing/PartnerOffer';
+import {PartnerExperience} from '~/components/landing/PartnerExperience';
 import {getPartner, type PartnerData} from '~/data/partners';
 
 export const links: LinksFunction = () => [
@@ -88,7 +75,10 @@ const PARTNER_METAOBJECT_QUERY = `#graphql
  * Map a `partner_page` metaobject to PartnerData. Optional fields (cta, accent,
  * banner) fall back to sensible defaults so the team only fills the essentials.
  */
-function metaobjectToPartner(handle: string, metaobject: any): PartnerData | null {
+function metaobjectToPartner(
+  handle: string,
+  metaobject: any,
+): PartnerData | null {
   if (!metaobject) return null;
   const f: Record<string, any> = {};
   for (const field of metaobject.fields ?? []) f[field.key] = field;
@@ -155,7 +145,9 @@ export async function loader({context, params}: Route.LoaderArgs) {
       if (!variant?.id) return undefined;
       return {
         variantId: String(variant.id).split('/').pop()!,
-        available: Boolean(product.availableForSale && variant.availableForSale),
+        available: Boolean(
+          product.availableForSale && variant.availableForSale,
+        ),
       };
     };
 
@@ -177,29 +169,8 @@ export default function PartnerPage() {
     <>
       <Analytics />
       <PartnerHero partner={partner} />
-      <UnlockBanner />
-      {/* Mobile order: Training together → Player journey → Trusted by (logos).
-          Desktop order: Trusted by → Training together → Player journey. */}
-      <div className="flex flex-col">
-        <div className="order-3 lg:order-1">
-          <TrustedBy />
-        </div>
-        <div className="order-1 lg:order-2">
-          <TrainingTogether />
-        </div>
-        <div className="order-2 lg:order-3">
-          <PlayerJourney />
-        </div>
-      </div>
-      <VirtualCoach />
-      <TrainingBoard />
-      <Reviews />
-      <CoreSkills />
       <PartnerOffer partner={partner} />
-      <StartTraining checkout={checkout} discountCode={partner.discountCode} />
-      <SetupTraining />
-      <OwnerMessage />
-      <Faq />
+      <PartnerExperience partner={partner} checkout={checkout} />
       <StickyMobileCTA />
     </>
   );
