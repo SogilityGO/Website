@@ -976,7 +976,10 @@ function BoardSlider() {
 
 export function TrainingBoard() {
   return (
-    <section className="relative overflow-hidden bg-dark text-white">
+    <section
+      id="how-it-works"
+      className="relative overflow-hidden bg-dark text-white"
+    >
       {/* green glow, top-left */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[400px] bg-[radial-gradient(50%_110%_at_24%_0%,rgba(48,190,45,0.18),transparent_65%)]" />
 
