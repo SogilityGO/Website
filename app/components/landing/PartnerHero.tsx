@@ -1,34 +1,36 @@
-import {Container} from './ui';
 import type {PartnerData} from '~/data/partners';
 
-/** Default SogilityGO hero photo — kept so partner pages keep the brand visual. */
-const DEFAULT_HERO_SRCSET =
-  '/landing/hero-960.webp 960w, /landing/hero-1280.webp 1280w, /landing/hero-1920.webp 1920w';
-const DEFAULT_HERO_FALLBACK = '/landing/hero-1920.jpg';
-const HERO_ALT = 'Young player training at home with SogilityGO';
+const DEFAULT_HERO_POSTER = '/landing/hero-1920.webp';
+const HERO_VIDEO =
+  'https://cdn.shopify.com/videos/c/o/v/3eeae311b2184d3fa3a217001dfaba52.mp4';
 
-/** Partner logo × SogilityGO co-branding. */
-function CoBrand({partner, logoClass}: {partner: PartnerData; logoClass: string}) {
+const SYSTEM_PILLS = [
+  'ReboundIQ',
+  'Impact Light',
+  'SogilityGO App',
+  'Progress Tracking',
+];
+
+/** Partner logo and SogilityGO co-branding. */
+function CoBrand({partner}: {partner: PartnerData}) {
   return (
-    <div className="flex items-center gap-4">
-      {/* Partner logo is optional: with no logo, show SogilityGO alone (no default
-          logo, no "×" separator) — per client request 19 Jul 2026. */}
+    <div className="flex min-h-11 items-center gap-3 lg:min-h-14 lg:gap-4">
       {partner.logo && (
         <>
           <img
             src={partner.logo}
             alt={partner.logoAlt}
-            className={logoClass}
+            className="max-h-11 max-w-[136px] object-contain lg:max-h-14 lg:max-w-[168px]"
             fetchPriority="high"
           />
-          <span className="text-xl font-light text-white/45">×</span>
+          <span className="text-lg font-light text-white/40">×</span>
         </>
       )}
       <span className="flex items-center gap-1.5">
-        <span className="text-base font-extrabold tracking-[0.18em] text-cream lg:text-lg">
+        <span className="text-sm font-extrabold tracking-[0.2em] text-cream lg:text-base">
           SOGILITY
         </span>
-        <span className="rounded-full bg-sogility px-2 py-0.5 text-xs font-extrabold text-white lg:text-sm">
+        <span className="rounded-full bg-sogility px-2 py-0.5 text-[11px] font-extrabold text-white lg:text-xs">
           GO
         </span>
       </span>
@@ -36,107 +38,101 @@ function CoBrand({partner, logoClass}: {partner: PartnerData; logoClass: string}
   );
 }
 
-function OfferCta({partner}: {partner: PartnerData}) {
+function HeroActions({partner}: {partner: PartnerData}) {
   return (
-    <a
-      href="#start-training"
-      className="inline-flex items-center justify-center rounded-2xl border border-sogility-deep bg-[linear-gradient(188deg,#30be2d_13%,#30892e_68%)] px-8 py-3.5 text-[16px] font-bold text-white shadow-[0px_4px_10px_rgba(0,0,0,0.25)] transition hover:brightness-105"
-    >
-      {partner.ctaText}
-    </a>
+    <div className="mt-6 grid grid-cols-[1.12fr_0.88fr] gap-3 sm:flex sm:flex-wrap">
+      <a
+        href="#start-training"
+        className="inline-flex min-h-12 items-center justify-center rounded-full bg-sogility px-3 text-center text-[12px] font-black leading-[1.15] text-dark shadow-[0_12px_28px_rgba(48,190,45,0.25)] transition hover:-translate-y-0.5 hover:brightness-105 sm:min-h-[52px] sm:px-6 sm:text-[15px]"
+      >
+        {partner.ctaText}
+      </a>
+      <a
+        href="#how-it-works"
+        className="inline-flex min-h-12 items-center justify-center rounded-full border-2 border-white/40 bg-white/5 px-3 text-center text-[12px] font-black leading-[1.15] text-white transition hover:-translate-y-0.5 hover:border-sogility/70 hover:bg-sogility/10 sm:min-h-[52px] sm:px-6 sm:text-[15px]"
+      >
+        See How It Works
+      </a>
+    </div>
   );
 }
 
-function HeroImage({partner, className}: {partner: PartnerData; className: string}) {
+function HeroMedia({partner}: {partner: PartnerData}) {
   return (
-    <picture>
-      {!partner.heroImage && (
-        <source type="image/webp" srcSet={DEFAULT_HERO_SRCSET} sizes="100vw" />
-      )}
-      <img
-        src={partner.heroImage ?? DEFAULT_HERO_FALLBACK}
-        alt={HERO_ALT}
-        className={className}
-        fetchPriority="high"
-      />
-    </picture>
+    <div className="relative min-h-[300px] lg:min-h-[410px]">
+      <div className="absolute inset-0 overflow-hidden rounded-[24px] border border-white/20 bg-[#171a25] shadow-[0_35px_80px_rgba(0,0,0,0.35)] lg:rounded-[28px]">
+        {partner.heroImage ? (
+          <img
+            src={partner.heroImage}
+            alt={`Player training at home with ${partner.name} and SogilityGO`}
+            className="h-full w-full object-cover"
+            fetchPriority="high"
+          />
+        ) : (
+          <video
+            className="h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={DEFAULT_HERO_POSTER}
+            aria-label="SogilityGO training in action"
+          >
+            <source src={HERO_VIDEO} type="video/mp4" />
+          </video>
+        )}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent from-40% to-[#10121c]/85" />
+        <div className="absolute inset-x-[18px] bottom-[18px] z-10 lg:inset-x-6 lg:bottom-[22px]">
+          <strong className="text-[16px] font-extrabold text-white lg:text-[18px]">
+            See SogilityGO in action
+          </strong>
+        </div>
+      </div>
+    </div>
   );
 }
 
 /**
- * Partner hero — replaces the default Hero on /partners/<handle>.
- *
- * Mobile: a clean photo band (player visible) with the co-branding on top, then
- * the partner copy on solid dark below — so the copy stays crisp and the player
- * is never buried.
- * Desktop: the SogilityGO photo as a full-bleed background with the co-branding
- * and copy overlaid on the left; the player sits clear to the right.
+ * Shared partner hero. It uses the paid-ads landing page's split conversion
+ * layout while keeping all partner identity, copy, and offer fields dynamic.
  */
 export function PartnerHero({partner}: {partner: PartnerData}) {
   return (
-    <section className="relative overflow-hidden bg-dark text-white">
-      {/* ---------- MOBILE ---------- */}
-      <div className="lg:hidden">
-        <div className="relative h-[400px] overflow-hidden">
-          <HeroImage
-            partner={partner}
-            className="absolute inset-0 h-full w-full object-cover [object-position:48%_22%]"
-          />
-          {/* dark only at the very top (logo contrast) + a soft blend into the
-              dark copy block below; the middle stays clear so the player shows */}
-          <div className="absolute inset-0 bg-gradient-to-b from-dark/75 via-transparent to-dark/45" />
-          <div className="absolute inset-x-0 top-0 px-6 pt-6">
-            <CoBrand partner={partner} logoClass="h-14 w-auto" />
-          </div>
-        </div>
+    <section className="relative overflow-hidden bg-[radial-gradient(circle_at_14%_8%,rgba(48,190,45,0.18),transparent_32%),linear-gradient(135deg,#1c2030_0%,#252a3c_60%,#181b28_100%)] text-white">
+      <div className="pointer-events-none absolute -bottom-[260px] -right-[260px] h-[520px] w-[520px] rounded-full border-[90px] border-sogility/10" />
 
-        <div className="px-6 pb-12 pt-6">
-          <p className="eyebrow text-[16px] tracking-[0.18em] text-sogility">
+      <div className="relative mx-auto grid w-[calc(100%-2rem)] max-w-[1180px] grid-cols-1 gap-11 pb-[52px] pt-9 lg:min-h-[540px] lg:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)] lg:items-center lg:gap-14 lg:py-12">
+        <div className="min-w-0">
+          <CoBrand partner={partner} />
+          <p className="mt-5 text-[12px] font-black uppercase leading-[1.3] tracking-[0.11em] text-sogility lg:mt-6">
             {partner.eyebrow}
           </p>
-          <h1 className="title-italic mt-2 text-[32px] leading-[1.06]">
+          <h1 className="mt-3 max-w-[620px] text-[40px] font-black leading-[0.97] tracking-[-0.055em] text-white lg:text-[52px] lg:leading-[0.98]">
             {partner.headline}
           </h1>
-          <div className="mt-4 flex flex-col gap-3 text-[16px] leading-[25px] text-cream/85">
-            {partner.body.map((p, i) => (
-              <p key={i}>{p}</p>
+          <div className="mt-[18px] flex max-w-[560px] flex-col gap-3 text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
+            {partner.body.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          <div className="mt-6">
-            <OfferCta partner={partner} />
+          <HeroActions partner={partner} />
+          <div
+            className="mt-6 hidden flex-wrap gap-2.5 lg:flex"
+            aria-label="SogilityGO components"
+          >
+            {SYSTEM_PILLS.map((label) => (
+              <span
+                key={label}
+                className="rounded-full border border-white/20 bg-white/[0.06] px-3 py-2 text-[12px] font-extrabold text-white/75"
+              >
+                {label}
+              </span>
+            ))}
           </div>
         </div>
-      </div>
 
-      {/* ---------- DESKTOP ---------- */}
-      <div className="relative hidden overflow-hidden lg:flex lg:min-h-[860px] lg:items-center">
-        <HeroImage
-          partner={partner}
-          className="absolute inset-y-0 left-0 h-full w-[118%] max-w-none object-cover [object-position:50%_45%]"
-        />
-        {/* left-weighted, fades to transparent on the right so the player shows */}
-        <div className="absolute inset-0 bg-gradient-to-r from-dark/85 via-dark/40 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-[radial-gradient(circle_at_left,rgba(48,190,45,0.16),transparent_55%)]" />
-
-        <Container className="relative py-24">
-          <div className="max-w-[600px]">
-            <CoBrand partner={partner} logoClass="h-20 w-auto" />
-            <p className="eyebrow mt-7 max-w-[500px] text-[22px] text-sogility">
-              {partner.eyebrow}
-            </p>
-            <h1 className="title-italic mt-3 text-[52px] leading-[1.05]">
-              {partner.headline}
-            </h1>
-            <div className="mt-5 flex flex-col gap-3 text-[18px] leading-[28px] text-cream/90">
-              {partner.body.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-            <div className="mt-7">
-              <OfferCta partner={partner} />
-            </div>
-          </div>
-        </Container>
+        <HeroMedia partner={partner} />
       </div>
     </section>
   );
