@@ -1,4 +1,4 @@
-import {Await, Link} from 'react-router';
+import {Await, Link, useLocation} from 'react-router';
 import {Suspense, useId} from 'react';
 import type {
   CartApiQueryFragment,
@@ -9,6 +9,7 @@ import {Aside} from '~/components/Aside';
 import {HeaderMenu} from '~/components/Header';
 import {LandingHeader} from '~/components/landing/LandingHeader';
 import {LandingFooter} from '~/components/landing/LandingFooter';
+import {PartnerLandingFooter} from '~/components/landing/PartnerExperience';
 import {HubSpotTracking} from '~/components/landing/analytics';
 import {CartMain} from '~/components/CartMain';
 import {
@@ -34,6 +35,8 @@ export function PageLayout({
   isLoggedIn,
   publicStoreDomain,
 }: PageLayoutProps) {
+  const isPartnerPage = useLocation().pathname.startsWith('/partners/');
+
   return (
     <Aside.Provider>
       <CartAside cart={cart} />
@@ -41,7 +44,7 @@ export function PageLayout({
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
       <LandingHeader />
       <main>{children}</main>
-      <LandingFooter />
+      {isPartnerPage ? <PartnerLandingFooter /> : <LandingFooter />}
       {/* Site-wide HubSpot analytics (loads on every route). */}
       <HubSpotTracking />
     </Aside.Provider>
