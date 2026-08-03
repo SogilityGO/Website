@@ -116,6 +116,7 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
             <span className="block whitespace-nowrap">in the Backyard.</span>
           </h1>
           <div className="mt-[18px] flex max-w-[560px] flex-col gap-3 text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
+            {partner.body[0] ? <p>{partner.body[0]}</p> : null}
             <p>
               SogilityGO gives kids the structured, smart guidance they need to
               build real skill, real confidence, and a lifelong passion for the
