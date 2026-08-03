@@ -95,7 +95,8 @@ function HeroMedia({partner}: {partner: PartnerData}) {
 
 /**
  * Shared partner hero. It uses the paid-ads landing page's split conversion
- * layout while keeping all partner identity, copy, and offer fields dynamic.
+ * layout and core message while keeping partner identity and offer fields
+ * dynamic.
  */
 export function PartnerHero({partner}: {partner: PartnerData}) {
   return (
@@ -109,12 +110,15 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
             {partner.eyebrow}
           </p>
           <h1 className="mt-3 max-w-[620px] text-[40px] font-black leading-[0.97] tracking-[-0.055em] text-white lg:text-[52px] lg:leading-[0.98]">
-            {partner.headline}
+            <span className="block">Big Confidence Begins</span>
+            <span className="block">in the Backyard.</span>
           </h1>
           <div className="mt-[18px] flex max-w-[560px] flex-col gap-3 text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
-            {partner.body.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+            <p>
+              SogilityGO gives kids the structured, smart guidance they need to
+              build real skill, real confidence, and a lifelong passion for the
+              game.
+            </p>
           </div>
           <HeroActions partner={partner} />
           <div
