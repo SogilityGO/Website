@@ -249,32 +249,58 @@ function Heading({
 
 function StoreBadges() {
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex shrink-0 flex-wrap items-center gap-2.5 max-lg:w-full max-sm:grid max-sm:grid-cols-1">
       <a
         href="https://apps.apple.com/us/app/sogilitygo-soccer-training/id6754323607"
         target="_blank"
         rel="noreferrer"
         aria-label="Download SogilityGO on the App Store"
+        className="inline-flex min-h-[52px] min-w-[158px] items-center justify-center gap-2.5 rounded-full border-2 border-[#202333] bg-[#fffef9] px-4 text-[#202333] transition hover:-translate-y-0.5 hover:border-[#159f23] hover:bg-sogility/10 hover:shadow-[0_10px_24px_rgba(28,31,43,0.12)] focus-visible:-translate-y-0.5 focus-visible:border-[#159f23] focus-visible:bg-sogility/10 focus-visible:shadow-[0_10px_24px_rgba(28,31,43,0.12)] max-sm:w-full"
       >
-        <img
-          src="/landing/coach/app-store.svg"
-          alt="Download on the App Store"
-          className="h-12 w-auto"
-          loading="lazy"
-        />
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          className="h-[22px] w-[22px] shrink-0"
+        >
+          <path
+            fill="currentColor"
+            d="M19.67 13.65c-.02-2.12 1.73-3.15 1.81-3.2-1.01-1.47-2.57-1.67-3.13-1.69-1.31-.14-2.59.79-3.26.79-.68 0-1.72-.78-2.83-.75-1.43.02-2.78.85-3.51 2.14-1.52 2.62-.39 6.48 1.07 8.6.72 1.04 1.57 2.2 2.68 2.15 1.09-.04 1.5-.69 2.81-.69 1.3 0 1.68.69 2.82.67 1.17-.02 1.9-1.04 2.6-2.09.84-1.19 1.17-2.36 1.19-2.42-.03-.01-2.22-.85-2.24-3.51ZM17.49 7.37c.58-.73.98-1.72.87-2.73-.85.04-1.9.59-2.51 1.3-.54.63-1.02 1.66-.89 2.63.95.07 1.94-.48 2.53-1.2Z"
+          />
+        </svg>
+        <span className="grid gap-px text-left leading-none">
+          <small className="text-[9px] font-extrabold uppercase tracking-[0.03em]">
+            Download on the
+          </small>
+          <strong className="text-[15px] font-black tracking-[-0.01em]">
+            App Store
+          </strong>
+        </span>
       </a>
       <a
         href="https://play.google.com/store/apps/details?id=com.ytiligos.sogilitygo"
         target="_blank"
         rel="noreferrer"
         aria-label="Get SogilityGO on Google Play"
+        className="inline-flex min-h-[52px] min-w-[158px] items-center justify-center gap-2.5 rounded-full border-2 border-[#202333] bg-[#fffef9] px-4 text-[#202333] transition hover:-translate-y-0.5 hover:border-[#159f23] hover:bg-sogility/10 hover:shadow-[0_10px_24px_rgba(28,31,43,0.12)] focus-visible:-translate-y-0.5 focus-visible:border-[#159f23] focus-visible:bg-sogility/10 focus-visible:shadow-[0_10px_24px_rgba(28,31,43,0.12)] max-sm:w-full"
       >
-        <img
-          src="/landing/coach/google-play.svg"
-          alt="Get it on Google Play"
-          className="h-12 w-auto"
-          loading="lazy"
-        />
+        <svg
+          viewBox="0 0 32 36"
+          aria-hidden="true"
+          className="h-[22px] w-[22px] shrink-0"
+        >
+          <path fill="#20c5f4" d="M1 2 18.5 18 1 34Z" />
+          <path fill="#32d26f" d="M1 2 22 14 18.5 18Z" />
+          <path fill="#ffd23f" d="m18.5 18 3.5 4L1 34Z" />
+          <path fill="#f05b55" d="m22 14 9 4-9 4-3.5-4Z" />
+        </svg>
+        <span className="grid gap-px text-left leading-none">
+          <small className="text-[9px] font-extrabold uppercase tracking-[0.03em]">
+            Get it on
+          </small>
+          <strong className="text-[15px] font-black tracking-[-0.01em]">
+            Google Play
+          </strong>
+        </span>
       </a>
     </div>
   );
@@ -348,14 +374,16 @@ function HowItWorks() {
 
         <div
           id="progress-tracking"
-          className="mt-6 grid scroll-mt-24 gap-7 overflow-hidden rounded-[26px] bg-[#202333] p-7 text-white shadow-[0_20px_55px_rgba(31,34,49,0.18)] lg:grid-cols-[1.35fr_0.65fr] lg:items-center lg:p-9"
+          className="mt-[18px] flex scroll-mt-24 items-center justify-between gap-[34px] rounded-[20px] border border-[#dbddd5] bg-[#fffef9] px-[22px] py-5 shadow-[0_12px_34px_rgba(28,31,43,0.05)] max-lg:flex-col max-lg:items-start"
         >
-          <div>
-            <Kicker>SogilityGO app + Coach</Kicker>
-            <h3 className="mt-3 text-[28px] font-black leading-tight tracking-[-0.035em] lg:text-[34px]">
+          <div className="grid gap-[5px]">
+            <span className="text-[12px] font-black uppercase tracking-[0.13em] text-[#159f23]">
+              SogilityGO app + Coach
+            </span>
+            <h3 className="text-[22px] font-black leading-[1.2] text-[#202333]">
               Connection, guidance, and progress in one app.
             </h3>
-            <p className="mt-4 text-[16px] leading-[1.65] text-white/70">
+            <p className="text-[16px] leading-[1.5] text-[#6e7281]">
               Use the free app to connect your Impact Lights and access a
               selection of drills. Add optional SogilityGO Coach for tailored
               plans and 180+ pro-designed activities across first touch,
@@ -364,9 +392,7 @@ function HowItWorks() {
               hardware.
             </p>
           </div>
-          <div className="lg:justify-self-end">
-            <StoreBadges />
-          </div>
+          <StoreBadges />
         </div>
       </div>
     </section>
