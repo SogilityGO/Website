@@ -387,8 +387,8 @@ function HowItWorks() {
               Use the free app to connect your Impact Lights and access a
               selection of drills. Add optional SogilityGO Coach for tailored
               plans and 180+ pro-designed activities across first touch,
-              passing, dribbling, vision, and agility—plus progress tracking and
-              up to five player profiles. Coach is not required to use the
+              passing, dribbling, vision, and agility, plus progress tracking
+              and up to five player profiles. Coach is not required to use the
               hardware.
             </p>
           </div>
