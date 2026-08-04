@@ -357,9 +357,11 @@ function HowItWorks() {
             </h3>
             <p className="mt-4 text-[16px] leading-[1.65] text-white/70">
               Use the free app to connect your Impact Lights and access a
-              selection of drills. No subscription required. Add optional
-              SogilityGO Coach for tailored plans, 180+ pro-designed activities,
-              progress tracking, and up to five player profiles.
+              selection of drills. Add optional SogilityGO Coach for tailored
+              plans and 180+ pro-designed activities across first touch,
+              passing, dribbling, vision, and agility—plus progress tracking and
+              up to five player profiles. Coach is not required to use the
+              hardware.
             </p>
           </div>
           <div className="lg:justify-self-end">
