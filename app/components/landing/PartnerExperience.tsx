@@ -487,7 +487,7 @@ function PartnerPricing({
   partner: PartnerData;
   checkout?: CheckoutMap;
 }) {
-  const offer = partner.offerText || 'Member pricing';
+  const offerSentence = formatPartnerOfferSentence(partner);
   return (
     <section
       id="start-training"
@@ -559,8 +559,7 @@ function PartnerPricing({
                     )}
                   </div>
                   <p className="mt-2 text-center text-[11px] font-bold leading-[1.35] text-[#6e7281]">
-                    {partner.name} members receive {offer.toLowerCase()} at
-                    checkout
+                    {offerSentence}
                   </p>
                   <ul className="my-5 space-y-2 text-center text-[14px] text-[#515562]">
                     {tier.includes.map((item) => (
@@ -614,6 +613,32 @@ function PartnerPricing({
       </div>
     </section>
   );
+}
+
+function formatPartnerOfferSentence(partner: PartnerData) {
+  const rawOffer = (partner.offerText || 'Member pricing')
+    .trim()
+    .replace(/[.!?]+$/, '');
+  const normalizedOffer =
+    rawOffer === rawOffer.toUpperCase() ? rawOffer.toLowerCase() : rawOffer;
+  const brandedOffer = normalizedOffer.replace(/sogilitygo/gi, 'SogilityGO');
+
+  if (/^(save|get|enjoy|claim|receive)\b/i.test(brandedOffer)) {
+    const memberOffer = brandedOffer
+      .replace(/^./, (character) => character.toLowerCase())
+      .replace(/\byour\b/gi, 'their');
+    const duplicatedPartnerOffer = new RegExp(
+      `their exclusive ${partner.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} offer`,
+      'i',
+    );
+
+    return `${partner.name} members ${memberOffer.replace(
+      duplicatedPartnerOffer,
+      'their exclusive offer',
+    )} at checkout.`;
+  }
+
+  return `${partner.name} members receive ${brandedOffer} at checkout.`;
 }
 
 function PlayerProof() {
