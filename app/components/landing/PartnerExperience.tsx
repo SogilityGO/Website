@@ -1,5 +1,7 @@
 import type {ReactNode} from 'react';
+import {useSearchParams} from 'react-router';
 import type {PartnerData} from '~/data/partners';
+import {buildPartnerCheckoutHref} from '~/lib/partner-attribution';
 import type {CheckoutMap} from './sections';
 import {trackBeginCheckout} from './analytics';
 
@@ -73,8 +75,8 @@ const PRICING = [
     image: '/landing/pricing/p1.webp',
     price: '$349',
     priceCents: 34900,
-    was: null,
-    save: null,
+    was: '$399',
+    save: 'Save $50',
     popular: false,
     copy: 'A compact one-board setup for focused ball-return practice and structured at-home reps.',
     includes: ['1 ReboundIQ board', '1 Impact Light', 'SogilityGO app'],
@@ -85,8 +87,8 @@ const PRICING = [
     image: '/landing/pricing/p2.webp',
     price: '$649',
     priceCents: 64900,
-    was: '$698',
-    save: 'Save $49',
+    was: '$799',
+    save: 'Save $150',
     popular: true,
     copy: 'Adds a second return angle for more varied sequences that layer reaction and decision-making.',
     includes: ['2 ReboundIQ boards', '2 Impact Lights', 'SogilityGO app'],
@@ -97,8 +99,8 @@ const PRICING = [
     image: '/landing/pricing/p3.webp',
     price: '$949',
     priceCents: 94900,
-    was: '$1,047',
-    save: 'Save $98',
+    was: '$1,199',
+    save: 'Save $250',
     popular: false,
     copy: 'A three-board setup for the widest training area and greatest variety of return angles.',
     includes: ['3 ReboundIQ boards', '3 Impact Lights', 'SogilityGO app'],
@@ -439,12 +441,13 @@ function SimpleSetup() {
 function CheckoutButton({
   tier,
   checkout,
-  discountCode,
+  partner,
 }: {
   tier: (typeof PRICING)[number];
   checkout?: CheckoutMap;
-  discountCode?: string;
+  partner: PartnerData;
 }) {
+  const [searchParams] = useSearchParams();
   const item = checkout?.[tier.name];
   if (item && !item.available) {
     return (
@@ -458,7 +461,12 @@ function CheckoutButton({
     );
   }
   const href = item
-    ? `/cart/${item.variantId}:1${discountCode ? `?discount=${encodeURIComponent(discountCode)}` : ''}`
+    ? buildPartnerCheckoutHref({
+        variantId: item.variantId,
+        discountCode: partner.discountCode,
+        partnerHandle: partner.handle,
+        currentSearch: searchParams,
+      })
     : `https://www.sogilitygo.com/products/${tier.handle}`;
   return (
     <a
@@ -469,6 +477,9 @@ function CheckoutButton({
           tierName: tier.name,
           valueUSD: tier.priceCents / 100,
           variantId: item?.variantId,
+          partnerHandle: partner.handle,
+          partnerName: partner.name,
+          discountCode: partner.discountCode,
         })
       }
       className={`mt-auto flex min-h-12 w-full items-center justify-center rounded-full px-5 text-center text-[15px] font-black transition hover:-translate-y-0.5 hover:brightness-105 ${
@@ -487,7 +498,7 @@ function PartnerPricing({
   partner: PartnerData;
   checkout?: CheckoutMap;
 }) {
-  const offer = partner.offerText || 'Member pricing';
+  const offerSentence = formatPartnerOfferSentence(partner);
   return (
     <section
       id="start-training"
@@ -525,33 +536,43 @@ function PartnerPricing({
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-6">
-                  <p className="text-[12px] font-black uppercase tracking-[0.12em] text-sogility">
+                  <p className="text-center text-[12px] font-black uppercase tracking-[0.12em] text-sogility">
                     ReboundIQ
                   </p>
-                  <h3 className="mt-1 text-[32px] font-black tracking-[-0.04em]">
+                  <h3 className="mt-1 text-center text-[32px] font-black tracking-[-0.04em]">
                     {tier.name}
                   </h3>
-                  <p className="mt-3 min-h-[76px] text-[15px] leading-[1.6] text-[#656977]">
+                  <p className="mt-3 min-h-[76px] text-center text-[15px] leading-[1.6] text-[#656977]">
                     {tier.copy}
                   </p>
-                  <div className="mt-4 flex items-center gap-3">
-                    <strong className="text-[32px] font-black">
+                  <div className="mt-4 grid min-h-[142px] content-start justify-items-center gap-2 text-center">
+                    {tier.was ? (
+                      <s className="text-[22px] font-black leading-none tracking-[-0.035em] text-[#777b87] decoration-[#d7192d] decoration-[4px] [text-decoration-skip-ink:none]">
+                        {tier.was}
+                      </s>
+                    ) : (
+                      <span aria-hidden="true" className="h-[22px]" />
+                    )}
+                    <strong className="text-[46px] font-black leading-[0.95] tracking-[-0.04em] text-[#159f23]">
                       {tier.price}
                     </strong>
-                    {tier.was ? (
-                      <s className="text-[15px] text-[#656977]">{tier.was}</s>
-                    ) : null}
                     {tier.save ? (
-                      <span className="rounded-lg border border-dashed border-sogility px-2 py-1 text-[12px] font-black text-[#247d25]">
-                        {tier.save}
+                      <span className="inline-flex min-w-[132px] items-center justify-center gap-2 rounded-full border-2 border-[#c4c7ce] bg-[#e7e8eb] px-4 py-2 text-[#202333] shadow-[0_4px_12px_rgba(32,35,51,0.1)]">
+                        <span className="text-[10px] font-black uppercase tracking-[0.06em]">
+                          You save
+                        </span>
+                        <strong className="text-[15px] font-black">
+                          {tier.save.replace(/^Save\s*/i, '')}
+                        </strong>
                       </span>
-                    ) : null}
+                    ) : (
+                      <span aria-hidden="true" className="h-[38px]" />
+                    )}
                   </div>
-                  <p className="mt-3 text-[12px] font-black text-[#247d25]">
-                    {partner.name} members receive {offer.toLowerCase()} at
-                    checkout
+                  <p className="mt-2 text-center text-[11px] font-bold leading-[1.35] text-[#6e7281]">
+                    {offerSentence}
                   </p>
-                  <ul className="my-5 space-y-2 text-[14px] text-[#515562]">
+                  <ul className="my-5 space-y-2 text-center text-[14px] text-[#515562]">
                     {tier.includes.map((item) => (
                       <li key={item}>
                         <span className="mr-2 text-sogility">✓</span>
@@ -562,7 +583,7 @@ function PartnerPricing({
                   <CheckoutButton
                     tier={tier}
                     checkout={checkout}
-                    discountCode={partner.discountCode}
+                    partner={partner}
                   />
                 </div>
               </div>
@@ -603,6 +624,30 @@ function PartnerPricing({
       </div>
     </section>
   );
+}
+
+function formatPartnerOfferSentence(partner: PartnerData) {
+  const rawOffer = (partner.offerText || 'Member pricing')
+    .trim()
+    .replace(/[.!?]+$/, '');
+  const normalizedOffer =
+    rawOffer === rawOffer.toUpperCase() ? rawOffer.toLowerCase() : rawOffer;
+  const brandedOffer = normalizedOffer.replace(/sogilitygo/gi, 'SogilityGO');
+  const percentage = brandedOffer.match(/\b\d+(?:\.\d+)?%/)?.[0];
+
+  if (percentage) {
+    return `${partner.name} members save ${percentage} on SogilityGO at checkout.`;
+  }
+
+  if (/^(save|get|enjoy|claim|receive)\b/i.test(brandedOffer)) {
+    const memberOffer = brandedOffer
+      .replace(/^./, (character) => character.toLowerCase())
+      .replace(/\byour\b/gi, 'their');
+
+    return `${partner.name} members ${memberOffer} at checkout.`;
+  }
+
+  return `${partner.name} members receive ${brandedOffer} at checkout.`;
 }
 
 function PlayerProof() {

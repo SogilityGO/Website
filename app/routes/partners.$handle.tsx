@@ -1,7 +1,7 @@
 import {useLoaderData, type LinksFunction} from 'react-router';
 import type {Route} from './+types/partners.$handle';
 import type {CheckoutMap} from '~/components/landing/sections';
-import {Analytics} from '~/components/landing/analytics';
+import {Analytics, PartnerAnalytics} from '~/components/landing/analytics';
 import {StickyMobileCTA} from '~/components/landing/StickyCTA';
 import {PartnerHero} from '~/components/landing/PartnerHero';
 import {PartnerOffer} from '~/components/landing/PartnerOffer';
@@ -168,6 +168,11 @@ export default function PartnerPage() {
   return (
     <>
       <Analytics />
+      <PartnerAnalytics
+        partnerHandle={partner.handle}
+        partnerName={partner.name}
+        discountCode={partner.discountCode}
+      />
       <PartnerHero partner={partner} />
       <PartnerOffer partner={partner} />
       <PartnerExperience partner={partner} checkout={checkout} />

@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import {getPartnerEventAttribution} from '~/lib/partner-attribution';
 
 /**
  * GA4 + Google Ads + Meta Pixel + Yahoo dot pixel for the landing pages.
@@ -36,7 +37,11 @@ const GOOGLE_ADS_ID = 'AW-18109223824';
 const YAHOO_PROJECT_ID = '10000';
 const YAHOO_PIXEL_ID = '10220772';
 const META_PIXEL_ID = '1654787059166470';
-const LINKER_DOMAINS = ['my.sogilitygo.com', 'www.sogilitygo.com', 'sogilitygo.com'];
+const LINKER_DOMAINS = [
+  'my.sogilitygo.com',
+  'www.sogilitygo.com',
+  'sogilitygo.com',
+];
 
 type YahooBeacon = {ywa: {I13N: {fireBeacon: (payload: unknown[]) => void}}};
 
@@ -119,7 +124,7 @@ export function Analytics() {
 
     // --- Meta Pixel (fbevents.js) ---
     if (!w.fbq) {
-      /* eslint-disable */
+      /* eslint-disable @typescript-eslint/no-unused-expressions, prefer-spread, prefer-rest-params */
       (function (f: any, b: any, e: any, v: any, n?: any, t?: any, s?: any) {
         if (f.fbq) return;
         n = f.fbq = function () {
@@ -143,11 +148,39 @@ export function Analytics() {
         'script',
         'https://connect.facebook.net/en_US/fbevents.js',
       );
-      /* eslint-enable */
+      /* eslint-enable @typescript-eslint/no-unused-expressions, prefer-spread, prefer-rest-params */
       w.fbq!('init', META_PIXEL_ID);
       w.fbq!('track', 'PageView');
     }
   }, []);
+
+  return null;
+}
+
+/** Record a partner landing-page visit with stable partner dimensions. */
+export function PartnerAnalytics({
+  partnerHandle,
+  partnerName,
+  discountCode,
+}: {
+  partnerHandle: string;
+  partnerName: string;
+  discountCode: string;
+}) {
+  useEffect(() => {
+    const w = window as AnalyticsWindow;
+    const attribution = getPartnerEventAttribution();
+    const properties = {
+      partner_handle: partnerHandle,
+      partner_name: partnerName,
+      coupon: discountCode,
+      page_path: window.location.pathname,
+      ...attribution,
+    };
+
+    w.gtag?.('event', 'partner_page_view', properties);
+    w.fbq?.('trackCustom', 'PartnerPageView', properties);
+  }, [discountCode, partnerHandle, partnerName]);
 
   return null;
 }
@@ -186,20 +219,58 @@ export function trackBeginCheckout(params: {
   tierName: string;
   valueUSD: number;
   variantId?: string;
+  partnerHandle?: string;
+  partnerName?: string;
+  discountCode?: string;
 }) {
-  const {tierName, valueUSD, variantId} = params;
+  const {
+    tierName,
+    valueUSD,
+    variantId,
+    partnerHandle,
+    partnerName,
+    discountCode,
+  } = params;
   const w = window as AnalyticsWindow;
   const itemId = variantId ?? tierName;
+  const partnerProperties = partnerHandle
+    ? {
+        partner_handle: partnerHandle,
+        partner_name: partnerName,
+        coupon: discountCode,
+        ...getPartnerEventAttribution(),
+      }
+    : {};
+
+  if (partnerHandle) {
+    w.gtag?.('event', 'partner_offer_click', {
+      tier_name: tierName,
+      item_id: itemId,
+      value: valueUSD,
+      currency: 'USD',
+      ...partnerProperties,
+    });
+    w.fbq?.('trackCustom', 'PartnerOfferClick', {
+      tier_name: tierName,
+      content_id: itemId,
+      value: valueUSD,
+      currency: 'USD',
+      ...partnerProperties,
+    });
+  }
 
   w.gtag?.('event', 'begin_checkout', {
     currency: 'USD',
     value: valueUSD,
+    coupon: discountCode,
+    ...partnerProperties,
     items: [
       {
         item_id: itemId,
         item_name: `Rebound IQ ${tierName}`,
         price: valueUSD,
         quantity: 1,
+        coupon: discountCode,
       },
     ],
   });
@@ -210,5 +281,6 @@ export function trackBeginCheckout(params: {
     content_ids: [itemId],
     content_type: 'product',
     num_items: 1,
+    ...partnerProperties,
   });
 }
