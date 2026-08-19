@@ -622,20 +622,18 @@ function formatPartnerOfferSentence(partner: PartnerData) {
   const normalizedOffer =
     rawOffer === rawOffer.toUpperCase() ? rawOffer.toLowerCase() : rawOffer;
   const brandedOffer = normalizedOffer.replace(/sogilitygo/gi, 'SogilityGO');
+  const percentage = brandedOffer.match(/\b\d+(?:\.\d+)?%\b/)?.[0];
+
+  if (percentage) {
+    return `${partner.name} members save ${percentage} on SogilityGO at checkout.`;
+  }
 
   if (/^(save|get|enjoy|claim|receive)\b/i.test(brandedOffer)) {
     const memberOffer = brandedOffer
       .replace(/^./, (character) => character.toLowerCase())
       .replace(/\byour\b/gi, 'their');
-    const duplicatedPartnerOffer = new RegExp(
-      `their exclusive ${partner.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} offer`,
-      'i',
-    );
 
-    return `${partner.name} members ${memberOffer.replace(
-      duplicatedPartnerOffer,
-      'their exclusive offer',
-    )} at checkout.`;
+    return `${partner.name} members ${memberOffer} at checkout.`;
   }
 
   return `${partner.name} members receive ${brandedOffer} at checkout.`;
