@@ -525,16 +525,16 @@ function PartnerPricing({
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-6">
-                  <p className="text-[12px] font-black uppercase tracking-[0.12em] text-sogility">
+                  <p className="text-center text-[12px] font-black uppercase tracking-[0.12em] text-sogility">
                     ReboundIQ
                   </p>
-                  <h3 className="mt-1 text-[32px] font-black tracking-[-0.04em]">
+                  <h3 className="mt-1 text-center text-[32px] font-black tracking-[-0.04em]">
                     {tier.name}
                   </h3>
                   <p className="mt-3 min-h-[76px] text-[15px] leading-[1.6] text-[#656977]">
                     {tier.copy}
                   </p>
-                  <div className="mt-4 flex items-center gap-3">
+                  <div className="mt-4 flex items-center justify-center gap-3 text-center">
                     <strong className="text-[32px] font-black">
                       {tier.price}
                     </strong>
@@ -547,11 +547,11 @@ function PartnerPricing({
                       </span>
                     ) : null}
                   </div>
-                  <p className="mt-3 text-[12px] font-black text-[#247d25]">
+                  <p className="mt-3 text-center text-[12px] font-black text-[#247d25]">
                     {partner.name} members receive {offer.toLowerCase()} at
                     checkout
                   </p>
-                  <ul className="my-5 space-y-2 text-[14px] text-[#515562]">
+                  <ul className="my-5 space-y-2 text-center text-[14px] text-[#515562]">
                     {tier.includes.map((item) => (
                       <li key={item}>
                         <span className="mr-2 text-sogility">✓</span>
