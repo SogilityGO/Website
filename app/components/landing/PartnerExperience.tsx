@@ -622,7 +622,7 @@ function formatPartnerOfferSentence(partner: PartnerData) {
   const normalizedOffer =
     rawOffer === rawOffer.toUpperCase() ? rawOffer.toLowerCase() : rawOffer;
   const brandedOffer = normalizedOffer.replace(/sogilitygo/gi, 'SogilityGO');
-  const percentage = brandedOffer.match(/\b\d+(?:\.\d+)?%\b/)?.[0];
+  const percentage = brandedOffer.match(/\b\d+(?:\.\d+)?%/)?.[0];
 
   if (percentage) {
     return `${partner.name} members save ${percentage} on SogilityGO at checkout.`;
