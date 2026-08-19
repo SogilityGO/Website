@@ -1,5 +1,7 @@
 import type {ReactNode} from 'react';
+import {useSearchParams} from 'react-router';
 import type {PartnerData} from '~/data/partners';
+import {buildPartnerCheckoutHref} from '~/lib/partner-attribution';
 import type {CheckoutMap} from './sections';
 import {trackBeginCheckout} from './analytics';
 
@@ -439,12 +441,13 @@ function SimpleSetup() {
 function CheckoutButton({
   tier,
   checkout,
-  discountCode,
+  partner,
 }: {
   tier: (typeof PRICING)[number];
   checkout?: CheckoutMap;
-  discountCode?: string;
+  partner: PartnerData;
 }) {
+  const [searchParams] = useSearchParams();
   const item = checkout?.[tier.name];
   if (item && !item.available) {
     return (
@@ -458,7 +461,12 @@ function CheckoutButton({
     );
   }
   const href = item
-    ? `/cart/${item.variantId}:1${discountCode ? `?discount=${encodeURIComponent(discountCode)}` : ''}`
+    ? buildPartnerCheckoutHref({
+        variantId: item.variantId,
+        discountCode: partner.discountCode,
+        partnerHandle: partner.handle,
+        currentSearch: searchParams,
+      })
     : `https://www.sogilitygo.com/products/${tier.handle}`;
   return (
     <a
@@ -469,6 +477,9 @@ function CheckoutButton({
           tierName: tier.name,
           valueUSD: tier.priceCents / 100,
           variantId: item?.variantId,
+          partnerHandle: partner.handle,
+          partnerName: partner.name,
+          discountCode: partner.discountCode,
         })
       }
       className={`mt-auto flex min-h-12 w-full items-center justify-center rounded-full px-5 text-center text-[15px] font-black transition hover:-translate-y-0.5 hover:brightness-105 ${
@@ -572,7 +583,7 @@ function PartnerPricing({
                   <CheckoutButton
                     tier={tier}
                     checkout={checkout}
-                    discountCode={partner.discountCode}
+                    partner={partner}
                   />
                 </div>
               </div>

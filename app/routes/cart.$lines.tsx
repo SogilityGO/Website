@@ -1,5 +1,9 @@
 import {redirect} from 'react-router';
 import type {Route} from './+types/cart.$lines';
+import {
+  addCheckoutLinkerParams,
+  getPartnerCartAttributes,
+} from '~/lib/partner-attribution';
 
 /**
  * Automatically creates a new cart based on the URL and redirects straight to checkout.
@@ -39,11 +43,13 @@ export async function loader({request, context, params}: Route.LoaderArgs) {
 
   const discount = searchParams.get('discount');
   const discountArray = discount ? [discount] : [];
+  const attributes = getPartnerCartAttributes(searchParams);
 
   // create a cart
   const result = await cart.create({
     lines: linesMap,
     discountCodes: discountArray,
+    attributes,
   });
 
   const cartResult = result.cart;
@@ -59,7 +65,10 @@ export async function loader({request, context, params}: Route.LoaderArgs) {
 
   // redirect to checkout
   if (cartResult.checkoutUrl) {
-    return redirect(cartResult.checkoutUrl, {headers});
+    return redirect(
+      addCheckoutLinkerParams(cartResult.checkoutUrl, searchParams),
+      {headers},
+    );
   } else {
     throw new Error('No checkout URL found');
   }
