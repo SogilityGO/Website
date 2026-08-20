@@ -198,6 +198,10 @@ const TRUSTED_LOGOS = [
     alt: 'Cal South',
   },
   {
+    src: 'https://cdn.shopify.com/s/files/1/0942/1380/0238/files/calnorth-logo.png?v=1786705289',
+    alt: 'Cal North',
+  },
+  {
     src: 'https://cdn.shopify.com/s/files/1/0942/1380/0238/files/US_Deaf_HorizontalCrest-224x300_1.png?v=1772798005',
     alt: 'USA Deaf Soccer Association',
   },
