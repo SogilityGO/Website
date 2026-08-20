@@ -10,7 +10,7 @@ import {HeaderMenu} from '~/components/Header';
 import {LandingHeader} from '~/components/landing/LandingHeader';
 import {LandingFooter} from '~/components/landing/LandingFooter';
 import {PartnerLandingFooter} from '~/components/landing/PartnerExperience';
-import {HubSpotTracking} from '~/components/landing/analytics';
+import {ClarityTracking, HubSpotTracking} from '~/components/landing/analytics';
 import {CartMain} from '~/components/CartMain';
 import {
   SEARCH_ENDPOINT,
@@ -47,6 +47,8 @@ export function PageLayout({
       {isPartnerPage ? <PartnerLandingFooter /> : <LandingFooter />}
       {/* Site-wide HubSpot analytics (loads on every route). */}
       <HubSpotTracking />
+      {/* Site-wide Microsoft Clarity session analytics. */}
+      <ClarityTracking />
     </Aside.Provider>
   );
 }
