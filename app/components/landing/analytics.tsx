@@ -1,3 +1,4 @@
+import {useAnalytics} from '@shopify/hydrogen';
 import {useEffect} from 'react';
 import {getPartnerEventAttribution} from '~/lib/partner-attribution';
 
@@ -37,6 +38,7 @@ const GOOGLE_ADS_ID = 'AW-18109223824';
 const YAHOO_PROJECT_ID = '10000';
 const YAHOO_PIXEL_ID = '10220772';
 const META_PIXEL_ID = '1654787059166470';
+const CLARITY_PROJECT_ID = 'wp2szjohzu';
 const LINKER_DOMAINS = [
   'my.sogilitygo.com',
   'www.sogilitygo.com',
@@ -44,6 +46,7 @@ const LINKER_DOMAINS = [
 ];
 
 type YahooBeacon = {ywa: {I13N: {fireBeacon: (payload: unknown[]) => void}}};
+type ClarityFunction = ((...args: unknown[]) => void) & {q?: unknown[][]};
 
 type AnalyticsWindow = Window & {
   dataLayer?: unknown[];
@@ -58,6 +61,7 @@ type AnalyticsWindow = Window & {
     push?: unknown;
   };
   _fbq?: unknown;
+  clarity?: ClarityFunction;
 };
 
 /** Loads GA4 + Meta Pixel once and fires the initial PageView. */
@@ -153,6 +157,52 @@ export function Analytics() {
       w.fbq!('track', 'PageView');
     }
   }, []);
+
+  return null;
+}
+
+/**
+ * Microsoft Clarity project shared with the Shopify Online Store. Mounted in
+ * PageLayout so every Hydrogen route, including partner pages, is recorded.
+ * ConsentV2 mirrors Shopify's analytics and marketing consent choices.
+ */
+export function ClarityTracking() {
+  const {customerPrivacy} = useAnalytics();
+
+  useEffect(() => {
+    const w = window as AnalyticsWindow;
+
+    if (!w.clarity) {
+      const clarity = ((...args: unknown[]) => {
+        (clarity.q = clarity.q || []).push(args);
+      }) as ClarityFunction;
+      w.clarity = clarity;
+    }
+
+    if (!document.getElementById('clarity-tracking-script')) {
+      const script = document.createElement('script');
+      script.id = 'clarity-tracking-script';
+      script.async = true;
+      script.src = `https://www.clarity.ms/tag/${CLARITY_PROJECT_ID}`;
+      document.head.appendChild(script);
+    }
+
+    const syncConsent = () => {
+      if (!customerPrivacy) return;
+      w.clarity?.('consentv2', {
+        ad_Storage: customerPrivacy.marketingAllowed() ? 'granted' : 'denied',
+        analytics_Storage: customerPrivacy.analyticsProcessingAllowed()
+          ? 'granted'
+          : 'denied',
+      });
+    };
+
+    syncConsent();
+    document.addEventListener('visitorConsentCollected', syncConsent);
+    return () => {
+      document.removeEventListener('visitorConsentCollected', syncConsent);
+    };
+  }, [customerPrivacy]);
 
   return null;
 }

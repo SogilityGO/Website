@@ -20,7 +20,8 @@ export default async function handleRequest(
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
     // Third-party widgets/analytics. Affirm = monthly-payment messaging;
-    // GA4 (googletagmanager/google-analytics) + Meta Pixel (facebook) = tracking;
+    // GA4 (googletagmanager/google-analytics) + Meta Pixel (facebook) +
+    // Microsoft Clarity (clarity.ms) = tracking;
     // Google Ads (googleadservices/doubleclick) + Yahoo dot pixel (yimg/yahoo)
     // = Invisibly ad tracking.
     scriptSrc: [
@@ -32,6 +33,7 @@ export default async function handleRequest(
       'https://googleads.g.doubleclick.net',
       'https://connect.facebook.net',
       'https://s.yimg.com',
+      'https://*.clarity.ms',
       // HubSpot tracking code (portal 243986947). The hs-scripts loader pulls in
       // HubSpot's analytics / cookie-banner / collected-forms scripts —
       // wildcards cover the regional (js-na2.*) subdomains this portal serves.
@@ -60,6 +62,7 @@ export default async function handleRequest(
       'https://www.facebook.com',
       'https://sp.analytics.yahoo.com',
       'https://s.yimg.com',
+      'https://*.clarity.ms',
       // HubSpot: analytics beacons (*.hubapi.com), cookie banner, collected forms.
       'https://*.hubapi.com',
       'https://*.hubspot.com',
@@ -89,6 +92,7 @@ export default async function handleRequest(
       'https://connect.facebook.net',
       'https://sp.analytics.yahoo.com',
       'https://s.yimg.com',
+      'https://*.clarity.ms',
       // HubSpot tracking pixel (track.hubspot.com) + banner/forms images.
       'https://*.hubspot.com',
     ],
