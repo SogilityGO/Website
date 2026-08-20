@@ -893,7 +893,7 @@ function Trust() {
               alt={logo.hidden ? '' : logo.alt}
               aria-hidden={logo.hidden || undefined}
               className="h-[70px] w-[160px] shrink-0 object-contain"
-              loading="lazy"
+              loading="eager"
             />
           ))}
         </div>
