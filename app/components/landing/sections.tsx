@@ -1265,10 +1265,8 @@ const PRICING_TIERS = [
     handle: 'sogilitygo-rebounder-pro',
     img: '/landing/pricing/p1.webp',
     blurb: 'Perfect for mastering the basics and getting thousands of quality reps.',
-    price: '$349',
     priceCents: 34900,
-    was: null as string | null,
-    save: null as string | null,
+    compareAtPriceCents: 39900,
     popular: false,
     features: ['Rebound IQ board ×1', 'Impact Light ×1', 'SogilityGO App'],
   },
@@ -1277,10 +1275,8 @@ const PRICING_TIERS = [
     handle: 'sogilitygo-reboundiq-elite',
     img: '/landing/pricing/p2.webp',
     blurb: 'Take training up a notch with multi-angle passing, decision making and scanning.',
-    price: '$649',
     priceCents: 64900,
-    was: '$698',
-    save: 'Save $49',
+    compareAtPriceCents: 79900,
     popular: true,
     features: ['Rebound IQ board ×2', 'Impact Light ×2', 'SogilityGO App'],
   },
@@ -1289,10 +1285,8 @@ const PRICING_TIERS = [
     handle: 'sogilitygo-reboundiq-ultimate',
     img: '/landing/pricing/p3.webp',
     blurb: 'The ultimate 360-degree training experience for elite skill development.',
-    price: '$949',
     priceCents: 94900,
-    was: '$1,047',
-    save: 'Save $98',
+    compareAtPriceCents: 119900,
     popular: false,
     features: ['Rebound IQ board ×3', 'Impact Light ×3', 'SogilityGO App'],
   },
@@ -1301,8 +1295,70 @@ const PRICING_TIERS = [
 /** Live checkout data per tier, resolved in the route loader from the Storefront API. */
 export type TierCheckout = {variantId: string; available: boolean};
 export type CheckoutMap = Record<string, TierCheckout | undefined>;
+export type SitewidePromotion = {
+  discountPercentage: number;
+  discountCode: string;
+  badgeLabel: string;
+  offerMessage: string;
+};
 
 type PricingTier = (typeof PRICING_TIERS)[number];
+
+function tierPriceCents(
+  tier: PricingTier,
+  promotion?: SitewidePromotion,
+): number {
+  if (!promotion) return tier.priceCents;
+  return Math.floor(
+    (tier.priceCents * (100 - promotion.discountPercentage)) / 100,
+  );
+}
+
+function formatPrice(cents: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: cents % 100 === 0 ? 0 : 2,
+    maximumFractionDigits: 2,
+  }).format(cents / 100);
+}
+
+function TierPrice({
+  tier,
+  promotion,
+}: {
+  tier: PricingTier;
+  promotion?: SitewidePromotion;
+}) {
+  const currentPriceCents = tierPriceCents(tier, promotion);
+  const savingsCents = tier.compareAtPriceCents - currentPriceCents;
+
+  return (
+    <div className="flex flex-col gap-2 pt-4">
+      <div
+        className="flex flex-wrap items-center gap-3.5"
+        role="group"
+        aria-label={`Regular price ${formatPrice(tier.compareAtPriceCents)}. Sale price ${formatPrice(currentPriceCents)}. You save ${formatPrice(savingsCents)}.`}
+      >
+        <span className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px] text-sogility">
+          {formatPrice(currentPriceCents)}
+        </span>
+        <span className="text-[16px] font-medium text-dark line-through decoration-red-600 decoration-2">
+          {formatPrice(tier.compareAtPriceCents)}
+        </span>
+        <span className="rounded-lg border-2 border-dashed border-sogility bg-white px-3 py-1 text-[16px] font-extrabold leading-none text-sogility">
+          Save {formatPrice(savingsCents)}
+        </span>
+      </div>
+      {promotion && (
+        <p className="text-[12px] leading-[17px] text-blue-005">
+          {promotion.offerMessage && <span>{promotion.offerMessage} </span>}
+          <span>Discount applied automatically at checkout.</span>
+        </p>
+      )}
+    </div>
+  );
+}
 
 /**
  * Buy button → Shopify checkout.
@@ -1315,11 +1371,13 @@ function BuyButton({
   checkout,
   className,
   discountCode,
+  currentPriceCents,
 }: {
   tier: PricingTier;
   checkout?: CheckoutMap;
   className: string;
   discountCode?: string;
+  currentPriceCents: number;
 }) {
   const c = checkout?.[tier.name];
   const gradient =
@@ -1349,7 +1407,7 @@ function BuyButton({
       onClick={() =>
         trackBeginCheckout({
           tierName: tier.name,
-          valueUSD: tier.priceCents / 100,
+          valueUSD: currentPriceCents / 100,
           variantId: c?.variantId,
         })
       }
@@ -1362,10 +1420,10 @@ function BuyButton({
 
 export function StartTraining({
   checkout,
-  discountCode,
+  promotion,
 }: {
   checkout?: CheckoutMap;
-  discountCode?: string;
+  promotion?: SitewidePromotion;
 }) {
   return (
     <section
@@ -1417,23 +1475,7 @@ export function StartTraining({
                   <p className="text-[16px] leading-[22px] text-blue-005">
                     {t.blurb}
                   </p>
-                  <div className="flex flex-col gap-2 pt-4">
-                    <div className="flex items-center gap-3.5">
-                      <span className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px] text-dark">
-                        {t.price}
-                      </span>
-                      {t.was && (
-                        <span className="text-[16px] font-medium text-dark line-through">
-                          {t.was}
-                        </span>
-                      )}
-                      {t.save && (
-                        <span className="rounded-lg border-2 border-dashed border-sogility bg-white px-3 py-1 text-[16px] font-extrabold leading-none text-sogility">
-                          {t.save}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+                  <TierPrice tier={t} promotion={promotion} />
                 </div>
 
                 <div className="flex flex-col gap-2 pl-6 text-[14px] leading-[22px]">
@@ -1447,11 +1489,12 @@ export function StartTraining({
                 <BuyButton
                   tier={t}
                   checkout={checkout}
-                  discountCode={discountCode}
+                  discountCode={promotion?.discountCode}
+                  currentPriceCents={tierPriceCents(t, promotion)}
                   className="flex w-full items-center justify-center rounded-2xl p-3 text-[16px] font-bold"
                 />
                 <AffirmMessage
-                  amountCents={t.priceCents}
+                  amountCents={tierPriceCents(t, promotion)}
                   className="text-center text-[14px] text-dark"
                 />
               </div>
@@ -1482,7 +1525,7 @@ export function StartTraining({
       </Container>
 
       {/* mobile: horizontal slider of pricing cards */}
-      <StartTrainingSlider checkout={checkout} discountCode={discountCode} />
+      <StartTrainingSlider checkout={checkout} promotion={promotion} />
     </section>
   );
 }
@@ -1490,10 +1533,10 @@ export function StartTraining({
 /** Mobile Start Training slider — one pricing card per view, shared policy row + dots. */
 function StartTrainingSlider({
   checkout,
-  discountCode,
+  promotion,
 }: {
   checkout?: CheckoutMap;
-  discountCode?: string;
+  promotion?: SitewidePromotion;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -1561,23 +1604,7 @@ function StartTrainingSlider({
                   <p className="text-[16px] leading-[22px] text-blue-005">
                     {t.blurb}
                   </p>
-                  <div className="flex flex-col gap-2 pt-4">
-                    <div className="flex items-center gap-3.5">
-                      <span className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px] text-dark">
-                        {t.price}
-                      </span>
-                      {t.was && (
-                        <span className="text-[16px] font-medium text-dark line-through">
-                          {t.was}
-                        </span>
-                      )}
-                      {t.save && (
-                        <span className="rounded-lg border-2 border-dashed border-sogility bg-white px-3 py-1 text-[16px] font-extrabold leading-none text-sogility">
-                          {t.save}
-                        </span>
-                      )}
-                    </div>
-                  </div>
+                  <TierPrice tier={t} promotion={promotion} />
                 </div>
 
                 <div className="flex flex-col gap-2 pl-6 text-[18px] leading-[22px]">
@@ -1594,11 +1621,12 @@ function StartTrainingSlider({
                 <BuyButton
                   tier={t}
                   checkout={checkout}
-                  discountCode={discountCode}
+                  discountCode={promotion?.discountCode}
+                  currentPriceCents={tierPriceCents(t, promotion)}
                   className="flex h-14 w-full items-center justify-center rounded-2xl p-3 text-[18px] font-semibold"
                 />
                 <AffirmMessage
-                  amountCents={t.priceCents}
+                  amountCents={tierPriceCents(t, promotion)}
                   className="text-center text-[14px] text-dark"
                 />
               </div>

@@ -15,6 +15,7 @@ import {
   OwnerMessage,
   Faq,
   type CheckoutMap,
+  type SitewidePromotion,
 } from '~/components/landing/sections';
 import {Analytics} from '~/components/landing/analytics';
 import {StickyMobileCTA} from '~/components/landing/StickyCTA';
@@ -68,10 +69,65 @@ const START_TRAINING_QUERY = `#graphql
   }
 ` as const;
 
+const SITEWIDE_PROMOTIONS_QUERY = `#graphql
+  query SitewidePromotions {
+    metaobjects(type: "sitewide_promotion", first: 20) {
+      nodes {
+        enabled: field(key: "enabled") { value }
+        discountPercentage: field(key: "discount_percentage") { value }
+        discountCode: field(key: "discount_code") { value }
+        startsAt: field(key: "starts_at") { value }
+        endsAt: field(key: "ends_at") { value }
+        badgeLabel: field(key: "badge_label") { value }
+        offerMessage: field(key: "offer_message") { value }
+      }
+    }
+  }
+` as const;
+
+function getActiveSitewidePromotion(data: any): SitewidePromotion | undefined {
+  const now = Date.now();
+  const nodes = data?.metaobjects?.nodes ?? [];
+
+  for (const node of nodes) {
+    const enabled = node?.enabled?.value === 'true';
+    const discountPercentage = Number(node?.discountPercentage?.value);
+    const discountCode = String(node?.discountCode?.value ?? '').trim();
+    const startsAt = node?.startsAt?.value
+      ? Date.parse(node.startsAt.value)
+      : 0;
+    const endsAt = node?.endsAt?.value
+      ? Date.parse(node.endsAt.value)
+      : Number.POSITIVE_INFINITY;
+
+    if (
+      enabled &&
+      Number.isFinite(discountPercentage) &&
+      discountPercentage > 0 &&
+      discountPercentage < 100 &&
+      discountCode &&
+      Number.isFinite(startsAt) &&
+      Number.isFinite(endsAt) &&
+      now >= startsAt &&
+      now <= endsAt
+    ) {
+      return {
+        discountPercentage,
+        discountCode,
+        badgeLabel: String(node?.badgeLabel?.value ?? '').trim(),
+        offerMessage: String(node?.offerMessage?.value ?? '').trim(),
+      };
+    }
+  }
+
+  return undefined;
+}
+
 export async function loader({context}: Route.LoaderArgs) {
   const {storefront} = context;
 
   let checkout: CheckoutMap = {};
+  let promotion: SitewidePromotion | undefined;
   try {
     const data = await storefront.query(START_TRAINING_QUERY, {
       variables: {
@@ -100,11 +156,21 @@ export async function loader({context}: Route.LoaderArgs) {
     console.error('StartTraining pricing fetch failed', error);
   }
 
-  return {checkout};
+  try {
+    const promotionData = await storefront.query(SITEWIDE_PROMOTIONS_QUERY, {
+      cache: storefront.CacheShort(),
+    });
+    promotion = getActiveSitewidePromotion(promotionData);
+  } catch (error) {
+    // Promotion data is non-critical; base pricing remains available on failure.
+    console.error('Sitewide promotion fetch failed', error);
+  }
+
+  return {checkout, promotion};
 }
 
 export default function Homepage() {
-  const {checkout} = useLoaderData<typeof loader>();
+  const {checkout, promotion} = useLoaderData<typeof loader>();
   return (
     <>
       <Analytics />
@@ -127,7 +193,7 @@ export default function Homepage() {
       <TrainingBoard />
       <Reviews />
       <CoreSkills />
-      <StartTraining checkout={checkout} />
+      <StartTraining checkout={checkout} promotion={promotion} />
       <SetupTraining />
       <OwnerMessage />
       <Faq />
