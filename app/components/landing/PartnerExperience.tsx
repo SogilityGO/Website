@@ -323,10 +323,10 @@ export function PartnerExperience({
     <div style={{background: PAPER, color: INK}}>
       <HowItWorks />
       <SimpleSetup />
-      <PartnerPricing partner={partner} checkout={checkout} />
-      <PlayerProof />
-      <Comparison partner={partner} />
       <RepLoop />
+      <PartnerPricing partner={partner} checkout={checkout} />
+      <Comparison partner={partner} />
+      <PlayerProof />
       <Trust />
       <OwnerMessage />
       <PartnerFaq partner={partner} />
