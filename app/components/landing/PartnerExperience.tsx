@@ -827,21 +827,18 @@ function RepLoop() {
               key={step.number}
               className="rounded-[24px] border border-white/15 bg-white/[0.045] p-5"
             >
-              <div className="flex items-start justify-between">
-                <div className="grid h-16 w-16 place-items-center rounded-[18px] border border-white/15 bg-[radial-gradient(circle,rgba(48,190,45,0.2),transparent_65%)]">
-                  <img
-                    src={step.image}
-                    alt=""
-                    className="h-12 w-12 object-contain"
-                    loading="lazy"
-                  />
-                </div>
-                <span className="text-[34px] font-black text-white/20">
-                  {step.number}
-                </span>
+              <div className="mx-auto grid h-24 w-24 place-items-center rounded-[24px] border border-white/15 bg-[radial-gradient(circle,rgba(48,190,45,0.2),transparent_65%)]">
+                <img
+                  src={step.image}
+                  alt=""
+                  className="h-[72px] w-[72px] object-contain"
+                  loading="lazy"
+                />
               </div>
-              <Kicker>{step.product}</Kicker>
-              <h3 className="mt-2 text-[21px] font-black">{step.title}</h3>
+              <div className="text-center">
+                <Kicker>{step.product}</Kicker>
+                <h3 className="mt-2 text-[21px] font-black">{step.title}</h3>
+              </div>
               <p className="mt-3 text-[14px] leading-[1.6] text-white/65">
                 {step.copy}
               </p>
