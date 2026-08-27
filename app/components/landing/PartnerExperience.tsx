@@ -13,7 +13,7 @@ const SYSTEMS = [
   {
     id: 'reboundiq',
     name: 'ReboundIQ',
-    copy: 'Creates realistic ball returns so players can repeat, receive, and adjust through purposeful reps.',
+    copy: 'Creates realistic returns for purposeful passing, receiving, and first-touch reps.',
     image:
       'https://cdn.shopify.com/s/files/1/0942/1380/0238/files/Rebound-on-x4.png?v=1785369043',
     imageClass: 'w-[84%] max-w-[250px]',
@@ -21,7 +21,7 @@ const SYSTEMS = [
   {
     id: 'impact-light',
     name: 'Impact Light',
-    copy: 'Adds smart, connected visual cues that prompt players to recognize, react, and decide during the activity.',
+    copy: 'Adds visual cues that prompt players to recognize, react, and decide.',
     image:
       'https://cdn.shopify.com/s/files/1/0942/1380/0238/files/Lights-2.png?v=1785369043',
     imageClass: 'w-[76%] max-w-[210px]',
@@ -29,39 +29,10 @@ const SYSTEMS = [
   {
     id: 'sogilitygo-app',
     name: 'SogilityGO App',
-    copy: 'Connects the hardware and includes a starter selection of drills players can use without a subscription.',
+    copy: 'Connects the system and includes drills players can use without a subscription.',
     image:
       'https://cdn.shopify.com/s/files/1/0942/1380/0238/files/illu_coach-1.png?v=1785369280',
     imageClass: 'w-[80%] max-w-[230px]',
-  },
-];
-
-const SETUP_STEPS = [
-  {
-    label: 'Step 1',
-    title: 'Place the boards',
-    copy: 'Use a flat indoor or outdoor surface with enough room to safely receive the return.',
-    image: '/landing/setup/board.webp',
-    alt: 'ReboundIQ board on a backyard training surface',
-    imageClass: 'h-full w-full object-cover [object-position:35%_center]',
-  },
-  {
-    label: 'Step 2',
-    title: 'Pair the app and lights',
-    copy: 'Connect each Impact Light through Bluetooth in the free SogilityGO app.',
-    image:
-      'https://cdn.shopify.com/s/files/1/0942/1380/0238/files/phone-light-extended.png?v=1785509384',
-    alt: 'SogilityGO app pairing with an Impact Light',
-    imageClass:
-      'h-full w-full object-contain object-top scale-[1.04] -translate-y-4',
-  },
-  {
-    label: 'Step 3',
-    title: 'Choose how to train',
-    copy: 'Choose from the included drills or add SogilityGO Coach for guided plans, the full activity library, and progress tracking.',
-    image: '/landing/setup/phone-explore.webp',
-    alt: 'SogilityGO app guided activity library',
-    imageClass: 'h-full w-full object-contain',
   },
 ];
 
@@ -319,11 +290,10 @@ export function PartnerExperience({
   return (
     <div style={{background: PAPER, color: INK}}>
       <HowItWorks />
-      <SimpleSetup />
-      <RepLoop />
       <PartnerPricing partner={partner} checkout={checkout} />
-      <Comparison partner={partner} />
+      <RepLoop />
       <PlayerProof />
+      <Comparison partner={partner} />
       <Trust />
       <OwnerMessage />
       <PartnerFaq partner={partner} />
@@ -338,7 +308,7 @@ function HowItWorks() {
         <Heading
           kicker="How it works"
           title="Three parts. One purposeful session."
-          copy="ReboundIQ delivers realistic returns, the Impact Light adds smart connected visual cues, and the SogilityGO app brings every rep together in one purposeful at-home training experience."
+          copy="ReboundIQ, Impact Light, and the SogilityGO app turn each rep into one connected training session."
           center
         />
 
@@ -374,7 +344,7 @@ function HowItWorks() {
 
         <div
           id="progress-tracking"
-          className="mt-[18px] flex scroll-mt-24 items-center justify-between gap-[34px] rounded-[20px] border border-[#dbddd5] bg-[#fffef9] px-[22px] py-5 shadow-[0_12px_34px_rgba(28,31,43,0.05)] max-lg:flex-col max-lg:items-start"
+          className="mt-[18px] hidden scroll-mt-24 items-center justify-between gap-[34px] rounded-[20px] border border-[#dbddd5] bg-[#fffef9] px-[22px] py-5 shadow-[0_12px_34px_rgba(28,31,43,0.05)] lg:flex"
         >
           <div className="grid gap-[5px]">
             <span className="text-[12px] font-black uppercase tracking-[0.13em] text-[#159f23]">
@@ -393,43 +363,6 @@ function HowItWorks() {
             </p>
           </div>
           <StoreBadges />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function SimpleSetup() {
-  return (
-    <section className="border-t border-[#dfe0d9] py-14 lg:py-16">
-      <div className={WRAP}>
-        <Heading
-          kicker="Simple setup"
-          title="Ready in three steps."
-          copy="Place the boards, pair the Impact Lights, and choose how the player wants to train in the SogilityGO app."
-        />
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {SETUP_STEPS.map((step) => (
-            <article key={step.label}>
-              <div className="grid h-[300px] place-items-center overflow-hidden rounded-[22px] border border-[#dfe0d9] bg-[radial-gradient(circle_at_center,rgba(48,190,45,0.09),transparent_55%),#fbfaf4] shadow-[0_18px_40px_rgba(31,34,49,0.06)] lg:h-[354px]">
-                <img
-                  src={step.image}
-                  alt={step.alt}
-                  className={step.imageClass}
-                  loading="lazy"
-                />
-              </div>
-              <div className="px-1 pt-4">
-                <Kicker>{step.label}</Kicker>
-                <h3 className="mt-2 text-[26px] font-black tracking-[-0.035em]">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-[16px] leading-[1.6] text-[#656977]">
-                  {step.copy}
-                </p>
-              </div>
-            </article>
-          ))}
         </div>
       </div>
     </section>
@@ -506,7 +439,7 @@ function PartnerPricing({
         <Heading
           kicker={`${partner.name} member offer`}
           title="Choose the right setup for your player."
-          copy="Every setup includes ReboundIQ, Impact Lights, and the SogilityGO app. Choose based on your available space and the number of return angles you want to create."
+          copy="Every setup includes ReboundIQ, Impact Lights, and the SogilityGO app. Choose based on your space and preferred number of return angles."
           center
         />
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
@@ -658,7 +591,7 @@ function PlayerProof() {
         <Heading
           kicker="Real players. Real training."
           title="Players in action."
-          copy="Hear from players and parents using SogilityGO for purposeful work between organized sessions."
+          copy="Hear from players and parents using SogilityGO between organized sessions."
           light
         />
         <div className="mt-9 grid gap-6 lg:grid-cols-[0.62fr_1.38fr]">
@@ -710,8 +643,11 @@ function PlayerProof() {
                   'Quality repetitions outside of organized practice can make a meaningful difference. SogilityGO gives players structure and encourages them to take ownership of their development.',
                   'Todd, Soccer Coach',
                 ],
-              ].map(([quote, author]) => (
-                <div key={author} className="py-6">
+              ].map(([quote, author], index) => (
+                <div
+                  key={author}
+                  className={`${index > 0 ? 'hidden lg:block ' : ''}py-6`}
+                >
                   <blockquote className="text-[18px] font-bold leading-[1.45] lg:text-[21px]">
                     “{quote}”
                   </blockquote>
@@ -810,9 +746,8 @@ function RepLoop() {
             light
           />
           <p className="text-[16px] leading-[1.65] text-white/70">
-            Each rep asks the player to follow the session, read the cue,
-            receive the return, and use the feedback to adjust, building
-            ownership through purposeful work.
+            Follow the session, read the cue, receive the return, and use the
+            feedback to adjust the next rep.
           </p>
         </div>
         <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -918,12 +853,10 @@ function OwnerMessage() {
           </figure>
           <div className="text-center">
             <blockquote className="text-left text-[18px] leading-[1.55] lg:text-[20px]">
-              “I built SogilityGO because I know exactly what separates good
-              players from elite ones: the invisible hours spent training away
-              from the team. We created this so your child is not just getting
-              more touches in the backyard. They are getting the right touches,
-              guided by pro-level technology, to build the confidence they need
-              on game day.”
+              “I built SogilityGO to give players a better way to use the hours
+              away from the team. It combines purposeful touches with guidance
+              and feedback, helping players train with confidence and arrive at
+              the next session ready to keep learning.”
             </blockquote>
             <img
               src="/landing/owner/jozy-sig.svg"
@@ -979,18 +912,6 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
       'No. The free app connects the Impact Lights and includes a selection of drills. Optional Coach unlocks guided plans, the full activity library, progress tracking, and up to five player profiles.',
     ],
     [
-      'Can more than one player use SogilityGO?',
-      'Yes. With SogilityGO Coach, families can create up to five player profiles with separate plans and progress histories.',
-    ],
-    [
-      'Can parents track progress?',
-      'Yes. With optional SogilityGO Coach, each player profile keeps completed work and progress history in the app.',
-    ],
-    [
-      'Does SogilityGO need to stay plugged in?',
-      'No. ReboundIQ does not require power, and the Impact Lights are rechargeable.',
-    ],
-    [
       'Does this replace regular coaching?',
       'No. SogilityGO supports purposeful work between practices, coaching sessions, and games.',
     ],
@@ -1011,9 +932,8 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
             light
           />
           <p className="text-[16px] leading-[1.65] text-white/70">
-            Compare setups, understand what is included, and see how SogilityGO
-            supports purposeful work alongside organized practices, coaching,
-            and games.
+            Compare setups, see what is included, and understand how SogilityGO
+            supports work between organized sessions.
           </p>
         </div>
         <div className="mt-8 grid items-start gap-3 lg:grid-cols-2">
