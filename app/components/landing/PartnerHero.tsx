@@ -115,18 +115,12 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
             </span>
             <span className="block whitespace-nowrap">in the Backyard.</span>
           </h1>
-          <div className="mt-[18px] flex max-w-[560px] flex-col gap-3 text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
-            <p>
-              {partner.name} families can now access SogilityGO, an interactive
-              home training system designed to help players improve their first
-              touch, passing, reaction speed, vision, and overall confidence
-              through guided, app-based sessions.
-            </p>
-            <p>
-              With structured, smart guidance, kids can build real skill, real
-              confidence, and a lifelong passion for the game.
-            </p>
-          </div>
+          <p className="mt-[18px] max-w-[560px] text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
+            {partner.name} families can now access SogilityGO, a guided at-home
+            system that combines ball returns, visual cues, and app-based
+            sessions to help players build first touch, passing, reactions,
+            vision, and confidence between team practices.
+          </p>
           <HeroActions partner={partner} />
           <div
             className="mt-6 hidden flex-wrap gap-2.5 lg:flex"
