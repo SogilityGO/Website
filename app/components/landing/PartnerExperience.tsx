@@ -12,7 +12,6 @@ const INK = '#202333';
 const SYSTEMS = [
   {
     id: 'reboundiq',
-    number: '01',
     name: 'ReboundIQ',
     copy: 'Creates realistic ball returns so players can repeat, receive, and adjust through purposeful reps.',
     image:
@@ -21,7 +20,6 @@ const SYSTEMS = [
   },
   {
     id: 'impact-light',
-    number: '02',
     name: 'Impact Light',
     copy: 'Adds smart, connected visual cues that prompt players to recognize, react, and decide during the activity.',
     image:
@@ -30,7 +28,6 @@ const SYSTEMS = [
   },
   {
     id: 'sogilitygo-app',
-    number: '03',
     name: 'SogilityGO App',
     copy: 'Connects the hardware and includes a starter selection of drills players can use without a subscription.',
     image:
@@ -352,10 +349,7 @@ function HowItWorks() {
               id={system.id}
               className="scroll-mt-24 overflow-hidden rounded-[24px] border border-[#dfe0d9] bg-white p-6 shadow-[0_18px_45px_rgba(31,34,49,0.07)]"
             >
-              <div className="flex items-start justify-between">
-                <span className="text-[36px] font-black leading-none text-[#202333]/15">
-                  {system.number}
-                </span>
+              <div className="flex items-start justify-center">
                 <span className="rounded-full bg-sogility/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#247d25]">
                   Connected system
                 </span>
@@ -368,7 +362,7 @@ function HowItWorks() {
                   loading="lazy"
                 />
               </div>
-              <h3 className="mt-5 text-[29px] font-black tracking-[-0.035em] text-[#202333]">
+              <h3 className="mt-5 text-center text-[29px] font-black tracking-[-0.035em] text-[#202333]">
                 {system.name}
               </h3>
               <p className="mt-3 text-[16px] leading-[1.6] text-[#656977]">
