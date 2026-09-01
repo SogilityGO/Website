@@ -1,6 +1,6 @@
 import type {ReactNode} from 'react';
 import {useSearchParams} from 'react-router';
-import type {PartnerData} from '~/data/partners';
+import {getPartnerAudienceCopy, type PartnerData} from '~/data/partners';
 import {buildPartnerCheckoutHref} from '~/lib/partner-attribution';
 import type {CheckoutMap} from './sections';
 import {trackBeginCheckout} from './analytics';
@@ -378,6 +378,7 @@ function CheckoutButton({
   checkout?: CheckoutMap;
   partner: PartnerData;
 }) {
+  const audience = getPartnerAudienceCopy(partner);
   const [searchParams] = useSearchParams();
   const item = checkout?.[tier.name];
   if (item && !item.available) {
@@ -417,7 +418,7 @@ function CheckoutButton({
         tier.popular ? 'bg-sogility text-[#202333]' : 'bg-[#202333] text-white'
       }`}
     >
-      Claim member offer on {tier.name}
+      {audience.claimOffer} on {tier.name}
     </a>
   );
 }
@@ -429,6 +430,7 @@ function PartnerPricing({
   partner: PartnerData;
   checkout?: CheckoutMap;
 }) {
+  const audience = getPartnerAudienceCopy(partner);
   const offerSentence = formatPartnerOfferSentence(partner);
   return (
     <section
@@ -437,7 +439,7 @@ function PartnerPricing({
     >
       <div className={WRAP}>
         <Heading
-          kicker={`${partner.name} member offer`}
+          kicker={audience.pricingLabel}
           title="Choose the right setup for your player."
           copy="Every setup includes ReboundIQ, Impact Lights, and the SogilityGO app. Choose based on your space and preferred number of return angles."
           center
@@ -558,7 +560,8 @@ function PartnerPricing({
 }
 
 function formatPartnerOfferSentence(partner: PartnerData) {
-  const rawOffer = (partner.offerText || 'Member pricing')
+  const audience = getPartnerAudienceCopy(partner);
+  const rawOffer = (partner.offerText || audience.offerSentenceFallback)
     .trim()
     .replace(/[.!?]+$/, '');
   const normalizedOffer =
@@ -567,18 +570,18 @@ function formatPartnerOfferSentence(partner: PartnerData) {
   const percentage = brandedOffer.match(/\b\d+(?:\.\d+)?%/)?.[0];
 
   if (percentage) {
-    return `${partner.name} members save ${percentage} on SogilityGO at checkout.`;
+    return `${audience.offerSubject} save ${percentage} on SogilityGO at checkout.`;
   }
 
   if (/^(save|get|enjoy|claim|receive)\b/i.test(brandedOffer)) {
-    const memberOffer = brandedOffer
+    const audienceOffer = brandedOffer
       .replace(/^./, (character) => character.toLowerCase())
       .replace(/\byour\b/gi, 'their');
 
-    return `${partner.name} members ${memberOffer} at checkout.`;
+    return `${audience.offerSubject} ${audienceOffer} at checkout.`;
   }
 
-  return `${partner.name} members receive ${brandedOffer} at checkout.`;
+  return `${audience.offerSubject} receive ${brandedOffer} at checkout.`;
 }
 
 function PlayerProof() {
@@ -882,10 +885,11 @@ function OwnerMessage() {
 }
 
 function PartnerFaq({partner}: {partner: PartnerData}) {
+  const audience = getPartnerAudienceCopy(partner);
   const questions = [
     [
-      `How is the ${partner.name} member offer applied?`,
-      `The partner page carries the offer into checkout automatically, so families do not need to copy or type the discount code.`,
+      audience.faqQuestion,
+      `The partner page carries the offer into checkout automatically, so ${audience.checkoutPeople} do not need to copy or type the discount code.`,
     ],
     [
       'Which setup is right for my player?',

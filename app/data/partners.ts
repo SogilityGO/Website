@@ -34,7 +34,73 @@ export type PartnerData = {
   /** Sitewide promo banner handling on this page */
   bannerMode: 'hide' | 'replace';
   bannerText?: string;
+  /**
+   * Optional page-specific audience wording. Existing club and association
+   * pages omit this and retain the current member/family language.
+   */
+  audience?: PartnerAudience;
 };
+
+export type PartnerAudience = {
+  /** Attributive form, e.g. "Flyin Lion listener" */
+  singular: string;
+  /** Group form, e.g. "Flyin Lion listeners" */
+  plural: string;
+  /** People label used in checkout instructions, e.g. "listeners" */
+  people: string;
+};
+
+const AUDIENCE_OVERRIDES: Record<string, PartnerAudience> = {
+  'flyin-lion-podcast': {
+    singular: 'Flyin Lion listener',
+    plural: 'Flyin Lion listeners',
+    people: 'listeners',
+  },
+};
+
+const LOGO_OVERRIDES: Record<string, string> = {
+  'flyin-lion-podcast': '/landing/partners/flyin-lion-podcast/logo.webp',
+};
+
+export function getPartnerAudienceOverride(
+  handle: string,
+): PartnerAudience | undefined {
+  return AUDIENCE_OVERRIDES[handle];
+}
+
+export function getPartnerLogoOverride(handle: string): string | undefined {
+  return LOGO_OVERRIDES[handle];
+}
+
+export function getPartnerAudienceCopy(partner: PartnerData) {
+  if (partner.audience) {
+    return {
+      heroSubject: partner.audience.plural,
+      exclusiveLabel: `${partner.audience.singular} exclusive`,
+      pricingLabel: `${partner.audience.singular} offer`,
+      offerSubject: partner.audience.plural,
+      fallbackOffer: 'Exclusive listener pricing',
+      offerSentenceFallback: 'Listener pricing',
+      viewPricing: 'View listener pricing',
+      claimOffer: 'Claim listener offer',
+      faqQuestion: `How is the ${partner.audience.singular} offer applied?`,
+      checkoutPeople: partner.audience.people,
+    };
+  }
+
+  return {
+    heroSubject: `${partner.name} families`,
+    exclusiveLabel: `${partner.name} member exclusive`,
+    pricingLabel: `${partner.name} member offer`,
+    offerSubject: `${partner.name} members`,
+    fallbackOffer: 'Exclusive member pricing',
+    offerSentenceFallback: 'Member pricing',
+    viewPricing: 'View member pricing',
+    claimOffer: 'Claim member offer',
+    faqQuestion: `How is the ${partner.name} member offer applied?`,
+    checkoutPeople: 'families',
+  };
+}
 
 const PARTNERS: Record<string, PartnerData> = {
   'indiana-soccer': {
@@ -43,7 +109,8 @@ const PARTNERS: Record<string, PartnerData> = {
     logo: '/landing/partners/indiana-soccer/logo.webp',
     logoAlt: 'Indiana Soccer Association',
     eyebrow: 'Indiana Soccer Members Exclusive',
-    headline: 'Take control of your development between team training sessions.',
+    headline:
+      'Take control of your development between team training sessions.',
     body: [
       'SogilityGO helps players continue improving at home with personalized training powered by assessments, virtual coaching, guided sessions, and progress tracking.',
       'Designed to supplement team training, private coaching, and game-day development, SogilityGO gives Indiana Soccer players a simple way to build better habits, improve their first touch, passing, vision, agility, and confidence between practices and games.',
@@ -53,6 +120,24 @@ const PARTNERS: Record<string, PartnerData> = {
     ctaText: 'Claim your offer',
     accentColor: '#1b2a4a',
     bannerMode: 'hide',
+  },
+  'flyin-lion-podcast': {
+    handle: 'flyin-lion-podcast',
+    name: 'The Flyin Lion Podcast',
+    logo: getPartnerLogoOverride('flyin-lion-podcast'),
+    logoAlt: 'The Flyin Lion Podcast',
+    eyebrow: 'Exclusive Offer for Flyin Lion Listeners | 20% OFF',
+    headline: 'Big Confidence Begins in the Backyard.',
+    body: [
+      'Flyin Lion listeners can bring structured soccer training home with ReboundIQ, Impact Light, guided activities in the SogilityGO app, and optional Virtual Coach support.',
+      'Designed to support purposeful work between team practices, coaching sessions, and games, SogilityGO gives players more opportunities to read, react, decide, and repeat.',
+    ],
+    offerText: '20% OFF ENTIRE PURCHASE',
+    discountCode: 'FLYINLION20',
+    ctaText: 'Claim your offer',
+    accentColor: '#1b2a4a',
+    bannerMode: 'hide',
+    audience: getPartnerAudienceOverride('flyin-lion-podcast'),
   },
 };
 
