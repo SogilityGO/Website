@@ -6,7 +6,12 @@ import {StickyMobileCTA} from '~/components/landing/StickyCTA';
 import {PartnerHero} from '~/components/landing/PartnerHero';
 import {PartnerOffer} from '~/components/landing/PartnerOffer';
 import {PartnerExperience} from '~/components/landing/PartnerExperience';
-import {getPartner, type PartnerData} from '~/data/partners';
+import {
+  getPartner,
+  getPartnerAudienceOverride,
+  getPartnerLogoOverride,
+  type PartnerData,
+} from '~/data/partners';
 
 export const links: LinksFunction = () => [
   {
@@ -92,7 +97,7 @@ function metaobjectToPartner(
     handle,
     name,
     // No fallback: a partner with no uploaded logo shows no logo (not Indiana's).
-    logo: logoImage?.url,
+    logo: logoImage?.url || getPartnerLogoOverride(handle),
     logoAlt: logoImage?.altText || `${name} logo`,
     eyebrow: val('eyebrow'),
     headline: val('headline'),
@@ -105,6 +110,7 @@ function metaobjectToPartner(
     ctaText: 'Claim your offer',
     accentColor: '#1b2a4a',
     bannerMode: 'hide',
+    audience: getPartnerAudienceOverride(handle),
   };
 }
 

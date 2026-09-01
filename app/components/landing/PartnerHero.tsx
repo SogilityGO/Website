@@ -1,4 +1,4 @@
-import type {PartnerData} from '~/data/partners';
+import {getPartnerAudienceCopy, type PartnerData} from '~/data/partners';
 
 const DEFAULT_HERO_POSTER = '/landing/hero-1920.webp';
 const HERO_VIDEO =
@@ -99,6 +99,7 @@ function HeroMedia({partner}: {partner: PartnerData}) {
  * dynamic.
  */
 export function PartnerHero({partner}: {partner: PartnerData}) {
+  const audience = getPartnerAudienceCopy(partner);
   return (
     <section className="relative overflow-hidden bg-[radial-gradient(circle_at_14%_8%,rgba(48,190,45,0.18),transparent_32%),linear-gradient(135deg,#1c2030_0%,#252a3c_60%,#181b28_100%)] text-white">
       <div className="pointer-events-none absolute -bottom-[260px] -right-[260px] h-[520px] w-[520px] rounded-full border-[90px] border-sogility/10" />
@@ -116,7 +117,7 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
             <span className="block whitespace-nowrap">in the Backyard.</span>
           </h1>
           <p className="mt-[18px] max-w-[560px] text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
-            {partner.name} families can now access SogilityGO, a guided at-home
+            {audience.heroSubject} can now access SogilityGO, a guided at-home
             system that combines ball returns, visual cues, and app-based
             sessions to help players build first touch, passing, reactions,
             vision, and confidence between team practices.
