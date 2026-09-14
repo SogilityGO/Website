@@ -72,6 +72,8 @@ function HeroMedia({partner}: {partner: PartnerData}) {
           <video
             className="h-full w-full object-cover"
             controls
+            autoPlay
+            loop
             muted
             playsInline
             preload="metadata"
