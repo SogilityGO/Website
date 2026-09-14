@@ -27,13 +27,6 @@ export function StickyMobileCTA() {
     return () => io.disconnect();
   }, []);
 
-  const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const target = document.getElementById(TARGET_ID);
-    if (!target) return;
-    e.preventDefault();
-    target.scrollIntoView({behavior: 'smooth', block: 'start'});
-  };
-
   return (
     <div
       aria-hidden={hidden}
@@ -45,7 +38,6 @@ export function StickyMobileCTA() {
     >
       <a
         href={`#${TARGET_ID}`}
-        onClick={onClick}
         tabIndex={hidden ? -1 : undefined}
         className="flex h-14 w-full max-w-[420px] items-center justify-center rounded-2xl border border-sogility-deep text-[18px] font-semibold tracking-[-0.18px] text-white shadow-[0px_4px_10px_rgba(0,0,0,0.25)] transition active:brightness-95"
         style={{
