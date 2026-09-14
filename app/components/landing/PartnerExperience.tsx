@@ -4,6 +4,7 @@ import {getPartnerAudienceCopy, type PartnerData} from '~/data/partners';
 import {buildPartnerCheckoutHref} from '~/lib/partner-attribution';
 import type {CheckoutMap} from './sections';
 import {trackBeginCheckout} from './analytics';
+import {ProductImagePreview} from './ProductImagePreview';
 
 const WRAP = 'mx-auto w-[calc(100%-2rem)] max-w-[1180px]';
 const PAPER = '#f7f6ef';
@@ -444,7 +445,15 @@ function PartnerPricing({
           copy="Every setup includes ReboundIQ, Impact Lights, and the SogilityGO app. Choose based on your space and preferred number of return angles."
           center
         />
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
+        <p className="mt-5 text-center text-sm font-semibold text-[#515562]">
+          No subscription required. Use a flat indoor or outdoor surface and
+          your size 3, 4, or 5 soccer ball.{' '}
+          <a href="#faq" className="underline underline-offset-4">
+            Read setup and app answers
+          </a>
+          .
+        </p>
+        <div className="mt-6 grid gap-6 lg:grid-cols-3">
           {PRICING.map((tier) => (
             <article
               key={tier.name}
@@ -460,14 +469,7 @@ function PartnerPricing({
                 </span>
               ) : null}
               <div className="flex w-full flex-col">
-                <div className="h-[225px] overflow-hidden border-b border-[#dfe0d9] bg-white">
-                  <img
-                    src={tier.image}
-                    alt={`ReboundIQ ${tier.name} setup`}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
+                <ProductImagePreview src={tier.image} name={tier.name} />
                 <div className="flex flex-1 flex-col p-6">
                   <p className="text-center text-[12px] font-black uppercase tracking-[0.12em] text-sogility">
                     ReboundIQ
@@ -475,10 +477,10 @@ function PartnerPricing({
                   <h3 className="mt-1 text-center text-[32px] font-black tracking-[-0.04em]">
                     {tier.name}
                   </h3>
-                  <p className="mt-3 min-h-[76px] text-center text-[15px] leading-[1.6] text-[#656977]">
+                  <p className="mt-3 lg:min-h-[76px] text-center text-[15px] leading-[1.6] text-[#656977]">
                     {tier.copy}
                   </p>
-                  <div className="mt-4 grid min-h-[142px] content-start justify-items-center gap-2 text-center">
+                  <div className="mt-4 grid lg:min-h-[142px] content-start justify-items-center gap-2 text-center">
                     {tier.was ? (
                       <s className="text-[22px] font-black leading-none tracking-[-0.035em] text-[#777b87] decoration-[#d7192d] decoration-[4px] [text-decoration-skip-ink:none]">
                         {tier.was}
@@ -598,14 +600,13 @@ function PlayerProof() {
           light
         />
         <div className="mt-9 grid gap-6 lg:grid-cols-[0.62fr_1.38fr]">
-          <article className="relative isolate mx-auto flex min-h-[570px] w-full max-w-[400px] flex-col justify-between overflow-hidden rounded-[24px] border border-white/15 p-6">
+          <article className="mx-auto w-full max-w-[400px] overflow-hidden rounded-[24px] border border-white/15 bg-[#202333]">
             <video
-              className="absolute inset-0 -z-20 h-full w-full object-cover"
-              autoPlay
+              className="aspect-[9/16] w-full object-contain"
+              controls
               muted
-              loop
               playsInline
-              preload="metadata"
+              preload="none"
               poster="/landing/hero-1920.webp"
               aria-label="SogilityGO player training story"
             >
@@ -614,17 +615,18 @@ function PlayerProof() {
                 type="video/mp4"
               />
             </video>
-            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-transparent to-[#202333]/95" />
-            <span className="self-start rounded-full bg-sogility px-3 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-[#202333]">
-              Player story
-            </span>
-            <div>
-              <blockquote className="text-[32px] font-black leading-[1.18] tracking-[-0.03em]">
-                “It helps me with my weak foot.”
-              </blockquote>
-              <p className="mt-3 text-[13px] text-white/65">
-                Sam, Noblesville United SC
-              </p>
+            <div className="p-6">
+              <span className="inline-block rounded-full bg-sogility px-3 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-[#202333]">
+                Player story
+              </span>
+              <div>
+                <blockquote className="text-[32px] font-black leading-[1.18] tracking-[-0.03em]">
+                  “It helps me with my weak foot.”
+                </blockquote>
+                <p className="mt-3 text-[13px] text-white/65">
+                  Sam, Noblesville United SC
+                </p>
+              </div>
             </div>
           </article>
           <div className="flex flex-col rounded-[24px] border border-white/15 bg-white/[0.055] p-6 lg:p-8">

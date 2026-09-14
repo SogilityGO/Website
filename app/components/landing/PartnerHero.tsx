@@ -71,9 +71,8 @@ function HeroMedia({partner}: {partner: PartnerData}) {
         ) : (
           <video
             className="h-full w-full object-cover"
-            autoPlay
+            controls
             muted
-            loop
             playsInline
             preload="metadata"
             poster={DEFAULT_HERO_POSTER}
@@ -83,7 +82,7 @@ function HeroMedia({partner}: {partner: PartnerData}) {
           </video>
         )}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent from-40% to-[#10121c]/85" />
-        <div className="absolute inset-x-[18px] bottom-[18px] z-10 lg:inset-x-6 lg:bottom-[22px]">
+        <div className="pointer-events-none absolute inset-x-[18px] top-[18px] z-10 lg:inset-x-6 lg:top-[22px]">
           <strong className="text-[16px] font-extrabold text-white lg:text-[18px]">
             See SogilityGO in action
           </strong>
@@ -117,10 +116,9 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
             <span className="block whitespace-nowrap">in the Backyard.</span>
           </h1>
           <p className="mt-[18px] max-w-[560px] text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
-            {audience.heroSubject} can now access SogilityGO, a guided at-home
-            system that combines ball returns, visual cues, and app-based
-            sessions to help players build first touch, passing, reactions,
-            vision, and confidence between team practices.
+            {audience.heroSubject} get connected at-home training with
+            ReboundIQ, Impact Light, and the free SogilityGO app. Build
+            purposeful reps between practices. No subscription required.
           </p>
           <HeroActions partner={partner} />
           <div
