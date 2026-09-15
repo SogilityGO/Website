@@ -1,5 +1,8 @@
 import {MAIN_SITE, pageMeta, descriptionText, articleDescriptions} from '~/lib/seo';
-import {useLoaderData} from 'react-router';
+import {useLoaderData, type LinksFunction} from 'react-router';
+import articleStyles from '~/styles/article.css?url';
+
+export const links: LinksFunction = () => [{rel: 'stylesheet', href: articleStyles}];
 import type {Route} from './+types/blogs.$blogHandle.$articleHandle';
 import {Image} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
@@ -94,19 +97,19 @@ export default function Article() {
   }).format(new Date(article.publishedAt));
 
   return (
-    <div className="article">
+    <article className="sgo-article">
       <h1>{title}</h1>
-        <div>
+        <div className="sgo-article__meta">
           <time dateTime={article.publishedAt}>{publishedDate}</time> &middot;{' '}
-          <address>{author?.name}</address>
+          <span>{author?.name}</span>
         </div>
 
       {image && <Image data={image} sizes="90vw" loading="eager" />}
       <div
         dangerouslySetInnerHTML={{__html: contentHtml}}
-        className="article"
+        className="sgo-article__body"
       />
-    </div>
+    </article>
   );
 }
 
