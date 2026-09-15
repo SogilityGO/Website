@@ -1,8 +1,11 @@
+import {pageMeta} from '~/lib/seo';
 import {useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/collections._index';
 import {getPaginationVariables, Image} from '@shopify/hydrogen';
 import type {CollectionFragment} from 'storefrontapi.generated';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
+
+export const meta: Route.MetaFunction = () => pageMeta('Soccer Training Collections', 'Browse SogilityGO ReboundIQ systems, Impact Lights, app access, and training accessories.', 'https://www.sogilitygo.com/collections');
 
 export async function loader(args: Route.LoaderArgs) {
   // Start fetching non-critical data without blocking time to first byte

@@ -1,6 +1,9 @@
+import {pageMeta} from '~/lib/seo';
 import {useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/policies._index';
 import type {PoliciesQuery, PolicyItemFragment} from 'storefrontapi.generated';
+
+export const meta: Route.MetaFunction = () => pageMeta('Store Policies', 'Find SogilityGO shipping, returns, privacy, and purchase policies.', 'https://my.sogilitygo.com/policies');
 
 export async function loader({context}: Route.LoaderArgs) {
   const data: PoliciesQuery = await context.storefront.query(POLICIES_QUERY);

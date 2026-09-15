@@ -1,3 +1,4 @@
+import {MAIN_SITE, pageMeta} from '~/lib/seo';
 import type {Route} from './+types/collections.all';
 import {useLoaderData} from 'react-router';
 import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
@@ -5,9 +6,7 @@ import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ProductItem} from '~/components/ProductItem';
 import type {CollectionItemFragment} from 'storefrontapi.generated';
 
-export const meta: Route.MetaFunction = () => {
-  return [{title: `Hydrogen | Products`}];
-};
+export const meta: Route.MetaFunction = () => pageMeta('SogilityGO Soccer Training Systems and Gear', 'Explore ReboundIQ systems, Impact Lights, and accessories for connected at-home soccer training.', `${MAIN_SITE}/collections/all`);
 
 export async function loader(args: Route.LoaderArgs) {
   // Start fetching non-critical data without blocking time to first byte

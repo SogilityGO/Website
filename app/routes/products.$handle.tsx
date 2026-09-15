@@ -1,3 +1,4 @@
+import {MAIN_SITE, pageMeta, descriptionText} from '~/lib/seo';
 import {redirect, useLoaderData} from 'react-router';
 import type {Route} from './+types/products.$handle';
 import {
@@ -14,13 +15,8 @@ import {ProductForm} from '~/components/ProductForm';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
 export const meta: Route.MetaFunction = ({data}) => {
-  return [
-    {title: `Hydrogen | ${data?.product.title ?? ''}`},
-    {
-      rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
-    },
-  ];
+  if (!data?.product) return [{title: 'Product not found | SogilityGO'}, {name: 'robots', content: 'noindex'}];
+  return pageMeta(data.product.seo?.title || data.product.title, descriptionText(data.product.seo?.description, data.product.description), `${MAIN_SITE}/products/${data.product.handle}`);
 };
 
 export async function loader(args: Route.LoaderArgs) {

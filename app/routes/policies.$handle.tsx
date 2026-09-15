@@ -1,3 +1,4 @@
+import {MAIN_SITE, pageMeta} from '~/lib/seo';
 import {Link, useLoaderData} from 'react-router';
 import type {Route} from './+types/policies.$handle';
 import {type Shop} from '@shopify/hydrogen/storefront-api-types';
@@ -7,8 +8,8 @@ type SelectedPolicies = keyof Pick<
   'privacyPolicy' | 'shippingPolicy' | 'termsOfService' | 'refundPolicy'
 >;
 
-export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Hydrogen | ${data?.policy.title ?? ''}`}];
+export const meta: Route.MetaFunction = ({data, params}) => {
+  return pageMeta(data?.policy.title || 'Policy', `Read the SogilityGO ${data?.policy.title || 'store policy'}.`, `${MAIN_SITE}/policies/${params.handle}`);
 };
 
 export async function loader({params, context}: Route.LoaderArgs) {

@@ -1,3 +1,4 @@
+import {MAIN_SITE, pageMeta, descriptionText} from '~/lib/seo';
 import {Link, useLoaderData} from 'react-router';
 import type {Route} from './+types/blogs.$blogHandle._index';
 import {Image, getPaginationVariables} from '@shopify/hydrogen';
@@ -6,7 +7,8 @@ import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
 export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Hydrogen | ${data?.blog.title ?? ''} blog`}];
+  if (!data?.blog) return [{title: 'Blog not found | SogilityGO'}, {name: 'robots', content: 'noindex'}];
+  return pageMeta(data.blog.seo?.title || 'Soccer Training Insights and Guides', descriptionText(data.blog.seo?.description, 'Practical soccer training guides for players, parents, and coaches, with purposeful activities between team sessions.'), `${MAIN_SITE}/blogs/${data.blog.handle}`);
 };
 
 export async function loader(args: Route.LoaderArgs) {

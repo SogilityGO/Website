@@ -1,3 +1,4 @@
+import {pageMeta} from '~/lib/seo';
 import {useLoaderData, type LinksFunction} from 'react-router';
 import type {Route} from './+types/partners.$handle';
 import type {CheckoutMap} from '~/components/landing/sections';
@@ -24,11 +25,11 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const meta: Route.MetaFunction = ({data}) => {
+export const meta: Route.MetaFunction = ({data, params}) => {
   const name = data?.partner?.name ?? 'Partner';
   return [
-    {title: `SogilityGO × ${name}`},
-    // Near-duplicate partner pages — keep them out of search, still follow links.
+    ...pageMeta(`SogilityGO × ${name}`, `Explore the SogilityGO training offer for ${name}. Compare ReboundIQ setups, Impact Lights, and guided app training for practice between sessions.`, `https://my.sogilitygo.com/partners/${params.handle}`),
+    // Near-duplicate campaign pages intentionally stay out of organic search.
     {name: 'robots', content: 'noindex, follow'},
   ];
 };
