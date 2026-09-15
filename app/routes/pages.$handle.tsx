@@ -1,9 +1,11 @@
+import {MAIN_SITE, pageMeta, descriptionText} from '~/lib/seo';
 import {useLoaderData} from 'react-router';
 import type {Route} from './+types/pages.$handle';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
 export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Hydrogen | ${data?.page.title ?? ''}`}];
+  if (!data?.page) return [{title: 'Page not found | SogilityGO'}, {name: 'robots', content: 'noindex'}];
+  return pageMeta(data.page.seo?.title || data.page.title, descriptionText(data.page.seo?.description, data.page.body), `${MAIN_SITE}/pages/${data.page.handle}`);
 };
 
 export async function loader(args: Route.LoaderArgs) {

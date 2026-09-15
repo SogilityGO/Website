@@ -1,3 +1,4 @@
+import {pageMeta} from '~/lib/seo';
 import {Link, useLoaderData} from 'react-router';
 import type {Route} from './+types/blogs._index';
 import {getPaginationVariables} from '@shopify/hydrogen';
@@ -6,9 +7,7 @@ import type {BlogsQuery} from 'storefrontapi.generated';
 
 type BlogNode = BlogsQuery['blogs']['nodes'][0];
 
-export const meta: Route.MetaFunction = () => {
-  return [{title: `Hydrogen | Blogs`}];
-};
+export const meta: Route.MetaFunction = () => pageMeta('Soccer Training Blogs', 'Explore SogilityGO soccer training guides for players, parents, and coaches.', 'https://my.sogilitygo.com/blogs');
 
 export async function loader(args: Route.LoaderArgs) {
   // Start fetching non-critical data without blocking time to first byte

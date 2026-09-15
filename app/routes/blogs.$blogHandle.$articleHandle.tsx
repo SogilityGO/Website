@@ -1,10 +1,28 @@
+import {MAIN_SITE, pageMeta, descriptionText, articleDescriptions} from '~/lib/seo';
 import {useLoaderData} from 'react-router';
 import type {Route} from './+types/blogs.$blogHandle.$articleHandle';
 import {Image} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
-export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Hydrogen | ${data?.article.title ?? ''} article`}];
+export const meta: Route.MetaFunction = ({data, params}) => {
+  if (!data?.article) return [{title: 'Article not found | SogilityGO'}, {name: 'robots', content: 'noindex'}];
+  const article = data.article;
+  const url = `${MAIN_SITE}/blogs/${params.blogHandle}/${article.handle}`;
+  const description = articleDescriptions[article.handle] || descriptionText(article.seo?.description, article.contentHtml);
+  return [
+    ...pageMeta(article.seo?.title || article.title, description, url),
+    {property: 'og:type', content: 'article'},
+    ...(article.image ? [{property: 'og:image', content: article.image.url}] : []),
+    {property: 'article:published_time', content: article.publishedAt},
+    {'script:ld+json': {
+      '@context': 'https://schema.org', '@type': 'BlogPosting',
+      headline: article.title, description, url, mainEntityOfPage: url,
+      datePublished: article.publishedAt,
+      ...(article.author?.name ? {author: {'@type': 'Person', name: article.author.name}} : {}),
+      ...(article.image ? {image: article.image.url} : {}),
+      publisher: {'@type': 'Organization', name: 'SogilityGO', url: MAIN_SITE},
+    }},
+  ];
 };
 
 export async function loader(args: Route.LoaderArgs) {
@@ -77,13 +95,11 @@ export default function Article() {
 
   return (
     <div className="article">
-      <h1>
-        {title}
+      <h1>{title}</h1>
         <div>
           <time dateTime={article.publishedAt}>{publishedDate}</time> &middot;{' '}
           <address>{author?.name}</address>
         </div>
-      </h1>
 
       {image && <Image data={image} sizes="90vw" loading="eager" />}
       <div

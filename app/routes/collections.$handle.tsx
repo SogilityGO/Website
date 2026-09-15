@@ -1,3 +1,4 @@
+import {MAIN_SITE, pageMeta, descriptionText} from '~/lib/seo';
 import {redirect, useLoaderData} from 'react-router';
 import type {Route} from './+types/collections.$handle';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
@@ -7,7 +8,8 @@ import {ProductItem} from '~/components/ProductItem';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 
 export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Hydrogen | ${data?.collection.title ?? ''} Collection`}];
+  if (!data?.collection) return [{title: 'Collection not found | SogilityGO'}, {name: 'robots', content: 'noindex'}];
+  return pageMeta(`${data.collection.title} Soccer Training`, descriptionText(data.collection.description, 'Explore SogilityGO connected soccer training systems and accessories for purposeful practice at home.'), `${MAIN_SITE}/collections/${data.collection.handle}`);
 };
 
 export async function loader(args: Route.LoaderArgs) {

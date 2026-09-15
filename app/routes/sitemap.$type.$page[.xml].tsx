@@ -1,3 +1,4 @@
+import {MAIN_SITE} from '~/lib/seo';
 import type {Route} from './+types/sitemap.$type.$page[.xml]';
 import {getSitemap} from '@shopify/hydrogen';
 import {getArticlePaths} from '~/lib/articlePaths';
@@ -14,13 +15,13 @@ export async function loader({
     params,
     // This app has no locale-prefixed page routes.
     locales: [],
-    getLink: ({type, baseUrl, handle}) => {
+    getLink: ({type, handle}) => {
       if (type === 'articles') {
         const path = handle ? articlePaths?.get(handle) : undefined;
         if (!path) throw new Error(`Missing blog path for article ${handle}`);
-        return `${baseUrl}${path}`;
+        return `${MAIN_SITE}${path}`;
       }
-      return `${baseUrl}/${type}/${handle}`;
+      return `${MAIN_SITE}/${type}/${handle}`;
     },
   });
 

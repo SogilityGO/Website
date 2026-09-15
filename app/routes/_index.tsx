@@ -1,3 +1,4 @@
+import {pageMeta} from '~/lib/seo';
 import {useLoaderData, type LinksFunction} from 'react-router';
 import type {Route} from './+types/_index';
 import {
@@ -20,16 +21,11 @@ import {
 import {Analytics} from '~/components/landing/analytics';
 import {StickyMobileCTA} from '~/components/landing/StickyCTA';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: 'SogilityGO — Elite soccer training at home'},
-    {
-      name: 'description',
-      content:
-        'A guided virtual coach. Real-time feedback. Measurable improvement. At-home elite soccer training with the ReboundIQ board.',
-    },
-  ];
-};
+export const meta: Route.MetaFunction = () => pageMeta(
+  'At-Home Soccer Training | SogilityGO',
+  'Support soccer practice between team sessions with ReboundIQ boards, Impact Lights, guided app activities, and Virtual Coach support.',
+  'https://my.sogilitygo.com/',
+);
 
 // Preload the hero (LCP element) so it starts downloading in parallel with CSS
 // instead of after the <img> is discovered — biggest mobile LCP win.
