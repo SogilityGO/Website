@@ -604,9 +604,11 @@ function PlayerProof() {
             <video
               className="aspect-[9/16] w-full object-contain"
               controls
+              autoPlay
+              loop
               muted
               playsInline
-              preload="none"
+              preload="metadata"
               poster="/landing/hero-1920.webp"
               aria-label="SogilityGO player training story"
             >
