@@ -1,6 +1,7 @@
 import * as serverBuild from 'virtual:react-router/server-build';
 import {createRequestHandler, storefrontRedirect} from '@shopify/hydrogen';
 import {createHydrogenRouterContext} from '~/lib/context';
+import {getCartCrawlerResponse} from '~/lib/cart-indexing';
 
 /**
  * Export a fetch handler in module format.
@@ -11,6 +12,9 @@ export default {
     env: Env,
     executionContext: ExecutionContext,
   ): Promise<Response> {
+    const crawlerResponse = getCartCrawlerResponse(request);
+    if (crawlerResponse) return crawlerResponse;
+
     try {
       const hydrogenContext = await createHydrogenRouterContext(
         request,
