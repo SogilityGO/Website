@@ -1,4 +1,5 @@
 import type {Route} from './+types/[robots.txt]';
+import {reportedCartPaths} from '~/lib/cart-indexing';
 
 export function loader({request}: Route.LoaderArgs) {
   const url = new URL(request.url);
@@ -54,6 +55,7 @@ Crawl-delay: 1
  */
 function generalDisallowRules({sitemapUrl}: {sitemapUrl?: string}) {
   return `Disallow: /cart
+${reportedCartPaths.map((path) => `Allow: ${path}$`).join('\n')}
 Disallow: /account
 Disallow: /collections/*sort_by*
 Disallow: /*/collections/*sort_by*
