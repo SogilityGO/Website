@@ -73,6 +73,20 @@ export function getPartnerLogoOverride(handle: string): string | undefined {
 }
 
 export function getPartnerAudienceCopy(partner: PartnerData) {
+  if (partner.handle === 'the-review-wire') {
+    return {
+      heroSubject: 'The Review Wire readers',
+      exclusiveLabel: 'The Review Wire reader exclusive',
+      pricingLabel: 'The Review Wire reader offer',
+      offerSubject: 'The Review Wire readers',
+      fallbackOffer: 'Exclusive reader pricing',
+      offerSentenceFallback: 'Reader pricing',
+      viewPricing: 'View reader pricing',
+      claimOffer: 'Claim reader offer',
+      faqQuestion: 'How is The Review Wire reader offer applied?',
+      checkoutPeople: 'readers',
+    };
+  }
   if (partner.audience) {
     return {
       heroSubject: partner.audience.plural,
