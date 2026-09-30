@@ -1001,22 +1001,30 @@ export function PartnerLandingFooter() {
               players access to purposeful training wherever they have room to
               work.
             </p>
-            <div className="mt-5 flex gap-4">
+            <div className="mt-5 flex gap-3">
               <a
                 href="https://www.instagram.com/sogilitygo/"
                 target="_blank"
                 rel="noreferrer"
-                className="font-black underline"
+                aria-label="SogilityGO on Instagram"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#202333] text-white transition-colors hover:bg-[#128a19] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#128a19]"
               >
-                Instagram
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                </svg>
               </a>
               <a
                 href="https://www.tiktok.com/@sogilitygo"
                 target="_blank"
                 rel="noreferrer"
-                className="font-black underline"
+                aria-label="SogilityGO on TikTok"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#202333] text-white transition-colors hover:bg-[#128a19] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#128a19]"
               >
-                TikTok
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M16.6 5.82a4.28 4.28 0 0 1-1.05-2.82h-3.07v12.27a2.59 2.59 0 1 1-1.83-2.48V9.54a5.66 5.66 0 1 0 4.66 5.57V8.99a7.31 7.31 0 0 0 4.27 1.37V7.29a4.28 4.28 0 0 1-2.98-1.47Z" />
+                </svg>
               </a>
             </div>
           </div>
