@@ -1,3 +1,4 @@
+import responsiveStyles from '~/styles/partner-responsive.css?url';
 import {pageMeta} from '~/lib/seo';
 import {useLoaderData, type LinksFunction} from 'react-router';
 import type {Route} from './+types/partners.$handle';
@@ -15,6 +16,7 @@ import {
 } from '~/data/partners';
 
 export const links: LinksFunction = () => [
+  {rel: 'stylesheet', href: responsiveStyles},
   {
     rel: 'preload',
     as: 'image',
@@ -173,7 +175,7 @@ export async function loader({context, params}: Route.LoaderArgs) {
 export default function PartnerPage() {
   const {partner, checkout} = useLoaderData<typeof loader>();
   return (
-    <>
+    <div className="partner-page">
       <Analytics />
       <PartnerAnalytics
         partnerHandle={partner.handle}
@@ -184,6 +186,6 @@ export default function PartnerPage() {
       <PartnerOffer partner={partner} />
       <PartnerExperience partner={partner} checkout={checkout} />
       <StickyMobileCTA />
-    </>
+    </div>
   );
 }

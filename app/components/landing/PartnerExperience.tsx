@@ -453,7 +453,7 @@ function PartnerPricing({
           </a>
           .
         </p>
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <div className="partner-pricing-grid mt-6 grid gap-6 lg:grid-cols-3">
           {PRICING.map((tier) => (
             <article
               key={tier.name}
@@ -477,7 +477,7 @@ function PartnerPricing({
                   <h3 className="mt-1 text-center text-[32px] font-black tracking-[-0.04em]">
                     {tier.name}
                   </h3>
-                  <p className="mt-3 lg:min-h-[76px] text-center text-[15px] leading-[1.6] text-[#656977]">
+                  <p className="partner-tier-description mt-3 lg:min-h-[76px] text-center text-[15px] leading-[1.6] text-[#656977]">
                     {tier.copy}
                   </p>
                   <div className="mt-4 grid lg:min-h-[142px] content-start justify-items-center gap-2 text-center">
@@ -526,7 +526,7 @@ function PartnerPricing({
           ))}
         </div>
 
-        <div className="mt-7 grid overflow-hidden rounded-[22px] border border-[#dfe0d9] lg:grid-cols-2">
+        <div className="partner-app-options mt-7 grid overflow-hidden rounded-[22px] border border-[#dfe0d9] lg:grid-cols-2">
           <div className="bg-[#f7f6ef] p-6 lg:p-8">
             <Kicker>Included with every setup</Kicker>
             <h3 className="mt-2 text-[24px] font-black">Free SogilityGO app</h3>
@@ -536,7 +536,7 @@ function PartnerPricing({
             </p>
           </div>
           <div className="bg-[#202333] p-6 text-white lg:p-8">
-            <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="partner-coach-price flex flex-wrap items-start justify-between gap-3">
               <div>
                 <Kicker>Optional upgrade</Kicker>
                 <h3 className="mt-2 text-[24px] font-black">
@@ -690,7 +690,7 @@ function Comparison({partner}: {partner: PartnerData}) {
           center
         />
         <div className="mt-8 overflow-x-auto rounded-[24px] border border-[#dfe0d9] bg-white shadow-[0_18px_45px_rgba(31,34,49,0.07)]">
-          <div className="min-w-[680px]">
+          <div className="partner-comparison min-w-[680px]">
             <div className="grid grid-cols-[1.55fr_0.72fr_0.72fr] items-center bg-[#202333] font-black text-white">
               <div className="p-5">Training feature</div>
               <div className="p-5 text-center">Standard rebounder</div>

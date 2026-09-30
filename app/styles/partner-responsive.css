@@ -1,0 +1,71 @@
+/* Shared partner alignment with the September 25 campaign layouts.
+   Scoped to partner routes; existing desktop composition remains intact. */
+@media (max-width: 1024px) {
+  .partner-page .partner-hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding-block: 32px 44px;
+    min-height: 0;
+  }
+  .partner-page .partner-hero-media {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+  .partner-page .partner-hero-media video {
+    height: 100%;
+    object-fit: contain;
+  }
+  .partner-page .partner-video-shade,
+  .partner-page .partner-video-caption { display: none; }
+  .partner-page section { scroll-margin-top: 72px; }
+  .partner-page p[class*="text-white/"] { color: #d1d5df; }
+  .partner-page a[href="#faq"] {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+@media (min-width: 761px) and (max-width: 1024px) {
+  .partner-page .partner-pricing-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .partner-page .partner-pricing-grid article > div > div { padding: 20px 16px; }
+  .partner-page .partner-pricing-grid h3 { font-size: 28px; }
+  .partner-page .partner-tier-description { min-height: 9.6em; }
+  .partner-page .partner-pricing-grid button { height: 160px; }
+  .partner-page .partner-pricing-grid a { min-height: 56px; padding: 12px; }
+  .partner-page .partner-app-options { grid-template-columns: 1fr 1.3fr; }
+  .partner-page .partner-coach-price { flex-direction: column; gap: 8px; }
+}
+@media (max-width: 600px) {
+  .partner-page > div > section { padding-block: 40px; }
+  .partner-page .partner-hero-grid { width: calc(100% - 40px); }
+  .partner-page h1 { font-size: clamp(27px, 8.5vw, 40px); }
+  .partner-page h2 { font-size: 33px; line-height: 1.08; }
+  .partner-page .partner-hero-actions { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .partner-page .partner-hero-actions a,
+  .partner-page a[href="#start-training"],
+  .partner-page .partner-pricing-grid a {
+    width: 100%;
+    max-width: 420px;
+    min-height: 54px;
+    box-sizing: border-box;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 1.3;
+    padding: 16px;
+    margin-inline: auto;
+  }
+  .partner-page .partner-app-options > div { padding: 22px 20px; }
+  .partner-page .partner-comparison { min-width: 0; }
+  .partner-page .partner-comparison > div { grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, .8fr)); }
+  .partner-page .partner-comparison > div > div { padding: 12px 8px; overflow-wrap: anywhere; }
+  .partner-page .partner-comparison > div:first-child { font-size: 12px; }
+  .partner-page .partner-comparison strong { font-size: 14px; }
+}
+@media (max-width: 360px) {
+  .partner-page h1 { font-size: 25px; }
+  .partner-page .partner-hero-grid > div:first-child > div:first-child { gap: 8px; }
+  .partner-page .partner-hero-grid > div:first-child > div:first-child img { max-width: 110px; }
+}
