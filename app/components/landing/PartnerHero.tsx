@@ -1,3 +1,4 @@
+import {SogilityLogo} from './SogilityLogo';
 import {getPartnerAudienceCopy, type PartnerData} from '~/data/partners';
 
 const DEFAULT_HERO_POSTER = '/landing/hero-1920.webp';
@@ -26,14 +27,7 @@ function CoBrand({partner}: {partner: PartnerData}) {
           <span className="text-lg font-light text-white/40">×</span>
         </>
       )}
-      <span className="flex items-center gap-1.5">
-        <span className="text-sm font-extrabold tracking-[0.2em] text-cream lg:text-base">
-          SOGILITY
-        </span>
-        <span className="rounded-full bg-sogility px-2 py-0.5 text-[11px] font-extrabold text-white lg:text-xs">
-          GO
-        </span>
-      </span>
+      <SogilityLogo className="h-auto w-[112px] shrink-0 lg:w-[144px]" />
     </div>
   );
 }

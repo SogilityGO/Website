@@ -1,4 +1,5 @@
 import {Link, useMatches, useRouteLoaderData} from 'react-router';
+import {SogilityLogo} from './SogilityLogo';
 
 type PartnerBanner = {bannerMode?: 'hide' | 'replace'; bannerText?: string};
 type SiteBanner = {enabled: boolean; text: string} | null;
@@ -57,12 +58,18 @@ export function LandingHeader() {
             className="flex items-center gap-2 text-cream"
             aria-label="SogilityGO home"
           >
+            {partner ? (
+              <SogilityLogo className="h-auto w-[172px] lg:w-[208px]" />
+            ) : (
+              <>
             <span className="text-xl font-extrabold tracking-[0.2em]">
               SOGILITY
             </span>
             <span className="rounded-full bg-sogility px-2 py-0.5 text-sm font-extrabold text-white">
               GO
             </span>
+              </>
+            )}
           </Link>
         </div>
       </header>
