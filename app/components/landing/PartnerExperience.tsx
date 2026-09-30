@@ -6,7 +6,7 @@ import type {CheckoutMap} from './sections';
 import {trackBeginCheckout} from './analytics';
 import {ProductImagePreview} from './ProductImagePreview';
 
-const WRAP = 'mx-auto w-[calc(100%-2rem)] max-w-[1180px]';
+const WRAP = 'partner-wrap mx-auto w-[calc(100%-2rem)] max-w-[1180px]';
 const PAPER = '#f7f6ef';
 const INK = '#202333';
 
@@ -199,7 +199,7 @@ function Heading({
 }) {
   return (
     <div
-      className={center ? 'mx-auto max-w-[820px] text-center' : 'max-w-[820px]'}
+      className={center ? 'partner-heading mx-auto max-w-[820px] text-center' : 'partner-heading max-w-[820px]'}
     >
       <Kicker>{kicker}</Kicker>
       <h2
@@ -313,19 +313,19 @@ function HowItWorks() {
           center
         />
 
-        <div className="mt-10 grid gap-5 lg:grid-cols-3">
+        <div className="partner-component-grid mt-10 grid gap-5 lg:grid-cols-3">
           {SYSTEMS.map((system) => (
             <article
               key={system.id}
               id={system.id}
-              className="scroll-mt-24 overflow-hidden rounded-[24px] border border-[#dfe0d9] bg-white p-6 shadow-[0_18px_45px_rgba(31,34,49,0.07)]"
+              className="partner-component-card scroll-mt-24 overflow-hidden rounded-[24px] border border-[#dfe0d9] bg-white p-6 shadow-[0_18px_45px_rgba(31,34,49,0.07)]"
             >
               <div className="flex items-start justify-center">
                 <span className="rounded-full bg-sogility/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#247d25]">
                   Connected system
                 </span>
               </div>
-              <div className="mt-3 flex h-[200px] items-center justify-center rounded-[20px] bg-[radial-gradient(circle_at_center,rgba(48,190,45,0.14),transparent_60%)]">
+              <div className="partner-component-visual mt-3 flex h-[200px] items-center justify-center rounded-[20px] bg-[radial-gradient(circle_at_center,rgba(48,190,45,0.14),transparent_60%)]">
                 <img
                   src={system.image}
                   alt={system.name}
@@ -374,8 +374,10 @@ function CheckoutButton({
   tier,
   checkout,
   partner,
+  compact = false,
 }: {
   tier: (typeof PRICING)[number];
+  compact?: boolean;
   checkout?: CheckoutMap;
   partner: PartnerData;
 }) {
@@ -389,7 +391,7 @@ function CheckoutButton({
         disabled
         className="mt-auto flex min-h-12 w-full cursor-not-allowed items-center justify-center rounded-full bg-[#b6b8b3] px-5 font-black text-white"
       >
-        Sold out
+        {compact ? `${tier.name}: sold out` : 'Sold out'}
       </button>
     );
   }
@@ -415,11 +417,20 @@ function CheckoutButton({
           discountCode: partner.discountCode,
         })
       }
-      className={`mt-auto flex min-h-12 w-full items-center justify-center rounded-full px-5 text-center text-[15px] font-black transition hover:-translate-y-0.5 hover:brightness-105 ${
+      className={compact ? 'partner-mobile-product-row' : `mt-auto flex min-h-12 w-full items-center justify-center rounded-full px-5 text-center text-[15px] font-black transition hover:-translate-y-0.5 hover:brightness-105 ${
         tier.popular ? 'bg-sogility text-[#202333]' : 'bg-[#202333] text-white'
       }`}
     >
-      {audience.claimOffer} on {tier.name}
+      {compact ? <>
+        <span className="partner-mobile-product-photo"><img src={tier.image} alt={`ReboundIQ ${tier.name} setup`} loading="lazy" /></span>
+        <span className="partner-mobile-product-info">
+          {tier.popular && <span className="partner-mobile-product-tag">Most popular</span>}
+          <span className="partner-mobile-product-title">ReboundIQ {tier.name}</span>
+          <span className="partner-mobile-product-description">{tier.includes.slice(0, 2).join(' + ')}</span>
+          <span className="partner-mobile-product-price"><strong>{tier.price}</strong><s>{tier.was}</s></span>
+          <span className="partner-mobile-product-saving">{tier.save}</span>
+        </span>
+      </> : <>{audience.claimOffer} on {tier.name}</>}
     </a>
   );
 }
@@ -453,6 +464,11 @@ function PartnerPricing({
           </a>
           .
         </p>
+        <p className="partner-mobile-intro">{audience.fallbackOffer}. Every setup includes ReboundIQ, Impact Lights, and the free app.</p>
+        <div className="partner-mobile-product-list">
+          {PRICING.map(tier => <CheckoutButton key={tier.name} tier={tier} partner={partner} checkout={checkout} compact />)}
+        </div>
+        <p className="partner-mobile-offer-note">{offerSentence} Discount applied automatically at checkout.</p>
         <div className="partner-pricing-grid mt-6 grid gap-6 lg:grid-cols-3">
           {PRICING.map((tier) => (
             <article
@@ -599,7 +615,7 @@ function PlayerProof() {
           copy="Hear from players and parents using SogilityGO between organized sessions."
           light
         />
-        <div className="mt-9 grid gap-6 lg:grid-cols-[0.62fr_1.38fr]">
+        <div className="partner-proof-grid mt-9 grid gap-6 lg:grid-cols-[0.62fr_1.38fr]">
           <article className="mx-auto w-full max-w-[400px] overflow-hidden rounded-[24px] border border-white/15 bg-[#202333]">
             <video
               className="aspect-[9/16] w-full object-contain"
@@ -631,7 +647,7 @@ function PlayerProof() {
               </div>
             </div>
           </article>
-          <div className="flex flex-col rounded-[24px] border border-white/15 bg-white/[0.055] p-6 lg:p-8">
+          <div className="partner-proof-panel flex flex-col rounded-[24px] border border-white/15 bg-white/[0.055] p-6 lg:p-8">
             <Kicker>Player + parent reviews</Kicker>
             <h3 className="mt-2 text-[28px] font-black leading-tight">
               What families and players say about SogilityGO
@@ -653,7 +669,7 @@ function PlayerProof() {
               ].map(([quote, author], index) => (
                 <div
                   key={author}
-                  className={`${index > 0 ? 'hidden lg:block ' : ''}py-6`}
+                  className={`partner-player-quote ${index > 0 ? 'hidden lg:block ' : ''}py-6`}
                 >
                   <blockquote className="text-[18px] font-bold leading-[1.45] lg:text-[21px]">
                     “{quote}”
@@ -681,7 +697,7 @@ function Status({included}: {included: boolean}) {
 
 function Comparison({partner}: {partner: PartnerData}) {
   return (
-    <section className="py-14 lg:py-16">
+    <section className="partner-comparison-section py-14 lg:py-16">
       <div className={WRAP}>
         <Heading
           kicker="Why SogilityGO?"
@@ -813,7 +829,7 @@ function Trust() {
     })),
   ];
   return (
-    <section className="overflow-hidden border-y border-[#dfe0d9] bg-white py-10">
+    <section className="partner-trust overflow-hidden border-y border-[#dfe0d9] bg-white py-10">
       <p className="mb-6 text-center text-[12px] font-black uppercase tracking-[0.14em] text-[#656977]">
         Trusted across the soccer community
       </p>
@@ -849,7 +865,7 @@ function OwnerMessage() {
         >
           What separates good players from elite
         </h2>
-        <div className="mt-8 grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-11">
+        <div className="partner-owner-grid mt-8 grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-11">
           <figure className="overflow-hidden rounded-[24px] bg-[#202333] shadow-[0_18px_45px_rgba(31,34,49,0.13)]">
             <img
               src="/landing/owner/jozy.webp"
@@ -944,13 +960,12 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
             supports work between organized sessions.
           </p>
         </div>
-        <div className="mt-8 grid items-start gap-3 lg:grid-cols-2">
-          {columns.map((column, columnIndex) => (
+        <div className="partner-faq-grid mt-8 grid items-start gap-3 lg:grid-cols-2">
+          {columns.map((column) => (
             <div key={column.key} className="grid gap-3">
-              {column.items.map(([question, answer], index) => (
+              {column.items.map(([question, answer]) => (
                 <details
                   key={question}
-                  open={columnIndex === 0 && index === 0}
                   className="group overflow-hidden rounded-[18px] border border-white/15 bg-white text-[#202333]"
                 >
                   <summary className="relative cursor-pointer list-none px-5 py-[18px] pr-14 text-[17px] font-black leading-[1.35] after:absolute after:right-[18px] after:top-1/2 after:grid after:h-7 after:w-7 after:-translate-y-1/2 after:place-items-center after:rounded-full after:bg-sogility after:text-[18px] after:font-black after:content-['+'] group-open:after:content-['−']">
@@ -971,7 +986,7 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
 
 export function PartnerLandingFooter() {
   return (
-    <footer className="border-t border-[#dfe0d9] bg-[#f7f6ef] py-12 text-[#202333] lg:py-14">
+    <footer className="partner-footer border-t border-[#dfe0d9] bg-[#f7f6ef] py-12 text-[#202333] lg:py-14">
       <div className={WRAP}>
         <div className="flex items-center gap-2">
           <span className="text-xl font-black tracking-[0.2em]">SOGILITY</span>
