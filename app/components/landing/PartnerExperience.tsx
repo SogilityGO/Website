@@ -986,22 +986,15 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
 
 export function PartnerLandingFooter() {
   return (
-    <footer className="partner-footer border-t border-[#dfe0d9] bg-[#f7f6ef] py-12 text-[#202333] lg:py-14">
-      <div className={WRAP}>
-        <div className="flex items-center gap-2">
-          <span className="text-xl font-black tracking-[0.2em]">SOGILITY</span>
-          <span className="rounded-full bg-sogility px-2 py-0.5 text-sm font-black text-white">
-            GO
-          </span>
-        </div>
-        <div className="mt-8 grid gap-9 lg:grid-cols-[1.4fr_0.8fr_0.8fr_1fr]">
-          <div>
-            <p className="max-w-[360px] text-[17px] leading-[1.65] text-[#515562]">
-              SogilityGO ReboundIQ setups connect to the SogilityGO app, giving
-              players access to purposeful training wherever they have room to
-              work.
-            </p>
-            <div className="mt-5 flex gap-3">
+    <footer className="partner-site-footer">
+      <div className="partner-footer-wrap">
+        <div className="partner-footer-grid">
+          <div className="partner-footer-brand">
+            <a className="partner-footer-logo" href="https://www.sogilitygo.com/" aria-label="SogilityGO home">
+              <img src="/landing/sogilitygo-logo-dark.png" alt="SogilityGO" loading="lazy" />
+            </a>
+            <p>SogilityGO ReboundIQ setups connect to the SogilityGO app, giving players access to purposeful training wherever they have room to work.</p>
+            <div className="partner-footer-social">
               <a
                 href="https://www.instagram.com/sogilitygo/"
                 target="_blank"
@@ -1026,54 +1019,45 @@ export function PartnerLandingFooter() {
                   <path d="M16.6 5.82a4.28 4.28 0 0 1-1.05-2.82h-3.07v12.27a2.59 2.59 0 1 1-1.83-2.48V9.54a5.66 5.66 0 1 0 4.66 5.57V8.99a7.31 7.31 0 0 0 4.27 1.37V7.29a4.28 4.28 0 0 1-2.98-1.47Z" />
                 </svg>
               </a>
+
+              <a href="https://www.facebook.com/SogilityGO/" target="_blank" rel="noreferrer" aria-label="SogilityGO on Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 22v-9h3l.5-4H14V7c0-1 .3-2 2-2h2V1.5A24 24 0 0 0 15 1c-3 0-5 1.8-5 5v3H7v4h3v9z" /></svg></a>
+              <a href="https://www.youtube.com/@SogilityGO" target="_blank" rel="noreferrer" aria-label="SogilityGO on YouTube"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.7 4.6 12 4.6 12 4.6s-5.7 0-7.5.5a3 3 0 0 0-2.1 2.1A31 31 0 0 0 2 12a31 31 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.8.5 7.5.5 7.5.5s5.7 0 7.5-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 22 12a31 31 0 0 0-.4-4.8ZM10 15.5v-7l6 3.5z" /></svg></a>
             </div>
           </div>
-          <FooterLinks
-            title="About SogilityGO"
-            links={[
-              ['About Us', 'https://www.sogilitygo.com/pages/about-us'],
-              [
-                'Meet SogilityGO',
-                'https://www.sogilitygo.com/pages/meet-sogilitygo',
-              ],
-              ['Our Boards', 'https://www.sogilitygo.com/pages/our-boards'],
-              ['Our Lights', 'https://www.sogilitygo.com/pages/our-lights'],
-              ['Our App', 'https://www.sogilitygo.com/pages/our-app'],
-            ]}
-          />
-          <FooterLinks
-            title="Resources"
-            links={[
-              ['Help Center', 'https://www.sogilitygo.com/pages/support'],
-              ['Contact Us', 'https://www.sogilitygo.com/pages/contact'],
-              ['Blog', 'https://www.sogilitygo.com/blogs/news'],
-            ]}
-          />
-          <div>
-            <h2 className="font-black">Join Today</h2>
-            <p className="mt-3 text-[14px] leading-[1.55] text-[#656977]">
-              Get product news, training tips, and SogilityGO updates.
-            </p>
-            <a
-              href="https://www.sogilitygo.com/pages/contact"
-              className="mt-5 inline-flex min-h-11 items-center justify-center rounded-full bg-[#202333] px-6 font-black text-white"
-            >
-              Stay connected
-            </a>
+          <FooterLinks title="About SogilityGO" links={[
+            ['About Us', 'https://www.sogilitygo.com/pages/about-us'],
+            ['Meet SogilityGO', 'https://www.sogilitygo.com/pages/meet-sogilitygo'],
+            ['Our Boards', 'https://www.sogilitygo.com/pages/our-boards'],
+            ['Our Lights', 'https://www.sogilitygo.com/pages/our-lights'],
+            ['Our App', 'https://www.sogilitygo.com/pages/our-app'],
+            ['Affiliate Program', 'https://www.sogilitygo.com/pages/affiliate-program'],
+            ['Membership', 'https://www.sogilitygo.com/pages/membership'],
+          ]} />
+          <FooterLinks title="Resources" links={[
+            ['Help Center', 'https://www.sogilitygo.com/pages/support'],
+            ['Contact Us', 'https://www.sogilitygo.com/pages/contact'],
+            ['Blog', 'https://www.sogilitygo.com/blogs/news'],
+          ]} />
+          <div className="partner-footer-join">
+            <h2 className="partner-footer-title">Join Today</h2>
+            <p>Get product news, training tips, and SogilityGO updates.</p>
+            <form method="post" action="https://www.sogilitygo.com/contact#contact_form" acceptCharset="UTF-8">
+              <input type="hidden" name="form_type" value="customer" />
+              <input type="hidden" name="utf8" value="✓" />
+              <input type="hidden" name="contact[tags]" value="newsletter" />
+              <div className="partner-footer-form">
+                <input type="email" name="contact[email]" aria-label="Email address" placeholder="Email address" autoComplete="email" required />
+                <button type="submit" aria-label="Join the SogilityGO email list">Join</button>
+              </div>
+            </form>
           </div>
         </div>
-        <div className="mt-10 flex flex-col gap-4 border-t border-[#dfe0d9] pt-6 text-[13px] text-[#656977] lg:flex-row lg:items-center lg:justify-between">
-          <span>© 2026, SogilityGO®</span>
-          <div className="flex flex-wrap gap-5">
-            <a href="https://www.sogilitygo.com/policies/privacy-policy">
-              Privacy policy
-            </a>
-            <a href="https://www.sogilitygo.com/policies/terms-of-service">
-              Terms of service
-            </a>
-            <a href="https://www.sogilitygo.com/policies/refund-policy">
-              Refund policy
-            </a>
+        <div className="partner-footer-bottom">
+          <span>© 2026 SogilityGO. All rights reserved.</span>
+          <div className="partner-footer-legal">
+            <a href="https://www.sogilitygo.com/policies/privacy-policy">Privacy policy</a>
+            <a href="https://www.sogilitygo.com/policies/terms-of-service">Terms of service</a>
+            <a href="https://www.sogilitygo.com/policies/refund-policy">Refund policy</a>
           </div>
         </div>
       </div>
@@ -1081,29 +1065,12 @@ export function PartnerLandingFooter() {
   );
 }
 
-function FooterLinks({
-  title,
-  links,
-}: {
-  title: string;
-  links: [string, string][];
-}) {
+function FooterLinks({title, links}: {title: string; links: [string, string][]}) {
   return (
-    <nav>
-      <h2 className="font-black">{title}</h2>
-      <ul className="mt-3 space-y-2 text-[14px] text-[#515562]">
-        {links.map(([label, href]) => (
-          <li key={label}>
-            <a
-              href={href}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:underline"
-            >
-              {label}
-            </a>
-          </li>
-        ))}
+    <nav aria-label={title}>
+      <h2 className="partner-footer-title">{title}</h2>
+      <ul className="partner-footer-list">
+        {links.map(([label, href]) => <li key={label}><a href={href}>{label}</a></li>)}
       </ul>
     </nav>
   );
