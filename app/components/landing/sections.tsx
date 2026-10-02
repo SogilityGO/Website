@@ -2,6 +2,7 @@ import {type ReactNode, useEffect, useRef, useState} from 'react';
 import {Container, Eyebrow, SectionTitle, Placeholder} from './ui';
 import {AffirmLoader, AffirmMessage} from './affirm';
 import {trackBeginCheckout} from './analytics';
+import type {SitewidePromotion} from '~/lib/promotion';
 
 const TRUSTED_LOGOS = [
   {src: '/landing/logos/p1.webp', alt: 'Partner club'},
@@ -65,14 +66,14 @@ export function Hero() {
         {/* Text block — left 85 */}
         <div className="flex min-h-[520px] flex-col justify-start px-6 pt-6 lg:min-h-[707px] lg:justify-center lg:pt-0 lg:pl-[85px] lg:pr-0">
           <p className="text-[14px] font-extrabold uppercase leading-[28px] tracking-[0.1em] text-sogility lg:text-[16px] lg:leading-[38px]">
-            <span className="lg:hidden">At-home virtual coach</span>
-            <span className="hidden lg:inline">At-home soccer training</span>
+            At-home soccer training
           </p>
           <h1 className="title-italic max-w-[330px] text-[42px] leading-[43px] tracking-[-0.01em] text-cream lg:max-w-[501px] lg:text-[62px] lg:leading-[66px]">
             Elite soccer training at home
           </h1>
           <p className="mt-4 hidden max-w-[486px] text-[18px] leading-[26px] tracking-[-0.01em] text-cream lg:block lg:text-[20px] lg:leading-[28px]">
-            A guided virtual coach. Real-time feedback. Measurable improvement.
+            ReboundIQ boards, Impact Lights and the free SogilityGO app turn time
+            between team practices into purposeful reps.
           </p>
           <div className="mt-7 hidden lg:block">
             <a
@@ -1062,7 +1063,7 @@ export function TrainingBoard() {
   );
 }
 
-/* 10 — Personalized Training Sessions / 5 Core Skills (dark).
+/* 10 — Training built on five core skills / 5 Core Skills (dark).
    `lines` are the real per-skill checklists from the live store's VIRTUAL
    COACHING section (theme-live → templates/index.json). */
 const CORE_SKILLS = [
@@ -1148,7 +1149,7 @@ export function CoreSkills() {
           5 core skills
         </p>
         <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
-          Personalized Training Sessions
+          Training built on five core skills
         </h2>
 
         <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
@@ -1215,7 +1216,7 @@ function CoreSkillsSlider() {
           5 core skills
         </p>
         <h2 className="title-italic text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
-          Personalized Training Sessions
+          Training built on five core skills
         </h2>
       </div>
 
@@ -1287,7 +1288,6 @@ const PRICING_TIERS = [
     img: '/landing/pricing/p1.webp',
     blurb: 'Perfect for mastering the basics and getting thousands of quality reps.',
     priceCents: 34900,
-    compareAtPriceCents: 39900,
     popular: false,
     features: ['Rebound IQ board ×1', 'Impact Light ×1', 'Free SogilityGO app'],
   },
@@ -1297,7 +1297,6 @@ const PRICING_TIERS = [
     img: '/landing/pricing/p2.webp',
     blurb: 'Take training up a notch with multi-angle passing, decision making and scanning.',
     priceCents: 64900,
-    compareAtPriceCents: 79900,
     popular: true,
     features: ['Rebound IQ board ×2', 'Impact Light ×2', 'Free SogilityGO app'],
   },
@@ -1307,7 +1306,6 @@ const PRICING_TIERS = [
     img: '/landing/pricing/p3.webp',
     blurb: 'The ultimate 360-degree training experience for elite skill development.',
     priceCents: 94900,
-    compareAtPriceCents: 119900,
     popular: false,
     features: ['Rebound IQ board ×3', 'Impact Light ×3', 'Free SogilityGO app'],
   },
@@ -1316,12 +1314,7 @@ const PRICING_TIERS = [
 /** Live checkout data per tier, resolved in the route loader from the Storefront API. */
 export type TierCheckout = {variantId: string; available: boolean};
 export type CheckoutMap = Record<string, TierCheckout | undefined>;
-export type SitewidePromotion = {
-  discountPercentage: number;
-  discountCode: string;
-  badgeLabel: string;
-  offerMessage: string;
-};
+export type {SitewidePromotion};
 
 type PricingTier = (typeof PRICING_TIERS)[number];
 
@@ -1351,25 +1344,36 @@ function TierPrice({
   tier: PricingTier;
   promotion?: SitewidePromotion;
 }) {
+  // Compare against the real Shopify price so the savings shown here match
+  // the discount line at checkout exactly.
+  const regularPriceCents = tier.priceCents;
   const currentPriceCents = tierPriceCents(tier, promotion);
-  const savingsCents = tier.compareAtPriceCents - currentPriceCents;
+  const savingsCents = regularPriceCents - currentPriceCents;
 
   return (
     <div className="flex flex-col gap-2 pt-4">
       <div
         className="flex flex-wrap items-center gap-3.5"
         role="group"
-        aria-label={`Regular price ${formatPrice(tier.compareAtPriceCents)}. Sale price ${formatPrice(currentPriceCents)}. You save ${formatPrice(savingsCents)}.`}
+        aria-label={
+          savingsCents > 0
+            ? `Regular price ${formatPrice(regularPriceCents)}. Sale price ${formatPrice(currentPriceCents)}. You save ${formatPrice(savingsCents)}.`
+            : `Price ${formatPrice(currentPriceCents)}.`
+        }
       >
         <span className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px] text-sogility">
           {formatPrice(currentPriceCents)}
         </span>
-        <span className="text-[16px] font-medium text-dark line-through decoration-red-600 decoration-2">
-          {formatPrice(tier.compareAtPriceCents)}
-        </span>
-        <span className="rounded-lg border-2 border-dashed border-sogility bg-white px-3 py-1 text-[16px] font-extrabold leading-none text-sogility">
-          Save {formatPrice(savingsCents)}
-        </span>
+        {savingsCents > 0 && (
+          <>
+            <span className="text-[16px] font-medium text-dark line-through decoration-red-600 decoration-2">
+              {formatPrice(regularPriceCents)}
+            </span>
+            <span className="rounded-lg border-2 border-dashed border-sogility bg-white px-3 py-1 text-[16px] font-extrabold leading-none text-sogility">
+              Save {formatPrice(savingsCents)}
+            </span>
+          </>
+        )}
       </div>
       {promotion && (
         <p className="text-[12px] leading-[17px] text-blue-005">
@@ -1528,7 +1532,7 @@ export function StartTraining({
           {[
             ['14', 'Day Return Policy'],
             ['1', 'Year Warranty'],
-            ['365', 'Waterproof + Durable'],
+            ['Indoor', 'or outdoor, weather-resistant'],
           ].map(([n, label], i) => (
             <div
               key={label}
@@ -1717,7 +1721,7 @@ function StartTrainingSlider({
         {[
           ['14', 'Day Return Policy'],
           ['1', 'Year Warranty'],
-          ['365', 'Days outside Weatherproof'],
+          ['Indoor', 'or outdoor, weather-resistant'],
         ].map(([n, label], i) => (
           <div
             key={label}
@@ -1744,15 +1748,15 @@ const SETUP_STEPS = [
     img: '/landing/setup/board.webp',
     rounded: true,
     step: 'Step 1',
-    title: 'Place the board',
-    desc: 'Any flat surface – backyard, basement, driveway. No tools, no assembly. Takes minutes.',
+    title: 'Set up the board',
+    desc: 'Attach the two legs with the included Allen key and choose ground or air rebounding. Works on any flat surface: backyard, driveway, garage or basement.',
   },
   {
     img: '/landing/setup/phone-light.webp',
     rounded: false,
     step: 'Step 2',
-    title: 'Pair the APP',
-    desc: 'Download the SogilityGO app, pair Impact Light via bluetooth. Account setup under 3 minutes. Ready every session after that.',
+    title: 'Pair the Impact Light',
+    desc: 'Charge the Impact Light, download the SogilityGO app and pair the light over Bluetooth. Ready every session after that.',
   },
   {
     img: '/landing/setup/phone-explore.webp',
@@ -1807,11 +1811,10 @@ export function SetupTraining() {
           Setup and training
         </p>
         <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
-          Ready in under 5 minutes
+          Set it up together once
         </h2>
         <p className="mt-2 max-w-[608px] text-[16px] leading-[22px] text-blue-003">
-          Player doesn&rsquo;t need you there. Set it up once and they run their
-          own sessions.
+          After the first setup, your player can start sessions on their own.
         </p>
 
         {/* desktop: 3 columns */}
@@ -1950,7 +1953,7 @@ export function Faq() {
             <FaqItem
               open
               q="Is this suitable for my child's age and skill level?"
-              a="Absolutely. The system is intuitive enough for young beginners, yet the reaction speeds and data tracking are challenging enough to push professional athletes to their limits. Every player starts with an assessment. With SogilityGO Coach, their plan is built from the results and updated after each reassessment."
+              a="SogilityGO is designed for players ages 6 to 18, from young beginners to experienced club players. Every player starts with an assessment. With SogilityGO Coach, their plan is built from the results and updated after each reassessment."
             />
             <FaqItem
               q="Do we need a SogilityGO Coach subscription?"
@@ -1980,11 +1983,11 @@ export function Faq() {
             />
             <FaqItem
               q="Will the boards break if my older kid kicks too hard?"
-              a="No. ReboundIQ boards are constructed from high-density, impact-resistant materials designed for professional use. They provide a true bounce every time, no matter how hard the pass."
+              a="ReboundIQ boards are made from high-density polyethylene built for hard passes and outdoor use. Every setup includes a 1-year limited warranty."
             />
             <FaqItem
               q="How long does it take to set up?"
-              a="Your first set up takes less than 5 minutes. Afterwards, your child can set up in under a minute. Simply place the ReboundIQ boards, connect them to the SogilityGO app via Bluetooth on your phone, and your child is ready to train. No complicated wiring or permanent installation is required."
+              a="The first setup takes a few minutes: attach the two legs with the included Allen key, charge the Impact Light, and pair it with the SogilityGO app over Bluetooth. After that, place the board, power on the light, and your player is ready to train. No wiring or permanent installation is required."
             />
             <FaqItem
               q="Does my child need a specific type of soccer ball?"
@@ -1992,7 +1995,7 @@ export function Faq() {
             />
             <FaqItem
               q="Do the boards need to be plugged in during use?"
-              a="No, the boards are completely wireless. They feature a long-lasting rechargeable battery, giving you the freedom to set them up anywhere—from the driveway to the backyard to the living room—without tripping over cords."
+              a="No. ReboundIQ boards have no wiring or power. The Impact Light runs on a rechargeable battery, so charge it with the included cable before training. Set up in the driveway, backyard or garage with no cords to trip over."
             />
           </div>
         </div>

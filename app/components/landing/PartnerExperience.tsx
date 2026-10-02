@@ -44,8 +44,6 @@ const PRICING = [
     image: '/landing/pricing/p1.webp',
     price: '$349',
     priceCents: 34900,
-    was: '$399',
-    save: 'Save $50',
     popular: false,
     copy: 'A compact one-board setup for focused ball-return practice and structured at-home reps.',
     includes: ['1 ReboundIQ board', '1 Impact Light', 'SogilityGO app'],
@@ -56,8 +54,6 @@ const PRICING = [
     image: '/landing/pricing/p2.webp',
     price: '$649',
     priceCents: 64900,
-    was: '$799',
-    save: 'Save $150',
     popular: true,
     copy: 'Adds a second return angle for more varied sequences that layer reaction and decision-making.',
     includes: ['2 ReboundIQ boards', '2 Impact Lights', 'SogilityGO app'],
@@ -68,8 +64,6 @@ const PRICING = [
     image: '/landing/pricing/p3.webp',
     price: '$949',
     priceCents: 94900,
-    was: '$1,199',
-    save: 'Save $250',
     popular: false,
     copy: 'A three-board setup for the widest training area and greatest variety of return angles.',
     includes: ['3 ReboundIQ boards', '3 Impact Lights', 'SogilityGO app'],
@@ -480,29 +474,10 @@ function PartnerPricing({
                   <p className="mt-3 lg:min-h-[76px] text-center text-[15px] leading-[1.6] text-[#656977]">
                     {tier.copy}
                   </p>
-                  <div className="mt-4 grid lg:min-h-[142px] content-start justify-items-center gap-2 text-center">
-                    {tier.was ? (
-                      <s className="text-[22px] font-black leading-none tracking-[-0.035em] text-[#777b87] decoration-[#d7192d] decoration-[4px] [text-decoration-skip-ink:none]">
-                        {tier.was}
-                      </s>
-                    ) : (
-                      <span aria-hidden="true" className="h-[22px]" />
-                    )}
+                  <div className="mt-4 grid content-start justify-items-center gap-2 text-center">
                     <strong className="text-[46px] font-black leading-[0.95] tracking-[-0.04em] text-[#159f23]">
                       {tier.price}
                     </strong>
-                    {tier.save ? (
-                      <span className="inline-flex min-w-[132px] items-center justify-center gap-2 rounded-full border-2 border-[#c4c7ce] bg-[#e7e8eb] px-4 py-2 text-[#202333] shadow-[0_4px_12px_rgba(32,35,51,0.1)]">
-                        <span className="text-[10px] font-black uppercase tracking-[0.06em]">
-                          You save
-                        </span>
-                        <strong className="text-[15px] font-black">
-                          {tier.save.replace(/^Save\s*/i, '')}
-                        </strong>
-                      </span>
-                    ) : (
-                      <span aria-hidden="true" className="h-[38px]" />
-                    )}
                   </div>
                   <p className="mt-2 text-center text-[11px] font-bold leading-[1.35] text-[#6e7281]">
                     {offerSentence}
