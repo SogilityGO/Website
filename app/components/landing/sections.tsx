@@ -501,29 +501,38 @@ function JourneySlider() {
   );
 }
 
-/* 7 — Your Virtual Coach (dark) */
+/* 7 — Your Virtual Coach (dark). Every feature listed here is part of the
+   optional paid SogilityGO Coach membership, so each one carries a badge. */
 const COACH_FEATURES = [
   {
     icon: '/landing/coach/icons/coach.svg',
     title: 'Your Virtual Coach',
-    desc: 'Get tips from pro soccer coaches to improve your training',
+    desc: 'Guidance and pro tips from soccer coaches for every activity',
   },
   {
     icon: '/landing/coach/icons/training.svg',
     title: 'Tailored Training',
-    desc: 'A training plan personalized just for you and your skills',
+    desc: "A personalized 10-day plan built from your player's assessment",
   },
   {
     icon: '/landing/coach/icons/videos.svg',
     title: '180+ Videos',
-    desc: 'Access to the full library of pro-designed training activities',
+    desc: 'The full library of pro-designed activities. The free app includes 15 core-principle activities.',
   },
   {
     icon: '/landing/coach/icons/multiplayer.svg',
     title: 'Multiplayer',
-    desc: 'Up to 5 players can access their own personalized training plan',
+    desc: 'Up to five player profiles, each with its own plan. The free app includes one.',
   },
 ];
+
+function CoachBadge() {
+  return (
+    <span className="ml-2 inline-block rounded-full border border-sogility/60 px-2 py-[1px] align-middle text-[11px] font-semibold uppercase tracking-[1px] text-sogility">
+      With Coach
+    </span>
+  );
+}
 
 export function VirtualCoach() {
   return (
@@ -537,6 +546,12 @@ export function VirtualCoach() {
           <h2 className="title-italic mt-1 text-[42px] leading-[43px] tracking-[-0.42px] text-cream">
             Your Virtual Coach
           </h2>
+          <p className="mt-3 max-w-[540px] text-[16px] leading-[22px] text-blue-003">
+            Every setup includes the free SogilityGO app: 15 core-principle
+            activities, a three-day training plan, one assessment and one player
+            profile. The features on this page come with optional SogilityGO
+            Coach, $9.99/month or $99.99/year.
+          </p>
           <img
             src="/landing/coach/phone-graph.webp"
             alt="SogilityGO app showing player skill analytics"
@@ -559,7 +574,10 @@ export function VirtualCoach() {
                   loading="lazy"
                 />
                 <div>
-                  <p className="text-[16px] font-bold text-white">{f.title}</p>
+                  <p className="text-[16px] font-bold text-white">
+                    {f.title}
+                    <CoachBadge />
+                  </p>
                   <p className="text-[16px] leading-[22px] text-blue-003">
                     {f.desc}
                   </p>
@@ -637,7 +655,10 @@ function FeatureSlider() {
               loading="lazy"
             />
             <div>
-              <p className="text-[16px] font-bold text-white">{f.title}</p>
+              <p className="text-[16px] font-bold text-white">
+                {f.title}
+                <CoachBadge />
+              </p>
               <p className="text-[16px] leading-[22px] text-blue-003">{f.desc}</p>
             </div>
           </div>
@@ -1268,7 +1289,7 @@ const PRICING_TIERS = [
     priceCents: 34900,
     compareAtPriceCents: 39900,
     popular: false,
-    features: ['Rebound IQ board ×1', 'Impact Light ×1', 'SogilityGO App'],
+    features: ['Rebound IQ board ×1', 'Impact Light ×1', 'Free SogilityGO app'],
   },
   {
     name: 'Advanced',
@@ -1278,7 +1299,7 @@ const PRICING_TIERS = [
     priceCents: 64900,
     compareAtPriceCents: 79900,
     popular: true,
-    features: ['Rebound IQ board ×2', 'Impact Light ×2', 'SogilityGO App'],
+    features: ['Rebound IQ board ×2', 'Impact Light ×2', 'Free SogilityGO app'],
   },
   {
     name: 'Pro',
@@ -1288,7 +1309,7 @@ const PRICING_TIERS = [
     priceCents: 94900,
     compareAtPriceCents: 119900,
     popular: false,
-    features: ['Rebound IQ board ×3', 'Impact Light ×3', 'SogilityGO App'],
+    features: ['Rebound IQ board ×3', 'Impact Light ×3', 'Free SogilityGO app'],
   },
 ];
 
@@ -1526,7 +1547,51 @@ export function StartTraining({
 
       {/* mobile: horizontal slider of pricing cards */}
       <StartTrainingSlider checkout={checkout} promotion={promotion} />
+
+      <Container className="relative">
+        <FreeVsCoach />
+      </Container>
     </section>
+  );
+}
+
+/** Free app vs optional Coach membership, matching the partner pages. */
+function FreeVsCoach() {
+  return (
+    <div className="mx-auto mt-10 grid max-w-[1095px] overflow-hidden rounded-[22px] border border-white/15 text-left lg:mt-12 lg:grid-cols-2">
+      <div className="bg-[#f7f6ef] p-6 text-dark lg:p-8">
+        <p className="text-[12px] font-black uppercase tracking-[0.13em] text-sogility-deep">
+          Included with every setup
+        </p>
+        <h3 className="mt-2 text-[24px] font-black">Free SogilityGO app</h3>
+        <p className="mt-2 text-[15px] leading-[1.6] text-[#656977]">
+          Connect the Impact Lights and start training with 15 core-principle
+          activities, a three-day training plan, one assessment and one player
+          profile. No subscription required.
+        </p>
+      </div>
+      <div className="bg-[#202333] p-6 text-white lg:p-8">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-[12px] font-black uppercase tracking-[0.13em] text-sogility">
+              Optional upgrade
+            </p>
+            <h3 className="mt-2 text-[24px] font-black">SogilityGO Coach</h3>
+          </div>
+          <strong className="text-[18px] text-sogility">
+            $9.99/month{' '}
+            <small className="block text-[11px] font-semibold text-white/60">
+              or $99.99/year
+            </small>
+          </strong>
+        </div>
+        <p className="mt-3 text-[15px] leading-[1.6] text-white/70">
+          A personalized 10-day plan built from your player&rsquo;s assessment,
+          reassessment after each plan, all 180+ activities with pro tips,
+          progress tracking and up to five player profiles.
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -1693,8 +1758,8 @@ const SETUP_STEPS = [
     img: '/landing/setup/phone-explore.webp',
     rounded: false,
     step: 'Step 3',
-    title: 'Virtual Coach runs the session',
-    desc: 'Player assessment first, then a personalized 10-day plan. Real-time audio cues. 180+ activities. Average first session starts within 5 mins of unboxing.',
+    title: 'Start the first session',
+    desc: 'Create a player profile and complete the five-drill assessment. With SogilityGO Coach, the Virtual Coach turns the results into a personalized 10-day plan.',
   },
 ];
 
@@ -1885,15 +1950,19 @@ export function Faq() {
             <FaqItem
               open
               q="Is this suitable for my child's age and skill level?"
-              a="Absolutely. The system is intuitive enough for young beginners, yet the reaction speeds and data tracking are challenging enough to push professional athletes to their limits. The app customizes the difficulty based on your child's initial assessment and adapts as they improve."
+              a="Absolutely. The system is intuitive enough for young beginners, yet the reaction speeds and data tracking are challenging enough to push professional athletes to their limits. Every player starts with an assessment. With SogilityGO Coach, their plan is built from the results and updated after each reassessment."
+            />
+            <FaqItem
+              q="Do we need a SogilityGO Coach subscription?"
+              a="No. The free app connects the Impact Lights and includes 15 core-principle activities, a three-day training plan, one assessment and one player profile. Optional SogilityGO Coach ($9.99/month or $99.99/year) adds personalized 10-day plans, the full 180+ activity library, progress tracking and up to five player profiles."
             />
             <FaqItem
               q="I have more than one child playing soccer. Can they share the system?"
-              a="Yes! You can set up 5 player profiles within the SogilityGO app. Each child will have their own customized training plan and individualized data tracking, so they can both progress at their own pace using the same ReboundIQ boards."
+              a="Yes. Everyone can train on the same ReboundIQ boards. The free app includes one player profile. With SogilityGO Coach, you can set up to five player profiles, each with its own personalized plan and progress tracking."
             />
             <FaqItem
               q="As a parent, how can I track their progress?"
-              a="The SogilityGO app features a comprehensive data dashboard. Instead of guessing if they are getting better, you can review their training history, track their progress, and watch them improve week over week."
+              a="With SogilityGO Coach, progress tracking and performance review let you see their training history and how their assessment results change after each reassessment."
             />
             <FaqItem
               q={'Is this going to just be more "screen time" for my kid?'}
