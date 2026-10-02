@@ -1288,6 +1288,7 @@ const PRICING_TIERS = [
     img: '/landing/pricing/p1.webp',
     blurb: 'Perfect for mastering the basics and getting thousands of quality reps.',
     priceCents: 34900,
+    compareAtPriceCents: 39900,
     popular: false,
     features: ['Rebound IQ board ×1', 'Impact Light ×1', 'Free SogilityGO app'],
   },
@@ -1297,6 +1298,7 @@ const PRICING_TIERS = [
     img: '/landing/pricing/p2.webp',
     blurb: 'Take training up a notch with multi-angle passing, decision making and scanning.',
     priceCents: 64900,
+    compareAtPriceCents: 79900,
     popular: true,
     features: ['Rebound IQ board ×2', 'Impact Light ×2', 'Free SogilityGO app'],
   },
@@ -1306,6 +1308,7 @@ const PRICING_TIERS = [
     img: '/landing/pricing/p3.webp',
     blurb: 'The ultimate 360-degree training experience for elite skill development.',
     priceCents: 94900,
+    compareAtPriceCents: 119900,
     popular: false,
     features: ['Rebound IQ board ×3', 'Impact Light ×3', 'Free SogilityGO app'],
   },
@@ -1344,36 +1347,25 @@ function TierPrice({
   tier: PricingTier;
   promotion?: SitewidePromotion;
 }) {
-  // Compare against the real Shopify price so the savings shown here match
-  // the discount line at checkout exactly.
-  const regularPriceCents = tier.priceCents;
   const currentPriceCents = tierPriceCents(tier, promotion);
-  const savingsCents = regularPriceCents - currentPriceCents;
+  const savingsCents = tier.compareAtPriceCents - currentPriceCents;
 
   return (
     <div className="flex flex-col gap-2 pt-4">
       <div
         className="flex flex-wrap items-center gap-3.5"
         role="group"
-        aria-label={
-          savingsCents > 0
-            ? `Regular price ${formatPrice(regularPriceCents)}. Sale price ${formatPrice(currentPriceCents)}. You save ${formatPrice(savingsCents)}.`
-            : `Price ${formatPrice(currentPriceCents)}.`
-        }
+        aria-label={`Regular price ${formatPrice(tier.compareAtPriceCents)}. Sale price ${formatPrice(currentPriceCents)}. You save ${formatPrice(savingsCents)}.`}
       >
         <span className="text-[30px] font-extrabold leading-[28px] tracking-[-0.3px] text-sogility">
           {formatPrice(currentPriceCents)}
         </span>
-        {savingsCents > 0 && (
-          <>
-            <span className="text-[16px] font-medium text-dark line-through decoration-red-600 decoration-2">
-              {formatPrice(regularPriceCents)}
-            </span>
-            <span className="rounded-lg border-2 border-dashed border-sogility bg-white px-3 py-1 text-[16px] font-extrabold leading-none text-sogility">
-              Save {formatPrice(savingsCents)}
-            </span>
-          </>
-        )}
+        <span className="text-[16px] font-medium text-dark line-through decoration-red-600 decoration-2">
+          {formatPrice(tier.compareAtPriceCents)}
+        </span>
+        <span className="rounded-lg border-2 border-dashed border-sogility bg-white px-3 py-1 text-[16px] font-extrabold leading-none text-sogility">
+          Save {formatPrice(savingsCents)}
+        </span>
       </div>
       {promotion && (
         <p className="text-[12px] leading-[17px] text-blue-005">
