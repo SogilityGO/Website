@@ -60,10 +60,8 @@ export function LandingFooter() {
           </div>
         </div>
 
-        <PoweredByGoalStation />
-
         {/* Bottom bar */}
-        <div className="mt-10 flex flex-col gap-5 border-t border-[#168a14] pt-6 text-[14px] leading-[18px] tracking-[-0.14px] lg:flex-row lg:items-center lg:justify-between">
+        <div className="goalstation-footer-row mt-10 flex flex-col gap-5 border-t border-[#168a14] pt-6 text-[14px] leading-[18px] tracking-[-0.14px] lg:flex-row lg:items-center lg:justify-between">
           <p>
             © 2026,{' '}
             <a
@@ -76,6 +74,7 @@ export function LandingFooter() {
             </a>
             ®
           </p>
+          <PoweredByGoalStation />
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-12">
             <div className="flex gap-6">
               <a

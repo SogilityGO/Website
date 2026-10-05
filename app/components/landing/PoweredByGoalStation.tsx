@@ -2,7 +2,7 @@ export function PoweredByGoalStation() {
   return (
     <div
       className="footer-powered-by-goalstation"
-      style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, width: '100%', marginTop: 28, textAlign: 'center'}}
+      style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center', gap: 12, textAlign: 'center'}}
     >
       <span style={{fontSize: 11, lineHeight: 1.4, letterSpacing: '0.12em', textTransform: 'uppercase'}}>
         Powered by
@@ -13,7 +13,7 @@ export function PoweredByGoalStation() {
         width={702}
         height={59}
         loading="lazy"
-        style={{display: 'block', width: 240, maxWidth: '80%', height: 'auto'}}
+        style={{display: 'block', width: 180, maxWidth: '100%', height: 'auto'}}
       />
     </div>
   );

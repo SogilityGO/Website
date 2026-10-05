@@ -1053,9 +1053,9 @@ export function PartnerLandingFooter() {
             </form>
           </div>
         </div>
-        <PoweredByGoalStation />
-        <div className="partner-footer-bottom">
+        <div className="partner-footer-bottom goalstation-footer-row">
           <span>© 2026 SogilityGO. All rights reserved.</span>
+          <PoweredByGoalStation />
           <div className="partner-footer-legal">
             <a href="https://www.sogilitygo.com/policies/privacy-policy">Privacy policy</a>
             <a href="https://www.sogilitygo.com/policies/terms-of-service">Terms of service</a>

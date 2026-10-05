@@ -639,3 +639,13 @@ button.reset:hover:not(:has(> *)) {
   gap: 0.75rem;
   flex-wrap: wrap;
 }
+
+/* Keep the technology credit centered within the legal footer row. */
+footer .goalstation-footer-row { align-items: center; gap: 24px; }
+@media (min-width: 1100px) {
+  footer .goalstation-footer-row { display: grid; grid-template-columns: 1fr auto 1fr; }
+  footer .goalstation-footer-row > :last-child { justify-self: end; }
+}
+@media (max-width: 1099px) {
+  footer .goalstation-footer-row { flex-direction: column; }
+}
