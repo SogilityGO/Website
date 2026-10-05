@@ -5,6 +5,7 @@ import {buildPartnerCheckoutHref} from '~/lib/partner-attribution';
 import type {CheckoutMap} from './sections';
 import {trackBeginCheckout} from './analytics';
 import {ProductImagePreview} from './ProductImagePreview';
+import {PoweredByGoalStation} from './PoweredByGoalStation';
 
 const WRAP = 'partner-wrap mx-auto w-[calc(100%-2rem)] max-w-[1180px]';
 const PAPER = '#f7f6ef';
@@ -1052,6 +1053,7 @@ export function PartnerLandingFooter() {
             </form>
           </div>
         </div>
+        <PoweredByGoalStation />
         <div className="partner-footer-bottom">
           <span>© 2026 SogilityGO. All rights reserved.</span>
           <div className="partner-footer-legal">

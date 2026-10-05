@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {Container} from './ui';
+import {PoweredByGoalStation} from './PoweredByGoalStation';
 
 const ABOUT_LINKS = [
   {label: 'About Us', href: 'https://www.sogilitygo.com/pages/about-us'},
@@ -59,6 +60,8 @@ export function LandingFooter() {
           </div>
         </div>
 
+        <PoweredByGoalStation />
+
         {/* Bottom bar */}
         <div className="mt-10 flex flex-col gap-5 border-t border-[#168a14] pt-6 text-[14px] leading-[18px] tracking-[-0.14px] lg:flex-row lg:items-center lg:justify-between">
           <p>
@@ -74,9 +77,6 @@ export function LandingFooter() {
             ®
           </p>
           <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-12">
-            <p className="flex items-center gap-2">
-              Powered by <span className="font-bold tracking-[0.04em]">GOAL STATION</span>
-            </p>
             <div className="flex gap-6">
               <a
                 href="https://www.sogilitygo.com/policies/privacy-policy"
