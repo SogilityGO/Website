@@ -1,3 +1,8 @@
+import {
+  formatPartnerPrice,
+  getPartnerDiscountPercentage,
+  getPartnerPrice,
+} from '~/lib/partner-pricing';
 import type {ReactNode} from 'react';
 import {useSearchParams} from 'react-router';
 import {getPartnerAudienceCopy, type PartnerData} from '~/data/partners';
@@ -42,10 +47,8 @@ const PRICING = [
     name: 'Starter',
     handle: 'sogilitygo-rebounder-pro',
     image: '/landing/pricing/p1.webp',
-    price: '$349',
     priceCents: 34900,
-    was: '$399',
-    save: 'Save $50',
+    compareAtPriceCents: 39900,
     popular: false,
     copy: 'A compact one-board setup for focused ball-return practice and structured at-home reps.',
     includes: ['1 ReboundIQ board', '1 Impact Light', 'SogilityGO app'],
@@ -54,10 +57,8 @@ const PRICING = [
     name: 'Advanced',
     handle: 'sogilitygo-reboundiq-elite',
     image: '/landing/pricing/p2.webp',
-    price: '$649',
     priceCents: 64900,
-    was: '$799',
-    save: 'Save $150',
+    compareAtPriceCents: 79900,
     popular: true,
     copy: 'Adds a second return angle for more varied sequences that layer reaction and decision-making.',
     includes: ['2 ReboundIQ boards', '2 Impact Lights', 'SogilityGO app'],
@@ -66,10 +67,8 @@ const PRICING = [
     name: 'Pro',
     handle: 'sogilitygo-reboundiq-ultimate',
     image: '/landing/pricing/p3.webp',
-    price: '$949',
     priceCents: 94900,
-    was: '$1,199',
-    save: 'Save $250',
+    compareAtPriceCents: 119900,
     popular: false,
     copy: 'A three-board setup for the widest training area and greatest variety of return angles.',
     includes: ['3 ReboundIQ boards', '3 Impact Lights', 'SogilityGO app'],
@@ -374,8 +373,10 @@ function CheckoutButton({
   tier,
   checkout,
   partner,
+  currentPriceCents,
 }: {
   tier: (typeof PRICING)[number];
+  currentPriceCents: number;
   checkout?: CheckoutMap;
   partner: PartnerData;
 }) {
@@ -408,7 +409,7 @@ function CheckoutButton({
       onClick={() =>
         trackBeginCheckout({
           tierName: tier.name,
-          valueUSD: tier.priceCents / 100,
+          valueUSD: currentPriceCents / 100,
           variantId: item?.variantId,
           partnerHandle: partner.handle,
           partnerName: partner.name,
@@ -432,7 +433,10 @@ function PartnerPricing({
   checkout?: CheckoutMap;
 }) {
   const audience = getPartnerAudienceCopy(partner);
-  const offerSentence = formatPartnerOfferSentence(partner);
+  const percentage = getPartnerDiscountPercentage(partner);
+  const offerSentence = percentage
+    ? `Price includes your ${percentage}% partner discount. Automatically applied at checkout.`
+    : formatPartnerOfferSentence(partner);
   return (
     <section
       id="start-training"
@@ -454,76 +458,95 @@ function PartnerPricing({
           .
         </p>
         <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          {PRICING.map((tier) => (
-            <article
-              key={tier.name}
-              className={`relative flex overflow-hidden rounded-[24px] border bg-[#f7f6ef] shadow-[0_18px_45px_rgba(31,34,49,0.09)] ${
-                tier.popular
-                  ? 'border-sogility ring-2 ring-sogility/15'
-                  : 'border-[#dfe0d9]'
-              }`}
-            >
-              {tier.popular ? (
-                <span className="absolute left-0 top-0 z-10 rounded-br-2xl bg-sogility px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] text-[#202333]">
-                  Most popular
-                </span>
-              ) : null}
-              <div className="flex w-full flex-col">
-                <ProductImagePreview src={tier.image} name={tier.name} />
-                <div className="flex flex-1 flex-col p-6">
-                  <p className="text-center text-[12px] font-black uppercase tracking-[0.12em] text-sogility">
-                    ReboundIQ
-                  </p>
-                  <h3 className="mt-1 text-center text-[32px] font-black tracking-[-0.04em]">
-                    {tier.name}
-                  </h3>
-                  <p className="mt-3 lg:min-h-[76px] text-center text-[15px] leading-[1.6] text-[#656977]">
-                    {tier.copy}
-                  </p>
-                  <div className="mt-4 grid lg:min-h-[142px] content-start justify-items-center gap-2 text-center">
-                    {tier.was ? (
-                      <s className="text-[22px] font-black leading-none tracking-[-0.035em] text-[#777b87] decoration-[#d7192d] decoration-[4px] [text-decoration-skip-ink:none]">
-                        {tier.was}
-                      </s>
-                    ) : (
-                      <span aria-hidden="true" className="h-[22px]" />
-                    )}
-                    <strong className="text-[46px] font-black leading-[0.95] tracking-[-0.04em] text-[#159f23]">
-                      {tier.price}
-                    </strong>
-                    {tier.save ? (
-                      <span className="inline-flex min-w-[132px] items-center justify-center gap-2 rounded-full border-2 border-[#c4c7ce] bg-[#e7e8eb] px-4 py-2 text-[#202333] shadow-[0_4px_12px_rgba(32,35,51,0.1)]">
-                        <span className="text-[10px] font-black uppercase tracking-[0.06em]">
-                          You save
+          {PRICING.map((tier) => {
+            const live = checkout?.[tier.name];
+            const basePriceCents = live?.priceCents ?? tier.priceCents;
+            const regularPriceCents = Math.max(
+              basePriceCents,
+              live?.compareAtPriceCents ?? tier.compareAtPriceCents,
+            );
+            const {memberPriceCents, savingsCents} = getPartnerPrice(
+              basePriceCents,
+              regularPriceCents,
+              percentage,
+            );
+            return (
+              <article
+                key={tier.name}
+                className={`relative flex overflow-hidden rounded-[24px] border bg-[#f7f6ef] shadow-[0_18px_45px_rgba(31,34,49,0.09)] ${
+                  tier.popular
+                    ? 'border-sogility ring-2 ring-sogility/15'
+                    : 'border-[#dfe0d9]'
+                }`}
+              >
+                {tier.popular ? (
+                  <span className="absolute left-0 top-0 z-10 rounded-br-2xl bg-sogility px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] text-[#202333]">
+                    Most popular
+                  </span>
+                ) : null}
+                <div className="flex w-full flex-col">
+                  <ProductImagePreview src={tier.image} name={tier.name} />
+                  <div className="flex flex-1 flex-col p-6">
+                    <p className="text-center text-[12px] font-black uppercase tracking-[0.12em] text-sogility">
+                      ReboundIQ
+                    </p>
+                    <h3 className="mt-1 text-center text-[32px] font-black tracking-[-0.04em]">
+                      {tier.name}
+                    </h3>
+                    <p className="mt-3 lg:min-h-[76px] text-center text-[15px] leading-[1.6] text-[#656977]">
+                      {tier.copy}
+                    </p>
+                    <div className="mt-4 grid lg:min-h-[142px] content-start justify-items-center gap-2 text-center">
+                      {regularPriceCents > memberPriceCents ? (
+                        <s className="text-[22px] font-black leading-none tracking-[-0.035em] text-[#777b87] decoration-[#d7192d] decoration-[4px] [text-decoration-skip-ink:none]">
+                          {formatPartnerPrice(regularPriceCents)}
+                        </s>
+                      ) : (
+                        <span aria-hidden="true" className="h-[22px]" />
+                      )}
+                      {percentage > 0 && (
+                        <span className="rounded-full bg-sogility/15 px-3 py-1 text-[11px] font-black uppercase tracking-[0.06em] text-[#247d25]">
+                          {percentage}% partner discount included
                         </span>
-                        <strong className="text-[15px] font-black">
-                          {tier.save.replace(/^Save\s*/i, '')}
-                        </strong>
-                      </span>
-                    ) : (
-                      <span aria-hidden="true" className="h-[38px]" />
-                    )}
+                      )}
+                      <strong className="text-[46px] font-black leading-[0.95] tracking-[-0.04em] text-[#159f23]">
+                        {formatPartnerPrice(memberPriceCents)}
+                      </strong>
+                      {savingsCents > 0 ? (
+                        <span className="inline-flex min-w-[132px] items-center justify-center gap-2 rounded-full border-2 border-[#c4c7ce] bg-[#e7e8eb] px-4 py-2 text-[#202333] shadow-[0_4px_12px_rgba(32,35,51,0.1)]">
+                          <span className="text-[10px] font-black uppercase tracking-[0.06em]">
+                            You save
+                          </span>
+                          <strong className="text-[15px] font-black">
+                            {formatPartnerPrice(savingsCents)}
+                          </strong>
+                        </span>
+                      ) : (
+                        <span aria-hidden="true" className="h-[38px]" />
+                      )}
+                    </div>
+                    <p className="mt-2 text-center text-[11px] font-bold leading-[1.35] text-[#6e7281]">
+                      {offerSentence}
+                    </p>
+                    <ul className="my-5 space-y-2 text-center text-[14px] text-[#515562]">
+                      {tier.includes.map((item) => (
+                        <li key={item}>
+                          <span className="mr-2 text-sogility">✓</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <CheckoutButton
+                      tier={tier}
+                      currentPriceCents={memberPriceCents}
+                      checkout={checkout}
+                      partner={partner}
+                    />
                   </div>
-                  <p className="mt-2 text-center text-[11px] font-bold leading-[1.35] text-[#6e7281]">
-                    {offerSentence}
-                  </p>
-                  <ul className="my-5 space-y-2 text-center text-[14px] text-[#515562]">
-                    {tier.includes.map((item) => (
-                      <li key={item}>
-                        <span className="mr-2 text-sogility">✓</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <CheckoutButton
-                    tier={tier}
-                    checkout={checkout}
-                    partner={partner}
-                  />
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
 
         <div className="mt-7 grid overflow-hidden rounded-[22px] border border-[#dfe0d9] lg:grid-cols-2">

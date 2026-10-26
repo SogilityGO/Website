@@ -1293,7 +1293,7 @@ const PRICING_TIERS = [
 ];
 
 /** Live checkout data per tier, resolved in the route loader from the Storefront API. */
-export type TierCheckout = {variantId: string; available: boolean};
+export type TierCheckout = {variantId: string; available: boolean; priceCents?: number; compareAtPriceCents?: number};
 export type CheckoutMap = Record<string, TierCheckout | undefined>;
 export type SitewidePromotion = {
   discountPercentage: number;
