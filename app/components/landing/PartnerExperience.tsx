@@ -857,7 +857,7 @@ function Trust() {
 function OwnerMessage() {
   return (
     <section
-      className="border-t border-[#dfe0d9] bg-[radial-gradient(circle_at_12%_0%,rgba(48,190,45,0.12),transparent_34%),#f4f1e7] py-16 lg:py-[68px]"
+      className="border-t border-[#dfe0d9] bg-[radial-gradient(circle_at_12%_0%,rgba(48,190,45,0.12),transparent_34%),#f4f1e7] py-8 lg:py-9"
       aria-labelledby="partner-owner-heading"
     >
       <div className={WRAP}>
@@ -870,7 +870,7 @@ function OwnerMessage() {
         >
           What separates good players from elite
         </h2>
-        <div className="mt-8 grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-11">
+        <div className="mt-5 grid items-center gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
           <figure className="overflow-hidden rounded-[24px] bg-[#202333] shadow-[0_18px_45px_rgba(31,34,49,0.13)]">
             <img
               src="/landing/owner/jozy.webp"
