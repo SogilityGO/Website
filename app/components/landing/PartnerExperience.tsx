@@ -861,10 +861,12 @@ function OwnerMessage() {
       aria-labelledby="partner-owner-heading"
     >
       <div className={WRAP}>
-        <Kicker>Message from the owner</Kicker>
+        <div className="text-center">
+          <Kicker>Message from the owner</Kicker>
+        </div>
         <h2
           id="partner-owner-heading"
-          className="mt-3 max-w-[900px] text-[38px] font-black italic leading-[0.98] tracking-[-0.045em] text-sogility sm:text-[48px] lg:text-[56px]"
+          className="mx-auto mt-3 max-w-[900px] text-center text-[38px] font-black italic leading-[0.98] tracking-[-0.045em] text-sogility sm:text-[48px] lg:text-[56px]"
         >
           What separates good players from elite
         </h2>
