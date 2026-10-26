@@ -435,6 +435,7 @@ function PartnerPricing({
   partner: PartnerData;
   checkout?: CheckoutMap;
 }) {
+  const [searchParams] = useSearchParams();
   const audience = getPartnerAudienceCopy(partner);
   const percentage = getPartnerDiscountPercentage(partner);
   const offerSentence = percentage
@@ -461,7 +462,101 @@ function PartnerPricing({
           </a>
           .
         </p>
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <div className="mt-6 grid gap-[22px] min-[1025px]:hidden">
+          {PRICING.map((tier, index) => {
+            const item = checkout?.[tier.name];
+            const base = item?.priceCents ?? tier.priceCents;
+            const regular = Math.max(
+              base,
+              item?.compareAtPriceCents ?? tier.compareAtPriceCents,
+            );
+            const {memberPriceCents, savingsCents} = getPartnerPrice(
+              base,
+              regular,
+              percentage,
+            );
+            const href = item
+              ? buildPartnerCheckoutHref({
+                  variantId: item.variantId,
+                  discountCode: partner.discountCode,
+                  partnerHandle: partner.handle,
+                  currentSearch: searchParams,
+                })
+              : `https://www.sogilitygo.com/products/${tier.handle}`;
+            const soldOut = item && !item.available;
+            return (
+              <a
+                key={tier.name}
+                href={soldOut ? undefined : href}
+                aria-disabled={soldOut || undefined}
+                aria-label={`${soldOut ? 'Sold out:' : audience.claimOffer + ' on'} ReboundIQ ${tier.name}`}
+                {...(!item ? {target: '_blank', rel: 'noreferrer'} : {})}
+                onClick={() => {
+                  if (!soldOut)
+                    trackBeginCheckout({
+                      tierName: tier.name,
+                      valueUSD: memberPriceCents / 100,
+                      variantId: item?.variantId,
+                      partnerHandle: partner.handle,
+                      partnerName: partner.name,
+                      discountCode: partner.discountCode,
+                    });
+                }}
+                className="grid grid-cols-[112px_minmax(0,1fr)] items-center gap-3.5 rounded-xl text-[#202333] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sogility max-[359px]:grid-cols-[90px_minmax(0,1fr)]"
+              >
+                <img
+                  src={tier.image}
+                  alt={`ReboundIQ ${tier.name} setup`}
+                  width={112}
+                  height={112}
+                  loading="lazy"
+                  className="h-28 w-28 rounded-xl object-cover max-[359px]:h-[100px] max-[359px]:w-[90px]"
+                />
+                <div className="min-w-0">
+                  {tier.popular && (
+                    <p className="mb-1 text-[10px] font-black uppercase tracking-wide text-[#159f23]">
+                      Most popular
+                    </p>
+                  )}
+                  <h3 className="text-[20px] font-black leading-tight">
+                    ReboundIQ {tier.name}
+                  </h3>
+                  <p className="mb-2 mt-1 text-[14px] leading-snug text-[#626676]">
+                    {
+                      [
+                        '1 board + 1 Impact Light. For compact spaces.',
+                        '2 boards + 2 Impact Lights. More angles. More variety.',
+                        '3 boards + 3 Impact Lights. Your widest training setup.',
+                      ][index]
+                    }
+                  </p>
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    <strong className="text-[23px] font-black leading-tight tracking-tight text-[#159f23]">
+                      {formatPartnerPrice(memberPriceCents)}
+                    </strong>
+                    {regular > memberPriceCents && (
+                      <s className="text-[14px] text-[#c92532]">
+                        {formatPartnerPrice(regular)}
+                      </s>
+                    )}
+                  </div>
+                  {savingsCents > 0 && (
+                    <p className="mt-1 text-[12px] font-bold">
+                      You save {formatPartnerPrice(savingsCents)}
+                    </p>
+                  )}
+                  {soldOut && (
+                    <p className="mt-1 text-[12px] font-bold">Sold out</p>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+          <p className="border-t border-[#dadcd3] pt-4 text-[12px] leading-relaxed text-[#626676]">
+            {offerSentence} Every setup includes the free SogilityGO app.
+          </p>
+        </div>
+        <div className="mt-6 hidden gap-6 min-[1025px]:grid min-[1025px]:grid-cols-3">
           {PRICING.map((tier) => {
             const live = checkout?.[tier.name];
             const basePriceCents = live?.priceCents ?? tier.priceCents;
@@ -952,7 +1047,10 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
     {key: 'right', items: right},
   ];
   return (
-    <section id="faq" className="scroll-mt-20 bg-[#202333] py-8 text-white lg:py-10">
+    <section
+      id="faq"
+      className="scroll-mt-20 bg-[#202333] py-8 text-white lg:py-10"
+    >
       <div className={WRAP}>
         <Heading
           kicker="Questions parents ask"
