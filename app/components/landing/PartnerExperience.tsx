@@ -866,7 +866,7 @@ function OwnerMessage() {
         </div>
         <h2
           id="partner-owner-heading"
-          className="mx-auto mt-3 max-w-[900px] text-center text-[38px] font-black italic leading-[0.98] tracking-[-0.045em] text-sogility sm:text-[48px] lg:text-[56px]"
+          className="mx-auto mt-3 max-w-[900px] text-center text-[38px] font-black italic leading-[0.98] tracking-[-0.045em] text-sogility sm:text-[48px] lg:max-w-none lg:whitespace-nowrap lg:text-[clamp(40px,4vw,52px)]"
         >
           What separates good players from elite
         </h2>
