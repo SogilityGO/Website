@@ -112,7 +112,10 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
             {partner.eyebrow}
           </p>
           <h1 className="mt-3 max-w-[620px] text-[clamp(27px,8.7vw,40px)] font-black leading-[0.97] tracking-[-0.055em] text-white sm:text-[46px] lg:text-[52px] lg:leading-[0.98]">
-            The moments everyone sees, built from the reps no one sees.
+            <span className="block whitespace-nowrap">
+              Big Confidence Begins
+            </span>
+            <span className="block whitespace-nowrap">in the Backyard.</span>
           </h1>
           <p className="mt-[18px] max-w-[560px] text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
             {audience.heroSubject} get connected at-home training with
