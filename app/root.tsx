@@ -13,6 +13,11 @@ import {
 import type {Route} from './+types/root';
 import favicon from '~/assets/favicon.svg';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
+import {
+  SITEWIDE_PROMOTIONS_QUERY,
+  getActiveSitewidePromotion,
+  promotionBannerText,
+} from '~/lib/promotion';
 import appStyles from '~/styles/app.css?url';
 import tailwindCss from './styles/tailwind.css?url';
 import {PageLayout} from './components/PageLayout';
@@ -127,7 +132,7 @@ const SITE_BANNER_QUERY = `#graphql
 async function loadCriticalData({context}: Route.LoaderArgs) {
   const {storefront} = context;
 
-  const [header, siteBannerData] = await Promise.all([
+  const [header, siteBannerData, promotionData] = await Promise.all([
     storefront.query(HEADER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
@@ -141,6 +146,13 @@ async function loadCriticalData({context}: Route.LoaderArgs) {
         console.error('site_banner fetch failed', error);
         return null;
       }),
+    // Active sitewide promotion — same source as the homepage Buy buttons.
+    storefront
+      .query(SITEWIDE_PROMOTIONS_QUERY, {cache: storefront.CacheShort()})
+      .catch((error: Error) => {
+        console.error('sitewide_promotion fetch failed', error);
+        return null;
+      }),
   ]);
 
   const node = (siteBannerData as {metaobjects?: {nodes?: any[]}} | null)
@@ -149,7 +161,12 @@ async function loadCriticalData({context}: Route.LoaderArgs) {
     ? {enabled: node.enabled?.value === 'true', text: (node.text?.value ?? '').trim()}
     : null;
 
-  return {header, siteBanner};
+  // While a scheduled promotion is live, the banner states that offer, so it
+  // always matches the code applied at checkout.
+  const promotion = getActiveSitewidePromotion(promotionData);
+  const promotionBanner = promotion ? promotionBannerText(promotion) : null;
+
+  return {header, siteBanner, promotionBanner};
 }
 
 /**
