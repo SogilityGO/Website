@@ -449,6 +449,7 @@ function PartnerPricing({
         <Heading
           kicker={audience.pricingLabel}
           title="Choose the right setup for your player."
+          singleLineDesktop
           copy="Every setup includes ReboundIQ, Impact Lights, and the SogilityGO app. Choose based on your space and preferred number of return angles."
           center
         />
