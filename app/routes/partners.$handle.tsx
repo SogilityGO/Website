@@ -28,7 +28,11 @@ export const links: LinksFunction = () => [
 export const meta: Route.MetaFunction = ({data, params}) => {
   const name = data?.partner?.name ?? 'Partner';
   return [
-    ...pageMeta(`SogilityGO × ${name}`, `Explore the SogilityGO training offer for ${name}. Compare ReboundIQ setups, Impact Lights, and guided app training for practice between sessions.`, `https://my.sogilitygo.com/partners/${params.handle}`),
+    ...pageMeta(
+      `SogilityGO × ${name}`,
+      `Explore the SogilityGO training offer for ${name}. Compare ReboundIQ setups, Impact Lights, and guided app training for practice between sessions.`,
+      `https://my.sogilitygo.com/partners/${params.handle}`,
+    ),
     // Near-duplicate campaign pages intentionally stay out of organic search.
     {name: 'robots', content: 'noindex, follow'},
   ];
@@ -41,19 +45,21 @@ const PRICING_HANDLES = {
 };
 
 const PARTNER_TIERS_QUERY = `#graphql
-  fragment TierVariant on Product {
+  fragment PartnerTierVariant on Product {
     availableForSale
     variants(first: 1) {
       nodes {
         id
+        price { amount currencyCode }
+        compareAtPrice { amount currencyCode }
         availableForSale
       }
     }
   }
   query PartnerTiers($starter: String!, $advanced: String!, $pro: String!) {
-    Starter: product(handle: $starter) { ...TierVariant }
-    Advanced: product(handle: $advanced) { ...TierVariant }
-    Pro: product(handle: $pro) { ...TierVariant }
+    Starter: product(handle: $starter) { ...PartnerTierVariant }
+    Advanced: product(handle: $advanced) { ...PartnerTierVariant }
+    Pro: product(handle: $pro) { ...PartnerTierVariant }
   }
 ` as const;
 
@@ -152,6 +158,14 @@ export async function loader({context, params}: Route.LoaderArgs) {
       if (!variant?.id) return undefined;
       return {
         variantId: String(variant.id).split('/').pop()!,
+        priceCents:
+          variant.price?.currencyCode === 'USD'
+            ? Math.round(Number(variant.price.amount) * 100)
+            : undefined,
+        compareAtPriceCents:
+          variant.compareAtPrice?.currencyCode === 'USD'
+            ? Math.round(Number(variant.compareAtPrice.amount) * 100)
+            : undefined,
         available: Boolean(
           product.availableForSale && variant.availableForSale,
         ),
