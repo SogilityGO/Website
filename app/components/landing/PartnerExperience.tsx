@@ -619,6 +619,7 @@ function PlayerProof() {
           kicker="Real players. Real training."
           title="Players in action."
           copy="Hear from players and parents using SogilityGO between organized sessions."
+          center
           light
         />
         <div className="mt-9 grid gap-6 lg:grid-cols-[0.62fr_1.38fr]">
