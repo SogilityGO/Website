@@ -3,7 +3,7 @@ import {
   getPartnerDiscountPercentage,
   getPartnerPrice,
 } from '~/lib/partner-pricing';
-import type {ReactNode} from 'react';
+import {useEffect, useState, type ReactNode} from 'react';
 import {useSearchParams} from 'react-router';
 import {getPartnerAudienceCopy, type PartnerData} from '~/data/partners';
 import {buildPartnerCheckoutHref} from '~/lib/partner-attribution';
@@ -204,7 +204,7 @@ function Heading({
     >
       <Kicker>{kicker}</Kicker>
       <h2
-        className={`mt-3 text-[38px] font-black leading-[0.98] tracking-[-0.045em] sm:text-[46px] ${singleLineDesktop ? 'lg:whitespace-nowrap lg:text-[clamp(44px,4.4vw,56px)]' : 'lg:text-[56px]'} ${
+        className={`mt-3 text-[28px] font-black leading-[1.12] tracking-[-0.045em] min-[1025px]:text-[46px] ${singleLineDesktop ? 'lg:whitespace-nowrap lg:text-[clamp(44px,4.4vw,56px)]' : 'lg:text-[56px]'} ${
           light ? 'text-white' : 'text-[#202333]'
         }`}
       >
@@ -303,6 +303,41 @@ export function PartnerExperience({
   );
 }
 
+function CompactDetails({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  const [desktop, setDesktop] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 1025px)');
+    const update = () => {
+      setDesktop(media.matches);
+      setOpen(media.matches);
+    };
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+  return (
+    <details
+      open={desktop || open}
+      onToggle={(event) => {
+        if (!desktop) setOpen(event.currentTarget.open);
+      }}
+      className="group mt-4 rounded-xl border border-current/20 p-4 min-[1025px]:mt-0 min-[1025px]:border-0 min-[1025px]:p-0"
+    >
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 text-[18px] font-black after:text-sogility after:content-['+'] group-open:after:content-['−'] min-[1025px]:hidden">
+        {title}
+      </summary>
+      {children}
+    </details>
+  );
+}
+
 function HowItWorks() {
   return (
     <section id="how-it-works" className="scroll-mt-20 py-8 lg:py-10">
@@ -315,30 +350,30 @@ function HowItWorks() {
           center
         />
 
-        <div className="mt-6 grid gap-5 lg:grid-cols-3">
+        <div className="mt-6 grid gap-[22px] min-[1025px]:grid-cols-3">
           {SYSTEMS.map((system) => (
             <article
               key={system.id}
               id={system.id}
-              className="scroll-mt-24 overflow-hidden rounded-[24px] border border-[#dfe0d9] bg-white p-6 shadow-[0_18px_45px_rgba(31,34,49,0.07)]"
+              className="max-[1024px]:grid max-[1024px]:grid-cols-[96px_minmax(0,1fr)] max-[1024px]:gap-x-3 max-[1024px]:border-0 max-[1024px]:bg-transparent max-[1024px]:p-0 max-[1024px]:shadow-none scroll-mt-24 overflow-hidden rounded-[24px] border border-[#dfe0d9] bg-white p-6 shadow-[0_18px_45px_rgba(31,34,49,0.07)]"
             >
-              <div className="flex items-start justify-center">
+              <div className="hidden min-[1025px]:flex items-start justify-center">
                 <span className="rounded-full bg-sogility/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#247d25]">
                   Connected system
                 </span>
               </div>
-              <div className="mt-3 flex h-[200px] items-center justify-center rounded-[20px] bg-[radial-gradient(circle_at_center,rgba(48,190,45,0.14),transparent_60%)]">
+              <div className="max-[1024px]:row-span-2 max-[1024px]:m-0 max-[1024px]:h-24 mt-3 flex h-[200px] items-center justify-center rounded-[20px] bg-[radial-gradient(circle_at_center,rgba(48,190,45,0.14),transparent_60%)]">
                 <img
                   src={system.image}
                   alt={system.name}
-                  className={system.imageClass}
+                  className={`${system.imageClass} max-[1024px]:max-h-24 max-[1024px]:object-contain`}
                   loading="lazy"
                 />
               </div>
-              <h3 className="mt-5 text-center text-[29px] font-black tracking-[-0.035em] text-[#202333]">
+              <h3 className="max-[1024px]:m-0 max-[1024px]:self-end max-[1024px]:text-left max-[1024px]:text-[20px] mt-5 text-center text-[29px] font-black tracking-[-0.035em] text-[#202333]">
                 {system.name}
               </h3>
-              <p className="mt-3 text-[16px] leading-[1.6] text-[#656977]">
+              <p className="max-[1024px]:mt-1 max-[1024px]:text-[14px] mt-3 text-[16px] leading-[1.6] text-[#656977]">
                 {system.copy}
               </p>
             </article>
@@ -643,36 +678,40 @@ function PartnerPricing({
           })}
         </div>
 
-        <div className="mt-7 grid overflow-hidden rounded-[22px] border border-[#dfe0d9] lg:grid-cols-2">
-          <div className="bg-[#f7f6ef] p-6 lg:p-8">
-            <Kicker>Included with every setup</Kicker>
-            <h3 className="mt-2 text-[24px] font-black">Free SogilityGO app</h3>
-            <p className="mt-2 text-[15px] leading-[1.6] text-[#656977]">
-              Connect the Impact Lights and access a selection of drills. No
-              subscription required.
-            </p>
-          </div>
-          <div className="bg-[#202333] p-6 text-white lg:p-8">
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <Kicker>Optional upgrade</Kicker>
-                <h3 className="mt-2 text-[24px] font-black">
-                  SogilityGO Coach
-                </h3>
-              </div>
-              <strong className="text-[18px] text-sogility">
-                $9.99/month{' '}
-                <small className="block text-[11px] font-semibold text-white/60">
-                  or $99.99/year
-                </small>
-              </strong>
+        <CompactDetails title="Free app & optional Coach">
+          <div className="mt-7 grid overflow-hidden rounded-[22px] border border-[#dfe0d9] lg:grid-cols-2">
+            <div className="bg-[#f7f6ef] p-6 lg:p-8">
+              <Kicker>Included with every setup</Kicker>
+              <h3 className="mt-2 text-[24px] font-black">
+                Free SogilityGO app
+              </h3>
+              <p className="mt-2 text-[15px] leading-[1.6] text-[#656977]">
+                Connect the Impact Lights and access a selection of drills. No
+                subscription required.
+              </p>
             </div>
-            <p className="mt-3 text-[15px] leading-[1.6] text-white/70">
-              Unlock guided plans, the full activity library, progress tracking,
-              and up to five player profiles.
-            </p>
+            <div className="bg-[#202333] p-6 text-white lg:p-8">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <Kicker>Optional upgrade</Kicker>
+                  <h3 className="mt-2 text-[24px] font-black">
+                    SogilityGO Coach
+                  </h3>
+                </div>
+                <strong className="text-[18px] text-sogility">
+                  $9.99/month{' '}
+                  <small className="block text-[11px] font-semibold text-white/60">
+                    or $99.99/year
+                  </small>
+                </strong>
+              </div>
+              <p className="mt-3 text-[15px] leading-[1.6] text-white/70">
+                Unlock guided plans, the full activity library, progress
+                tracking, and up to five player profiles.
+              </p>
+            </div>
           </div>
-        </div>
+        </CompactDetails>
       </div>
     </section>
   );
@@ -717,71 +756,70 @@ function PlayerProof() {
           center
           light
         />
-        <div className="mt-6 grid gap-6 lg:grid-cols-[0.62fr_1.38fr]">
-          <article className="mx-auto w-full max-w-[400px] overflow-hidden rounded-[24px] border border-white/15 bg-[#202333]">
-            <video
-              className="aspect-[9/16] w-full object-contain"
-              controls
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
-              poster="/landing/hero-1920.webp"
-              aria-label="SogilityGO player training story"
-            >
-              <source
-                src="https://cdn.shopify.com/videos/c/o/v/957532ac62a94a25998792a5a2f4b17a.mp4"
-                type="video/mp4"
-              />
-            </video>
-            <div className="p-6">
-              <span className="inline-block rounded-full bg-sogility px-3 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-[#202333]">
-                Player story
-              </span>
-              <div>
-                <blockquote className="text-[32px] font-black leading-[1.18] tracking-[-0.03em]">
-                  “It helps me with my weak foot.”
-                </blockquote>
-                <p className="mt-3 text-[13px] text-white/65">
-                  Sam, Noblesville United SC
-                </p>
+        <CompactDetails title="Watch & read player stories">
+          <div className="mt-6 grid gap-6 lg:grid-cols-[0.62fr_1.38fr]">
+            <article className="mx-auto w-full max-w-[400px] overflow-hidden rounded-[24px] border border-white/15 bg-[#202333]">
+              <video
+                className="aspect-[9/16] max-h-[360px] w-full object-contain min-[1025px]:max-h-none"
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                poster="/landing/hero-1920.webp"
+                aria-label="SogilityGO player training story"
+              >
+                <source
+                  src="https://cdn.shopify.com/videos/c/o/v/957532ac62a94a25998792a5a2f4b17a.mp4"
+                  type="video/mp4"
+                />
+              </video>
+              <div className="p-6">
+                <span className="inline-block rounded-full bg-sogility px-3 py-2 text-[10px] font-black uppercase tracking-[0.1em] text-[#202333]">
+                  Player story
+                </span>
+                <div>
+                  <blockquote className="text-[32px] font-black leading-[1.18] tracking-[-0.03em]">
+                    “It helps me with my weak foot.”
+                  </blockquote>
+                  <p className="mt-3 text-[13px] text-white/65">
+                    Sam, Noblesville United SC
+                  </p>
+                </div>
+              </div>
+            </article>
+            <div className="flex flex-col rounded-[24px] border border-white/15 bg-white/[0.055] p-6 lg:p-8">
+              <Kicker>Player + parent reviews</Kicker>
+              <h3 className="mt-2 text-[28px] font-black leading-tight">
+                What families and players say about SogilityGO
+              </h3>
+              <div className="mt-4 divide-y divide-white/15">
+                {[
+                  [
+                    'My son has always wanted to train more, but he needed structure. SogilityGO gives him a clear plan and helps him make the most of his time between team practices.',
+                    'Kevin, Soccer Parent',
+                  ],
+                  [
+                    'The lights keep me reacting, and the app tells me exactly what to work on. It makes every session feel different and keeps me motivated.',
+                    'Hagan, St. Louis Scott Gallagher SC',
+                  ],
+                  [
+                    'Quality repetitions outside of organized practice can make a meaningful difference. SogilityGO gives players structure and encourages them to take ownership of their development.',
+                    'Todd, Soccer Coach',
+                  ],
+                ].map(([quote, author]) => (
+                  <div key={author} className="py-4 lg:py-6">
+                    <blockquote className="text-[18px] font-bold leading-[1.45] lg:text-[21px]">
+                      “{quote}”
+                    </blockquote>
+                    <p className="mt-3 text-[13px] text-white/60">{author}</p>
+                  </div>
+                ))}
               </div>
             </div>
-          </article>
-          <div className="flex flex-col rounded-[24px] border border-white/15 bg-white/[0.055] p-6 lg:p-8">
-            <Kicker>Player + parent reviews</Kicker>
-            <h3 className="mt-2 text-[28px] font-black leading-tight">
-              What families and players say about SogilityGO
-            </h3>
-            <div className="mt-4 divide-y divide-white/15">
-              {[
-                [
-                  'My son has always wanted to train more, but he needed structure. SogilityGO gives him a clear plan and helps him make the most of his time between team practices.',
-                  'Kevin, Soccer Parent',
-                ],
-                [
-                  'The lights keep me reacting, and the app tells me exactly what to work on. It makes every session feel different and keeps me motivated.',
-                  'Hagan, St. Louis Scott Gallagher SC',
-                ],
-                [
-                  'Quality repetitions outside of organized practice can make a meaningful difference. SogilityGO gives players structure and encourages them to take ownership of their development.',
-                  'Todd, Soccer Coach',
-                ],
-              ].map(([quote, author], index) => (
-                <div
-                  key={author}
-                  className={`${index > 0 ? 'hidden lg:block ' : ''}py-6`}
-                >
-                  <blockquote className="text-[18px] font-bold leading-[1.45] lg:text-[21px]">
-                    “{quote}”
-                  </blockquote>
-                  <p className="mt-3 text-[13px] text-white/60">{author}</p>
-                </div>
-              ))}
-            </div>
           </div>
-        </div>
+        </CompactDetails>
       </div>
     </section>
   );
@@ -807,43 +845,50 @@ function Comparison({partner}: {partner: PartnerData}) {
           copy="A standard rebounder returns the ball. SogilityGO combines ball return, visual decision cues, free app connectivity, and optional coaching tools in one connected system."
           center
         />
-        <div className="mt-6 overflow-x-auto rounded-[24px] border border-[#dfe0d9] bg-white shadow-[0_18px_45px_rgba(31,34,49,0.07)]">
-          <div className="min-w-[680px]">
-            <div className="grid grid-cols-[1.55fr_0.72fr_0.72fr] items-center bg-[#202333] font-black text-white">
-              <div className="p-5">Training feature</div>
-              <div className="p-5 text-center">Standard rebounder</div>
-              <div className="h-full bg-sogility/10 p-5 text-center text-sogility">
-                SogilityGO
+        <CompactDetails title="Compare training features">
+          <div className="mt-6 overflow-x-auto rounded-[24px] border border-[#dfe0d9] bg-white shadow-[0_18px_45px_rgba(31,34,49,0.07)]">
+            <div className="min-w-0 min-[1025px]:min-w-[680px]">
+              <div className="grid grid-cols-[1.55fr_0.72fr_0.72fr] items-center bg-[#202333] font-black text-white">
+                <div className="p-2 text-[12px] min-[1025px]:p-5 min-[1025px]:text-base">
+                  Training feature
+                </div>
+                <div className="p-2 text-center text-[11px] min-[1025px]:p-5 min-[1025px]:text-base">
+                  Standard rebounder
+                </div>
+                <div className="h-full bg-sogility/10 p-2 text-[11px] min-[1025px]:p-5 min-[1025px]:text-base text-center text-sogility">
+                  SogilityGO
+                </div>
               </div>
+              {COMPARISON.map(([title, copy, standard]) => (
+                <div
+                  key={title}
+                  className="grid min-h-[72px] grid-cols-[1.55fr_0.72fr_0.72fr] items-center border-t border-[#dfe0d9]"
+                >
+                  <div className="p-2 min-[1025px]:p-4 lg:px-6">
+                    <strong className="block text-[15px]">{title}</strong>
+                    <small className="mt-1 block text-[12px] text-[#656977]">
+                      {copy}
+                    </small>
+                  </div>
+                  <div className="p-4 text-center">
+                    <Status included={standard} />
+                  </div>
+                  <div className="grid h-full place-items-center bg-sogility/[0.055] p-4">
+                    <Status included />
+                  </div>
+                </div>
+              ))}
             </div>
-            {COMPARISON.map(([title, copy, standard]) => (
-              <div
-                key={title}
-                className="grid min-h-[72px] grid-cols-[1.55fr_0.72fr_0.72fr] items-center border-t border-[#dfe0d9]"
-              >
-                <div className="p-4 lg:px-6">
-                  <strong className="block text-[15px]">{title}</strong>
-                  <small className="mt-1 block text-[12px] text-[#656977]">
-                    {copy}
-                  </small>
-                </div>
-                <div className="p-4 text-center">
-                  <Status included={standard} />
-                </div>
-                <div className="grid h-full place-items-center bg-sogility/[0.055] p-4">
-                  <Status included />
-                </div>
-              </div>
-            ))}
           </div>
-        </div>
-        <p className="mx-auto mt-4 max-w-[820px] text-center text-[12px] leading-[1.55] text-[#656977]">
-          <strong className="block text-[#202333]">
-            *Available with the optional SogilityGO Coach subscription.
-          </strong>{' '}
-          Unlocks guided activities, personalized plans, the full activity
-          library, progress tracking, and up to five player profiles.
-        </p>
+          <p className="mx-auto mt-4 max-w-[820px] text-center text-[12px] leading-[1.55] text-[#656977]">
+            <strong className="block text-[#202333]">
+              *Available with the optional SogilityGO Coach subscription.
+            </strong>{' '}
+            Unlocks guided activities, personalized plans, the full activity
+            library, progress tracking, and up to five player profiles.
+          </p>
+        </CompactDetails>
+
         <div className="mt-6 text-center">
           <a
             href="#start-training"
@@ -871,7 +916,19 @@ function RepLoop() {
           center
           light
         />
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="min-[1025px]:hidden">
+          {REP_LOOP.map((step) => (
+            <CompactDetails
+              key={step.number}
+              title={`${step.number}. ${step.title}`}
+            >
+              <p className="pt-3 text-[14px] leading-relaxed text-white/70">
+                {step.copy}
+              </p>
+            </CompactDetails>
+          ))}
+        </div>
+        <div className="mt-6 hidden gap-4 min-[1025px]:grid min-[1025px]:grid-cols-4">
           {REP_LOOP.map((step) => (
             <article
               key={step.number}
@@ -895,7 +952,7 @@ function RepLoop() {
             </article>
           ))}
         </div>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-[18px] border border-sogility/25 bg-sogility/[0.07] px-5 py-4 text-center text-[12px] font-black uppercase tracking-[0.05em]">
+        <div className="mt-5 hidden min-[1025px]:flex flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-[18px] border border-sogility/25 bg-sogility/[0.07] px-5 py-4 text-center text-[12px] font-black uppercase tracking-[0.05em]">
           {[
             'Follow the session',
             'Read the cue',
@@ -961,44 +1018,46 @@ function OwnerMessage() {
         </div>
         <h2
           id="partner-owner-heading"
-          className="mx-auto mt-3 max-w-[900px] text-center text-[38px] font-black italic leading-[0.98] tracking-[-0.045em] text-sogility sm:text-[48px] lg:max-w-none lg:whitespace-nowrap lg:text-[clamp(40px,4vw,52px)]"
+          className="mx-auto mt-3 max-w-[900px] text-center text-[28px] font-black italic leading-[0.98] tracking-[-0.045em] text-sogility min-[1025px]:text-[48px] lg:max-w-none lg:whitespace-nowrap lg:text-[clamp(40px,4vw,52px)]"
         >
           What separates good players from elite
         </h2>
-        <div className="mt-5 grid items-center gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
-          <figure className="overflow-hidden rounded-[24px] bg-[#202333] shadow-[0_18px_45px_rgba(31,34,49,0.13)]">
-            <img
-              src="/landing/owner/jozy.webp"
-              alt="Jozy Altidore, SogilityGO co-founder and former USMNT striker"
-              className="aspect-[1.5/1] w-full object-cover"
-              loading="lazy"
-            />
-          </figure>
-          <div className="text-center">
-            <blockquote className="text-left text-[18px] leading-[1.55] lg:text-[20px]">
-              “I built SogilityGO to give players a better way to use the hours
-              away from the team. It combines purposeful touches with guidance
-              and feedback, helping players train with confidence and arrive at
-              the next session ready to keep learning.”
-            </blockquote>
-            <img
-              src="/landing/owner/jozy-sig.svg"
-              alt=""
-              className="mx-auto mt-6 w-[95px]"
-              loading="lazy"
-            />
-            <p className="mt-2 text-[19px] font-black text-sogility">
-              Jozy Altidore
-            </p>
-            <p className="mt-1 text-[14px] font-bold">
-              Former USMNT Striker &amp; Co-founder, SogilityGO
-            </p>
-            <p className="mt-1 text-[13px] text-[#656977]">
-              115 Caps for the USMNT | Professional Career across the Premier
-              League, Europe &amp; MLS
-            </p>
+        <CompactDetails title="Read Jozy’s message">
+          <div className="mt-5 grid items-center gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-8">
+            <figure className="overflow-hidden rounded-[24px] bg-[#202333] shadow-[0_18px_45px_rgba(31,34,49,0.13)]">
+              <img
+                src="/landing/owner/jozy.webp"
+                alt="Jozy Altidore, SogilityGO co-founder and former USMNT striker"
+                className="aspect-[1.5/1] w-full object-cover"
+                loading="lazy"
+              />
+            </figure>
+            <div className="text-center">
+              <blockquote className="text-left text-[18px] leading-[1.55] lg:text-[20px]">
+                “I built SogilityGO to give players a better way to use the
+                hours away from the team. It combines purposeful touches with
+                guidance and feedback, helping players train with confidence and
+                arrive at the next session ready to keep learning.”
+              </blockquote>
+              <img
+                src="/landing/owner/jozy-sig.svg"
+                alt=""
+                className="mx-auto mt-6 w-[95px]"
+                loading="lazy"
+              />
+              <p className="mt-2 text-[19px] font-black text-sogility">
+                Jozy Altidore
+              </p>
+              <p className="mt-1 text-[14px] font-bold">
+                Former USMNT Striker &amp; Co-founder, SogilityGO
+              </p>
+              <p className="mt-1 text-[13px] text-[#656977]">
+                115 Caps for the USMNT | Professional Career across the Premier
+                League, Europe &amp; MLS
+              </p>
+            </div>
           </div>
-        </div>
+        </CompactDetails>
       </div>
     </section>
   );
@@ -1060,12 +1119,12 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
           light
         />
         <div className="mt-6 grid items-start gap-3 lg:grid-cols-2">
-          {columns.map((column, columnIndex) => (
+          {columns.map((column) => (
             <div key={column.key} className="grid gap-3">
-              {column.items.map(([question, answer], index) => (
+              {column.items.map(([question, answer]) => (
                 <details
                   key={question}
-                  open={columnIndex === 0 && index === 0}
+
                   className="group overflow-hidden rounded-[18px] border border-white/15 bg-white text-[#202333]"
                 >
                   <summary className="relative cursor-pointer list-none px-5 py-[18px] pr-14 text-[17px] font-black leading-[1.35] after:absolute after:right-[18px] after:top-1/2 after:grid after:h-7 after:w-7 after:-translate-y-1/2 after:place-items-center after:rounded-full after:bg-sogility after:text-[18px] after:font-black after:content-['+'] group-open:after:content-['−']">
@@ -1094,7 +1153,7 @@ export function PartnerLandingFooter() {
             GO
           </span>
         </div>
-        <div className="mt-6 grid gap-9 lg:grid-cols-[1.4fr_0.8fr_0.8fr_1fr]">
+        <div className="mt-6 grid gap-3 min-[1025px]:gap-9 min-[1025px]:grid-cols-[1.4fr_0.8fr_0.8fr_1fr]">
           <div>
             <p className="max-w-[360px] text-[17px] leading-[1.65] text-[#515562]">
               SogilityGO ReboundIQ setups connect to the SogilityGO app, giving
@@ -1182,21 +1241,23 @@ function FooterLinks({
 }) {
   return (
     <nav>
-      <h2 className="font-black">{title}</h2>
-      <ul className="mt-3 space-y-2 text-[14px] text-[#515562]">
-        {links.map(([label, href]) => (
-          <li key={label}>
-            <a
-              href={href}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:underline"
-            >
-              {label}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <CompactDetails title={title}>
+        <h2 className="hidden min-[1025px]:block font-black">{title}</h2>
+        <ul className="mt-3 space-y-2 text-[14px] text-[#515562]">
+          {links.map(([label, href]) => (
+            <li key={label}>
+              <a
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:underline"
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </CompactDetails>
     </nav>
   );
 }
