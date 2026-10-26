@@ -768,17 +768,13 @@ function RepLoop() {
       className="scroll-mt-20 bg-[#202333] py-14 text-white lg:py-16"
     >
       <div className={WRAP}>
-        <div className="grid gap-5 lg:grid-cols-[1fr_0.8fr] lg:items-end">
-          <Heading
-            kicker="What one rep looks like"
-            title="Read. React. Decide. Repeat."
-            light
-          />
-          <p className="text-[16px] leading-[1.65] text-white/70">
-            Follow the session, read the cue, receive the return, and use the
-            feedback to adjust the next rep.
-          </p>
-        </div>
+        <Heading
+          kicker="What one rep looks like"
+          title="Read. React. Decide. Repeat."
+          copy="Follow the session, read the cue, receive the return, and use the feedback to adjust the next rep."
+          center
+          light
+        />
         <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {REP_LOOP.map((step) => (
             <article
