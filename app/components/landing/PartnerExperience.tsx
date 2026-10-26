@@ -189,20 +189,22 @@ function Heading({
   copy,
   center = false,
   light = false,
+  singleLineDesktop = false,
 }: {
   kicker: string;
   title: string;
   copy?: string;
   center?: boolean;
   light?: boolean;
+  singleLineDesktop?: boolean;
 }) {
   return (
     <div
-      className={center ? 'mx-auto max-w-[820px] text-center' : 'max-w-[820px]'}
+      className={`${center ? 'mx-auto text-center' : ''} ${singleLineDesktop ? 'max-w-none' : 'max-w-[820px]'}`}
     >
       <Kicker>{kicker}</Kicker>
       <h2
-        className={`mt-3 text-[38px] font-black leading-[0.98] tracking-[-0.045em] sm:text-[46px] lg:text-[56px] ${
+        className={`mt-3 text-[38px] font-black leading-[0.98] tracking-[-0.045em] sm:text-[46px] ${singleLineDesktop ? 'lg:whitespace-nowrap lg:text-[clamp(44px,4.4vw,56px)]' : 'lg:text-[56px]'} ${
           light ? 'text-white' : 'text-[#202333]'
         }`}
       >
@@ -308,6 +310,7 @@ function HowItWorks() {
         <Heading
           kicker="How it works"
           title="Three parts. One purposeful session."
+          singleLineDesktop
           copy="ReboundIQ, Impact Light, and the SogilityGO app turn each rep into one connected training session."
           center
         />
