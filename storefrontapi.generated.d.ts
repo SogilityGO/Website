@@ -1282,7 +1282,81 @@ export type PredictiveSearchQuery = {
   }>;
 };
 
+export type PartnerTierVariantFragment = Pick<
+  StorefrontAPI.Product,
+  'availableForSale'
+> & {
+  variants: {
+    nodes: Array<
+      Pick<StorefrontAPI.ProductVariant, 'id' | 'availableForSale'> & {
+        price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+        compareAtPrice?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
+        >;
+      }
+    >;
+  };
+};
+
+
+export type PartnerTiersQueryVariables = StorefrontAPI.Exact<{
+  starter: StorefrontAPI.Scalars['String']['input'];
+  advanced: StorefrontAPI.Scalars['String']['input'];
+  pro: StorefrontAPI.Scalars['String']['input'];
+}>;
+
+
+export type PartnerTiersQuery = {
+  Starter?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Product, 'availableForSale'> & {
+      variants: {
+        nodes: Array<
+          Pick<StorefrontAPI.ProductVariant, 'id' | 'availableForSale'> & {
+            price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+            compareAtPrice?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
+            >;
+          }
+        >;
+      };
+    }
+  >;
+  Advanced?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Product, 'availableForSale'> & {
+      variants: {
+        nodes: Array<
+          Pick<StorefrontAPI.ProductVariant, 'id' | 'availableForSale'> & {
+            price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+            compareAtPrice?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
+            >;
+          }
+        >;
+      };
+    }
+  >;
+  Pro?: StorefrontAPI.Maybe<
+    Pick<StorefrontAPI.Product, 'availableForSale'> & {
+      variants: {
+        nodes: Array<
+          Pick<StorefrontAPI.ProductVariant, 'id' | 'availableForSale'> & {
+            price: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
+            compareAtPrice?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>
+            >;
+          }
+        >;
+      };
+    }
+  >;
+};
+
+
 interface GeneratedQueryTypes {
+  '#graphql\n  fragment PartnerTierVariant on Product {\n    availableForSale\n    variants(first: 1) {\n      nodes {\n        id\n        price { amount currencyCode }\n        compareAtPrice { amount currencyCode }\n        availableForSale\n      }\n    }\n  }\n  query PartnerTiers($starter: String!, $advanced: String!, $pro: String!) {\n    Starter: product(handle: $starter) { ...PartnerTierVariant }\n    Advanced: product(handle: $advanced) { ...PartnerTierVariant }\n    Pro: product(handle: $pro) { ...PartnerTierVariant }\n  }\n': {
+    return: PartnerTiersQuery;
+    variables: PartnerTiersQueryVariables;
+  };
   '#graphql\n  query ArticlePaths($after: String) {\n    articles(first: 250, after: $after) {\n      nodes { handle blog { handle } }\n      pageInfo { hasNextPage endCursor }\n    }\n  }\n': {
     return: ArticlePathsQuery;
     variables: ArticlePathsQueryVariables;
