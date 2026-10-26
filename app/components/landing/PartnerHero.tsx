@@ -105,7 +105,7 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
     <section className="relative overflow-hidden bg-[radial-gradient(circle_at_14%_8%,rgba(48,190,45,0.18),transparent_32%),linear-gradient(135deg,#1c2030_0%,#252a3c_60%,#181b28_100%)] text-white">
       <div className="pointer-events-none absolute -bottom-[260px] -right-[260px] h-[520px] w-[520px] rounded-full border-[90px] border-sogility/10" />
 
-      <div className="relative mx-auto grid w-[calc(100%-2rem)] max-w-[1180px] grid-cols-1 gap-11 pb-[52px] pt-9 lg:min-h-[540px] lg:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)] lg:items-center lg:gap-14 lg:py-12">
+      <div className="relative mx-auto grid w-[calc(100%-2rem)] max-w-[1180px] grid-cols-1 gap-7 pb-8 pt-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(420px,0.92fr)] lg:items-center lg:gap-10 lg:py-8">
         <div className="min-w-0">
           <CoBrand partner={partner} />
           <p className="mt-5 text-[12px] font-black uppercase leading-[1.3] tracking-[0.11em] text-sogility lg:mt-6">

@@ -305,7 +305,7 @@ export function PartnerExperience({
 
 function HowItWorks() {
   return (
-    <section id="how-it-works" className="scroll-mt-20 py-16 lg:py-20">
+    <section id="how-it-works" className="scroll-mt-20 py-8 lg:py-10">
       <div className={WRAP}>
         <Heading
           kicker="How it works"
@@ -315,7 +315,7 @@ function HowItWorks() {
           center
         />
 
-        <div className="mt-10 grid gap-5 lg:grid-cols-3">
+        <div className="mt-6 grid gap-5 lg:grid-cols-3">
           {SYSTEMS.map((system) => (
             <article
               key={system.id}
@@ -443,7 +443,7 @@ function PartnerPricing({
   return (
     <section
       id="start-training"
-      className="scroll-mt-20 bg-white py-16 lg:py-20"
+      className="scroll-mt-20 bg-white py-8 lg:py-10"
     >
       <div className={WRAP}>
         <Heading
@@ -500,7 +500,7 @@ function PartnerPricing({
                     <p className="mt-3 lg:min-h-[76px] text-center text-[15px] leading-[1.6] text-[#656977]">
                       {tier.copy}
                     </p>
-                    <div className="mt-4 grid lg:min-h-[142px] content-start justify-items-center gap-2 text-center">
+                    <div className="mt-4 grid lg:min-h-[120px] content-start justify-items-center gap-2 text-center">
                       {regularPriceCents > memberPriceCents ? (
                         <s className="text-[22px] font-black leading-none tracking-[-0.035em] text-[#777b87] decoration-[#d7192d] decoration-[4px] [text-decoration-skip-ink:none]">
                           {formatPartnerPrice(regularPriceCents)}
@@ -612,7 +612,7 @@ function PlayerProof() {
   return (
     <section
       id="reviews"
-      className="scroll-mt-20 bg-[#202333] py-16 text-white lg:py-20"
+      className="scroll-mt-20 bg-[#202333] py-8 text-white lg:py-10"
     >
       <div className={WRAP}>
         <Heading
@@ -622,7 +622,7 @@ function PlayerProof() {
           center
           light
         />
-        <div className="mt-9 grid gap-6 lg:grid-cols-[0.62fr_1.38fr]">
+        <div className="mt-6 grid gap-6 lg:grid-cols-[0.62fr_1.38fr]">
           <article className="mx-auto w-full max-w-[400px] overflow-hidden rounded-[24px] border border-white/15 bg-[#202333]">
             <video
               className="aspect-[9/16] w-full object-contain"
@@ -704,7 +704,7 @@ function Status({included}: {included: boolean}) {
 
 function Comparison({partner}: {partner: PartnerData}) {
   return (
-    <section className="py-14 lg:py-16">
+    <section className="py-8 lg:py-10">
       <div className={WRAP}>
         <Heading
           kicker="Why SogilityGO?"
@@ -712,7 +712,7 @@ function Comparison({partner}: {partner: PartnerData}) {
           copy="A standard rebounder returns the ball. SogilityGO combines ball return, visual decision cues, free app connectivity, and optional coaching tools in one connected system."
           center
         />
-        <div className="mt-8 overflow-x-auto rounded-[24px] border border-[#dfe0d9] bg-white shadow-[0_18px_45px_rgba(31,34,49,0.07)]">
+        <div className="mt-6 overflow-x-auto rounded-[24px] border border-[#dfe0d9] bg-white shadow-[0_18px_45px_rgba(31,34,49,0.07)]">
           <div className="min-w-[680px]">
             <div className="grid grid-cols-[1.55fr_0.72fr_0.72fr] items-center bg-[#202333] font-black text-white">
               <div className="p-5">Training feature</div>
@@ -766,7 +766,7 @@ function RepLoop() {
   return (
     <section
       id="rep-loop"
-      className="scroll-mt-20 bg-[#202333] py-14 text-white lg:py-16"
+      className="scroll-mt-20 bg-[#202333] py-8 text-white lg:py-10"
     >
       <div className={WRAP}>
         <Heading
@@ -776,7 +776,7 @@ function RepLoop() {
           center
           light
         />
-        <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {REP_LOOP.map((step) => (
             <article
               key={step.number}
@@ -832,7 +832,7 @@ function Trust() {
     })),
   ];
   return (
-    <section className="overflow-hidden border-y border-[#dfe0d9] bg-white py-10">
+    <section className="overflow-hidden border-y border-[#dfe0d9] bg-white py-6">
       <p className="mb-6 text-center text-[12px] font-black uppercase tracking-[0.14em] text-[#656977]">
         Trusted across the soccer community
       </p>
@@ -952,7 +952,7 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
     {key: 'right', items: right},
   ];
   return (
-    <section id="faq" className="scroll-mt-20 bg-[#202333] py-16 text-white">
+    <section id="faq" className="scroll-mt-20 bg-[#202333] py-8 text-white lg:py-10">
       <div className={WRAP}>
         <Heading
           kicker="Questions parents ask"
@@ -961,7 +961,7 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
           center
           light
         />
-        <div className="mt-8 grid items-start gap-3 lg:grid-cols-2">
+        <div className="mt-6 grid items-start gap-3 lg:grid-cols-2">
           {columns.map((column, columnIndex) => (
             <div key={column.key} className="grid gap-3">
               {column.items.map(([question, answer], index) => (
@@ -988,7 +988,7 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
 
 export function PartnerLandingFooter() {
   return (
-    <footer className="border-t border-[#dfe0d9] bg-[#f7f6ef] py-12 text-[#202333] lg:py-14">
+    <footer className="border-t border-[#dfe0d9] bg-[#f7f6ef] py-8 text-[#202333] lg:py-10">
       <div className={WRAP}>
         <div className="flex items-center gap-2">
           <span className="text-xl font-black tracking-[0.2em]">SOGILITY</span>
@@ -996,7 +996,7 @@ export function PartnerLandingFooter() {
             GO
           </span>
         </div>
-        <div className="mt-8 grid gap-9 lg:grid-cols-[1.4fr_0.8fr_0.8fr_1fr]">
+        <div className="mt-6 grid gap-9 lg:grid-cols-[1.4fr_0.8fr_0.8fr_1fr]">
           <div>
             <p className="max-w-[360px] text-[17px] leading-[1.65] text-[#515562]">
               SogilityGO ReboundIQ setups connect to the SogilityGO app, giving
@@ -1056,7 +1056,7 @@ export function PartnerLandingFooter() {
             </a>
           </div>
         </div>
-        <div className="mt-10 flex flex-col gap-4 border-t border-[#dfe0d9] pt-6 text-[13px] text-[#656977] lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-6 flex flex-col gap-4 border-t border-[#dfe0d9] pt-6 text-[13px] text-[#656977] lg:flex-row lg:items-center lg:justify-between">
           <span>© 2026, SogilityGO®</span>
           <div className="flex flex-wrap gap-5">
             <a href="https://www.sogilitygo.com/policies/privacy-policy">
