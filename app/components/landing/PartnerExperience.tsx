@@ -504,11 +504,6 @@ function PartnerPricing({
                       ) : (
                         <span aria-hidden="true" className="h-[22px]" />
                       )}
-                      {percentage > 0 && (
-                        <span className="rounded-full bg-sogility/15 px-3 py-1 text-[11px] font-black uppercase tracking-[0.06em] text-[#247d25]">
-                          {percentage}% partner discount included
-                        </span>
-                      )}
                       <strong className="text-[46px] font-black leading-[0.95] tracking-[-0.04em] text-[#159f23]">
                         {formatPartnerPrice(memberPriceCents)}
                       </strong>
