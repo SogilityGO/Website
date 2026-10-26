@@ -954,17 +954,13 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
   return (
     <section id="faq" className="scroll-mt-20 bg-[#202333] py-16 text-white">
       <div className={WRAP}>
-        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end lg:gap-12">
-          <Heading
-            kicker="Questions parents ask"
-            title="Answers before checkout."
-            light
-          />
-          <p className="text-[16px] leading-[1.65] text-white/70">
-            Compare setups, see what is included, and understand how SogilityGO
-            supports work between organized sessions.
-          </p>
-        </div>
+        <Heading
+          kicker="Questions parents ask"
+          title="Answers before checkout."
+          copy="Compare setups, see what is included, and understand how SogilityGO supports work between organized sessions."
+          center
+          light
+        />
         <div className="mt-8 grid items-start gap-3 lg:grid-cols-2">
           {columns.map((column, columnIndex) => (
             <div key={column.key} className="grid gap-3">
