@@ -73,6 +73,20 @@ export function getPartnerLogoOverride(handle: string): string | undefined {
 }
 
 export function getPartnerAudienceCopy(partner: PartnerData) {
+  if (partner.handle === 'socchermom') {
+    return {
+      heroSubject: 'soccHERmom families',
+      exclusiveLabel: 'soccHERmom community exclusive',
+      pricingLabel: 'soccHERmom community offer',
+      offerSubject: 'The soccHERmom community',
+      fallbackOffer: 'Exclusive community pricing',
+      offerSentenceFallback: 'Community pricing',
+      viewPricing: 'View community pricing',
+      claimOffer: 'Claim community offer',
+      faqQuestion: 'How is the soccHERmom community offer applied?',
+      checkoutPeople: 'families',
+    };
+  }
   if (partner.audience) {
     return {
       heroSubject: partner.audience.plural,

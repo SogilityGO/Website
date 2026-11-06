@@ -13,6 +13,24 @@ const SYSTEM_PILLS = [
 
 /** Partner logo and SogilityGO co-branding. */
 function CoBrand({partner}: {partner: PartnerData}) {
+  if (partner.handle === 'socchermom' && partner.logo) {
+    return (
+      <div className="flex flex-col items-start gap-3">
+        <div className="w-[352px] max-w-full rounded-xl bg-white p-4">
+          <img
+            src={partner.logo}
+            alt={partner.logoAlt}
+            className="h-auto w-full object-contain"
+            fetchPriority="high"
+          />
+        </div>
+        <span className="text-sm font-extrabold tracking-[0.12em] text-white">
+          × SOGILITY
+          <span className="ml-1 rounded-full bg-sogility px-2 py-0.5">GO</span>
+        </span>
+      </div>
+    );
+  }
   return (
     <div className="flex min-h-11 items-center gap-3 lg:min-h-14 lg:gap-4">
       {partner.logo && (
@@ -118,9 +136,15 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
             <span className="block whitespace-nowrap">in the Backyard.</span>
           </h1>
           <p className="mt-[18px] max-w-[560px] text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
-            {audience.heroSubject} get connected at-home training with
-            ReboundIQ, Impact Light, and the free SogilityGO app. Build
-            purposeful reps between practices. No subscription required.
+            {partner.handle === 'socchermom' ? (
+              partner.body.join(' ')
+            ) : (
+              <>
+                {audience.heroSubject} get connected at-home training with
+                ReboundIQ, Impact Light, and the free SogilityGO app. Build
+                purposeful reps between practices. No subscription required.
+              </>
+            )}
           </p>
           <HeroActions partner={partner} />
           <div

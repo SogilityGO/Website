@@ -10,7 +10,7 @@ export function PartnerOffer({partner}: {partner: PartnerData}) {
     <section className="relative z-10 bg-[#f7f6ef] pb-2">
       <div className="mx-auto grid min-h-[96px] w-[calc(100%-2rem)] max-w-[960px] -translate-y-4 overflow-hidden rounded-2xl border border-[#202333]/10 border-l-[5px] border-l-sogility bg-white shadow-[0_20px_50px_rgba(28,31,43,0.15)] lg:-translate-y-5 lg:grid-cols-[minmax(0,1fr)_auto]">
         <div className="flex items-center gap-4 p-4 lg:px-6">
-          {partner.logo ? (
+          {partner.logo && partner.handle !== 'socchermom' ? (
             <img
               src={partner.logo}
               alt=""
