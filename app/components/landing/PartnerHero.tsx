@@ -15,8 +15,8 @@ const SYSTEM_PILLS = [
 function CoBrand({partner}: {partner: PartnerData}) {
   if (partner.handle === 'socchermom' && partner.logo) {
     return (
-      <div className="flex flex-col items-start gap-3">
-        <div className="w-[88px] max-w-full lg:w-[136px]">
+      <div className="flex flex-nowrap items-center gap-3 lg:gap-4">
+        <div className="w-[88px] shrink-0 lg:w-[136px]">
           <img
             src={partner.logo}
             alt={partner.logoAlt}
@@ -24,7 +24,7 @@ function CoBrand({partner}: {partner: PartnerData}) {
             fetchPriority="high"
           />
         </div>
-        <span className="text-sm font-extrabold tracking-[0.12em] text-white">
+        <span className="whitespace-nowrap text-sm font-extrabold tracking-[0.12em] text-white">
           × SOGILITY
           <span className="ml-1 rounded-full bg-sogility px-2 py-0.5">GO</span>
         </span>
