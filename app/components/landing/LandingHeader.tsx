@@ -3,9 +3,6 @@ import {Link, useMatches, useRouteLoaderData} from 'react-router';
 type PartnerBanner = {bannerMode?: 'hide' | 'replace'; bannerText?: string};
 type SiteBanner = {enabled: boolean; text: string} | null;
 
-/** Shown only until the Sogility team creates the `site_banner` metaobject. */
-const DEFAULT_BANNER_TEXT = 'Get 20% Off + Free Shipping (US). Use Code: WC26 🏆';
-
 /**
  * Landing header: centered logo + green promo strip below.
  * No nav items, so no mobile hamburger is needed.
@@ -13,9 +10,12 @@ const DEFAULT_BANNER_TEXT = 'Get 20% Off + Free Shipping (US). Use Code: WC26 �
  * Banner source:
  * - Partner pages (/partners/<handle>): hidden or replaced with the partner's own
  *   banner (keeps partner attribution clean).
- * - Everywhere else: the admin-editable `site_banner` metaobject (root loader) —
+ * - Everywhere else, while a `sitewide_promotion` is active: that promotion's
+ *   badge label + offer message, so the banner always names the code the Buy
+ *   buttons apply and switches automatically when the next promotion starts.
+ * - Otherwise: the admin-editable `site_banner` metaobject (root loader) —
  *   the team toggles it on/off and edits the text in Shopify admin, no deploy.
- * - If that metaobject doesn't exist yet: the built-in default below.
+ * - If neither exists: no banner (an old hard-coded code could have expired).
  */
 export function LandingHeader() {
   const matches = useMatches();
@@ -24,19 +24,23 @@ export function LandingHeader() {
     .find(Boolean);
 
   const rootData = useRouteLoaderData('root') as
-    | {siteBanner?: SiteBanner}
+    | {siteBanner?: SiteBanner; promotionBanner?: string | null}
     | undefined;
   const siteBanner = rootData?.siteBanner;
+  const promotionBanner = rootData?.promotionBanner;
 
   let bannerText: string | null;
   if (partner) {
     // Partner page: only the "replace" mode shows a banner; "hide" shows none.
     bannerText = partner.bannerMode === 'replace' ? partner.bannerText ?? null : null;
+  } else if (promotionBanner) {
+    // Scheduled promotion is live: state that offer.
+    bannerText = promotionBanner;
   } else if (siteBanner) {
     // Admin-controlled: toggle off → no banner; on → the edited text.
     bannerText = siteBanner.enabled ? siteBanner.text || null : null;
   } else {
-    bannerText = DEFAULT_BANNER_TEXT;
+    bannerText = null;
   }
 
   const banner = bannerText ? (
