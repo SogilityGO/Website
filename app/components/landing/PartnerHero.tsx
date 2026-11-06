@@ -16,7 +16,7 @@ function CoBrand({partner}: {partner: PartnerData}) {
   if (partner.handle === 'socchermom' && partner.logo) {
     return (
       <div className="flex flex-col items-start gap-3">
-        <div className="w-[352px] max-w-full rounded-xl bg-white p-4">
+        <div className="w-[200px] max-w-full">
           <img
             src={partner.logo}
             alt={partner.logoAlt}
