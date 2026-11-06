@@ -73,17 +73,24 @@ export function getPartnerLogoOverride(handle: string): string | undefined {
 }
 
 export function getPartnerAudienceCopy(partner: PartnerData) {
-  if (partner.handle === 'socchermom') {
+  if (['socchermom', 'the-swag'].includes(partner.handle)) {
+    const community = partner.handle === 'the-swag' ? 'The SWAG' : 'soccHERmom';
     return {
-      heroSubject: 'soccHERmom families',
-      exclusiveLabel: 'soccHERmom community exclusive',
-      pricingLabel: 'soccHERmom community offer',
-      offerSubject: 'The soccHERmom community',
+      heroSubject: `${community} families`,
+      exclusiveLabel: `${community} community exclusive`,
+      pricingLabel: `${community} community offer`,
+      offerSubject:
+        partner.handle === 'the-swag'
+          ? 'The SWAG community'
+          : 'The soccHERmom community',
       fallbackOffer: 'Exclusive community pricing',
       offerSentenceFallback: 'Community pricing',
       viewPricing: 'View community pricing',
       claimOffer: 'Claim community offer',
-      faqQuestion: 'How is the soccHERmom community offer applied?',
+      faqQuestion:
+        partner.handle === 'the-swag'
+          ? 'How is The SWAG community offer applied?'
+          : 'How is the soccHERmom community offer applied?',
       checkoutPeople: 'families',
     };
   }

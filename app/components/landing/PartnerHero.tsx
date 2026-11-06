@@ -13,7 +13,7 @@ const SYSTEM_PILLS = [
 
 /** Partner logo and SogilityGO co-branding. */
 function CoBrand({partner}: {partner: PartnerData}) {
-  if (partner.handle === 'socchermom' && partner.logo) {
+  if (['socchermom', 'the-swag'].includes(partner.handle) && partner.logo) {
     return (
       <div className="flex flex-nowrap items-center gap-3 lg:gap-4">
         <div className="w-[88px] shrink-0 lg:w-[136px]">
@@ -136,7 +136,7 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
             <span className="block whitespace-nowrap">in the Backyard.</span>
           </h1>
           <p className="mt-[18px] max-w-[560px] text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
-            {partner.handle === 'socchermom' ? (
+            {['socchermom', 'the-swag'].includes(partner.handle) ? (
               partner.body.join(' ')
             ) : (
               <>
