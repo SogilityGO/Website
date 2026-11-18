@@ -35,7 +35,7 @@ const SYSTEMS = [
   {
     id: 'sogilitygo-app',
     name: 'SogilityGO App',
-    copy: 'Connects the system and includes drills players can use without a subscription.',
+    copy: 'Connects the system and includes 15 activities, a three-day plan, one complete assessment, and one player profile at no cost.',
     image:
       'https://cdn.shopify.com/s/files/1/0942/1380/0238/files/illu_coach-1.png?v=1785369280',
     imageClass: 'w-[80%] max-w-[230px]',
@@ -293,6 +293,7 @@ export function PartnerExperience({
     <div style={{background: PAPER, color: INK}}>
       <HowItWorks />
       <PartnerPricing partner={partner} checkout={checkout} />
+      <PurchaseConfidence />
       <RepLoop />
       <PlayerProof />
       <Comparison partner={partner} />
@@ -393,11 +394,11 @@ function HowItWorks() {
             </h3>
             <p className="text-[16px] leading-[1.5] text-[#6e7281]">
               Use the free app to connect your Impact Lights and access a
-              selection of drills. Add optional SogilityGO Coach for tailored
-              plans and 180+ pro-designed activities across first touch,
-              passing, dribbling, vision, and agility, plus progress tracking
-              and up to five player profiles. Coach is not required to use the
-              hardware.
+              three-day plan, 15 activities, one complete assessment, and one
+              player profile. Add optional SogilityGO Coach for a personalized
+              10-day plan with three activities per training day, all 180+
+              activities, full assessment access, progress tracking, and up to
+              five player profiles. Coach is not required to use the hardware.
             </p>
           </div>
           <StoreBadges />
@@ -686,8 +687,9 @@ function PartnerPricing({
                 Free SogilityGO app
               </h3>
               <p className="mt-2 text-[15px] leading-[1.6] text-[#656977]">
-                Connect the Impact Lights and access a selection of drills. No
-                subscription required.
+                Connect the Impact Lights and get 15 activities, a three-day
+                training plan, one complete assessment, and one player profile.
+                No subscription required.
               </p>
             </div>
             <div className="bg-[#202333] p-6 text-white lg:p-8">
@@ -706,12 +708,76 @@ function PartnerPricing({
                 </strong>
               </div>
               <p className="mt-3 text-[15px] leading-[1.6] text-white/70">
-                Unlock guided plans, the full activity library, progress
-                tracking, and up to five player profiles.
+                Get a personalized 10-day plan with three activities per
+                training day, all 180+ activities, full assessment and
+                reassessment access, progress tracking, and up to five player
+                profiles.
               </p>
             </div>
           </div>
         </CompactDetails>
+      </div>
+    </section>
+  );
+}
+
+function PurchaseConfidence() {
+  const items = [
+    {
+      title: 'Secure checkout',
+      copy: "Payments are processed through Shopify's secure checkout.",
+    },
+    {
+      title: '14-day returns',
+      copy: 'Conditions apply. Review the return policy before purchasing.',
+      href: 'https://www.sogilitygo.com/policies/refund-policy',
+    },
+    {
+      title: '1-year limited warranty',
+      copy: 'Coverage for manufacturing defects under normal use.',
+    },
+  ];
+  return (
+    <section
+      aria-label="Purchase confidence"
+      className="border-y border-[#dfe0d9] bg-[#fffef9] py-5"
+    >
+      <div className={`${WRAP} grid gap-3 min-[760px]:grid-cols-3`}>
+        {items.map((item) => {
+          const content = (
+            <>
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-sogility/15 font-black text-[#159f23]">
+                ✓
+              </span>
+              <span>
+                <strong className="block text-[14px] font-black text-[#202333]">
+                  {item.title}
+                </strong>
+                <small className="mt-1 block text-[12px] leading-[1.45] text-[#656977]">
+                  {item.copy}
+                </small>
+              </span>
+            </>
+          );
+          return item.href ? (
+            <a
+              key={item.title}
+              href={item.href}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-start gap-3 rounded-[16px] border border-[#dfe0d9] bg-white p-4 transition hover:-translate-y-0.5 hover:border-sogility/50"
+            >
+              {content}
+            </a>
+          ) : (
+            <div
+              key={item.title}
+              className="flex items-start gap-3 rounded-[16px] border border-[#dfe0d9] bg-white p-4"
+            >
+              {content}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
@@ -1092,7 +1158,7 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
     ],
     [
       'Do we need a SogilityGO Coach subscription?',
-      'No. The free app connects the Impact Lights and includes a selection of drills. Optional Coach unlocks guided plans, the full activity library, progress tracking, and up to five player profiles.',
+      'No. The free app includes 15 activities, a three-day training plan, one complete assessment, and one player profile. Optional Coach adds a personalized 10-day plan with three activities per training day, all 180+ activities, full assessment access, progress tracking, and up to five player profiles.',
     ],
     [
       'Does this replace regular coaching?',
@@ -1124,7 +1190,6 @@ function PartnerFaq({partner}: {partner: PartnerData}) {
               {column.items.map(([question, answer]) => (
                 <details
                   key={question}
-
                   className="group overflow-hidden rounded-[18px] border border-white/15 bg-white text-[#202333]"
                 >
                   <summary className="relative cursor-pointer list-none px-5 py-[18px] pr-14 text-[17px] font-black leading-[1.35] after:absolute after:right-[18px] after:top-1/2 after:grid after:h-7 after:w-7 after:-translate-y-1/2 after:place-items-center after:rounded-full after:bg-sogility after:text-[18px] after:font-black after:content-['+'] group-open:after:content-['−']">
@@ -1159,6 +1224,12 @@ export function PartnerLandingFooter() {
               SogilityGO ReboundIQ setups connect to the SogilityGO app, giving
               players access to purposeful training wherever they have room to
               work.
+            </p>
+            <p className="mt-4 text-[15px] font-black leading-[1.45] text-[#202333]">
+              Train Different. Get Better.
+            </p>
+            <p className="mt-1 text-[12px] font-bold uppercase tracking-[0.08em] text-[#656977]">
+              Technology-Driven Soccer Training®
             </p>
             <div className="mt-5 flex gap-4">
               <a

@@ -7,8 +7,8 @@ const HERO_VIDEO =
 const SYSTEM_PILLS = [
   'ReboundIQ',
   'Impact Light',
-  'SogilityGO App',
-  'Progress Tracking',
+  'Free SogilityGO App',
+  'Optional SogilityGO Coach',
 ];
 
 /** Partner logo and SogilityGO co-branding. */
@@ -130,21 +130,14 @@ export function PartnerHero({partner}: {partner: PartnerData}) {
             {partner.eyebrow}
           </p>
           <h1 className="mt-3 max-w-[620px] text-[clamp(27px,8.7vw,40px)] font-black leading-[0.97] tracking-[-0.055em] text-white sm:text-[46px] lg:text-[52px] lg:leading-[0.98]">
-            <span className="block whitespace-nowrap">
-              Big Confidence Begins
-            </span>
-            <span className="block whitespace-nowrap">in the Backyard.</span>
+            <span className="block">The Reps Before</span>
+            <span className="block">the Moment.</span>
           </h1>
           <p className="mt-[18px] max-w-[560px] text-[15px] leading-[1.52] text-white/80 lg:mt-5 lg:text-[17px]">
-            {['socchermom', 'the-swag'].includes(partner.handle) ? (
-              partner.body.join(' ')
-            ) : (
-              <>
-                {audience.heroSubject} get connected at-home training with
-                ReboundIQ, Impact Light, and the free SogilityGO app. Build
-                purposeful reps between practices. No subscription required.
-              </>
-            )}
+            Purposeful work between practices. {audience.heroSubject} can train
+            with ReboundIQ boards, Impact Lights, and app-guided drills in the
+            free SogilityGO app. SogilityGO Coach is an optional paid upgrade
+            for personalized plans and progress tracking.
           </p>
           <HeroActions partner={partner} />
           <div
