@@ -44,6 +44,70 @@ const PRICING_HANDLES = {
   Pro: 'sogilitygo-reboundiq-ultimate',
 };
 
+const SOCCER_PARENTING_HANDLE = 'soccer-parenting';
+const CENTRAL_TIME_ZONE = 'America/Chicago';
+
+const SOCCER_PARENTING_HOLIDAY_OFFERS = [
+  {
+    start: '2026-11-27',
+    end: '2026-11-30',
+    discountCode: 'HOLIDAY30',
+    percentage: 30,
+    saleName: 'Black Friday sale',
+  },
+  {
+    start: '2026-12-01',
+    end: '2026-12-31',
+    discountCode: 'HOLIDAY26',
+    percentage: 25,
+    saleName: 'holiday sale',
+  },
+  {
+    start: '2027-01-01',
+    end: '2027-01-01',
+    discountCode: 'NEWYEAR2027',
+    percentage: 30,
+    saleName: "New Year's Day sale",
+  },
+  {
+    start: '2027-01-02',
+    end: '2027-01-05',
+    discountCode: 'HOLIDAY26',
+    percentage: 25,
+    saleName: 'holiday sale',
+  },
+] as const;
+
+function getCentralDateKey(date: Date): string {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: CENTRAL_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map(({type, value}) => [type, value]));
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function applyScheduledSoccerParentingOffer(
+  partner: PartnerData,
+  date = new Date(),
+): PartnerData {
+  if (partner.handle !== SOCCER_PARENTING_HANDLE) return partner;
+
+  const dateKey = getCentralDateKey(date);
+  const offer = SOCCER_PARENTING_HOLIDAY_OFFERS.find(
+    ({start, end}) => dateKey >= start && dateKey <= end,
+  );
+  if (!offer) return partner;
+
+  return {
+    ...partner,
+    offerText: `Soccer Parenting families save ${offer.percentage}% during our ${offer.saleName}.`,
+    discountCode: offer.discountCode,
+  };
+}
+
 const PARTNER_TIERS_QUERY = `#graphql
   fragment PartnerTierVariant on Product {
     availableForSale
@@ -141,6 +205,7 @@ export async function loader({context, params}: Route.LoaderArgs) {
   if (!partner) {
     throw new Response('Partner not found', {status: 404});
   }
+  partner = applyScheduledSoccerParentingOffer(partner);
 
   // Live variant ids for the Buy buttons (same approach as the main landing).
   let checkout: CheckoutMap = {};
