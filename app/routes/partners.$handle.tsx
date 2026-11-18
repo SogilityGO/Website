@@ -30,7 +30,7 @@ export const meta: Route.MetaFunction = ({data, params}) => {
   return [
     ...pageMeta(
       `SogilityGO × ${name}`,
-      `Explore the SogilityGO training offer for ${name}. Compare ReboundIQ setups, Impact Lights, and guided app training for practice between sessions.`,
+      `The reps before the moment. Explore the ${name} offer on ReboundIQ boards, Impact Lights, the free SogilityGO app, and optional SogilityGO Coach.`,
       `https://my.sogilitygo.com/partners/${params.handle}`,
     ),
     // Near-duplicate campaign pages intentionally stay out of organic search.
@@ -84,7 +84,9 @@ function getCentralDateKey(date: Date): string {
     month: '2-digit',
     day: '2-digit',
   }).formatToParts(date);
-  const values = Object.fromEntries(parts.map(({type, value}) => [type, value]));
+  const values = Object.fromEntries(
+    parts.map(({type, value}) => [type, value]),
+  );
   return `${values.year}-${values.month}-${values.day}`;
 }
 
