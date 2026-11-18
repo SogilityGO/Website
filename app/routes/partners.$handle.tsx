@@ -44,10 +44,9 @@ const PRICING_HANDLES = {
   Pro: 'sogilitygo-reboundiq-ultimate',
 };
 
-const SOCCER_PARENTING_HANDLE = 'soccer-parenting';
 const CENTRAL_TIME_ZONE = 'America/Chicago';
 
-const SOCCER_PARENTING_HOLIDAY_OFFERS = [
+const PARTNER_HOLIDAY_OFFERS = [
   {
     start: '2026-11-27',
     end: '2026-11-30',
@@ -89,21 +88,19 @@ function getCentralDateKey(date: Date): string {
   return `${values.year}-${values.month}-${values.day}`;
 }
 
-function applyScheduledSoccerParentingOffer(
+function applyScheduledPartnerHolidayOffer(
   partner: PartnerData,
   date = new Date(),
 ): PartnerData {
-  if (partner.handle !== SOCCER_PARENTING_HANDLE) return partner;
-
   const dateKey = getCentralDateKey(date);
-  const offer = SOCCER_PARENTING_HOLIDAY_OFFERS.find(
+  const offer = PARTNER_HOLIDAY_OFFERS.find(
     ({start, end}) => dateKey >= start && dateKey <= end,
   );
   if (!offer) return partner;
 
   return {
     ...partner,
-    offerText: `Soccer Parenting families save ${offer.percentage}% during our ${offer.saleName}.`,
+    offerText: `Save ${offer.percentage}% during our ${offer.saleName}.`,
     discountCode: offer.discountCode,
   };
 }
@@ -205,7 +202,7 @@ export async function loader({context, params}: Route.LoaderArgs) {
   if (!partner) {
     throw new Response('Partner not found', {status: 404});
   }
-  partner = applyScheduledSoccerParentingOffer(partner);
+  partner = applyScheduledPartnerHolidayOffer(partner);
 
   // Live variant ids for the Buy buttons (same approach as the main landing).
   let checkout: CheckoutMap = {};
