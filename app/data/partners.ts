@@ -73,6 +73,21 @@ export function getPartnerLogoOverride(handle: string): string | undefined {
 }
 
 export function getPartnerAudienceCopy(partner: PartnerData) {
+  if (partner.handle === 'kristin-morris') {
+    return {
+      heroSubject: 'Players',
+      exclusiveLabel: 'SogilityGO offer',
+      pricingLabel: 'Offer pricing',
+      offerSubject: 'You',
+      fallbackOffer: 'Special pricing',
+      offerSentenceFallback: 'Special pricing',
+      viewPricing: 'View pricing',
+      claimOffer: 'Claim your offer',
+      comparisonCta: 'Claim your offer',
+      faqQuestion: 'How is the discount applied?',
+      checkoutPeople: 'you',
+    };
+  }
   if (['socchermom', 'the-swag'].includes(partner.handle)) {
     const community = partner.handle === 'the-swag' ? 'The SWAG' : 'soccHERmom';
     return {
