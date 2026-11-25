@@ -902,6 +902,8 @@ function Status({included}: {included: boolean}) {
 }
 
 function Comparison({partner}: {partner: PartnerData}) {
+  const {comparisonCta = `Claim ${partner.name} offer`} =
+    getPartnerAudienceCopy(partner);
   return (
     <section className="py-8 lg:py-10">
       <div className={WRAP}>
@@ -960,7 +962,7 @@ function Comparison({partner}: {partner: PartnerData}) {
             href="#start-training"
             className="inline-flex min-h-12 items-center justify-center rounded-full bg-sogility px-7 font-black text-[#202333] transition hover:-translate-y-0.5"
           >
-            Claim {partner.name} offer
+            {comparisonCta}
           </a>
         </div>
       </div>
